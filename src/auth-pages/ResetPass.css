@@ -1,0 +1,104 @@
+.board-fill-image {
+    position: absolute;
+width: 797px;
+height: 720px;
+left: 0px;
+top: 0px;
+}
+
+.board-motto {
+    position: absolute;
+width: 283px;
+height: 360px;
+left: 257px;
+top: 140px;
+
+background: rgba(0, 0, 0, 0.39);
+border-radius: 10px;
+}
+
+.board-motto-text {
+    position: absolute;
+width: 283px;
+height: 291px;
+left: 257px;
+top: 215px;
+
+font-style: normal;
+font-weight: normal;
+font-size: 50px;
+line-height: 75px;
+text-align: center;
+
+color: #FFFFFF;
+}
+
+.company-name {
+    position: absolute;
+width: 167px;
+height: 45px;
+left: 958px;
+top: 72px;
+
+font-style: normal;
+font-weight: 600;
+font-size: 30px;
+line-height: 45px;
+text-decoration: none;
+
+color: #FF7F58;
+}
+
+.email-address {
+    position: absolute;
+width: 374px;
+height: 41px;
+left: 855px;
+top: 180px;
+
+background: #F2F2F2;
+border-radius: 6px;
+border: 0;
+}
+
+
+.reset-page .right-panel .signup-login {
+    position: absolute;
+    width: 47px;
+    height: 27px;
+    left: 878px;
+    top: 270px;
+    
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 27px;    
+    border: 0;
+    text-decoration: none;
+    padding-left: 50px;
+    
+    color: #FF7F58;
+    background-color: transparent;
+}
+
+.reset-page .right-panel .signup-reset {
+    position: absolute;
+width: 100px;
+height: 40px;
+left: 1084px;
+top: 260px;
+
+font-style: normal;
+font-weight: 300;
+font-size: 18px;
+line-height: 27px;
+
+background-color: #FF7F58;
+color: #F2F2F2;
+border-radius: 6px;
+border: 0;
+text-decoration: none;
+
+padding-left: 45px;
+padding-top: 6px;
+}
