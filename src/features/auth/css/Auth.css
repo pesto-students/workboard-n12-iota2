@@ -1,0 +1,29 @@
+.auth_background {
+  background: url(../../../assets/auth_background.jpg);
+  background-size: cover;
+  background-position: center center;
+  min-height: 100vh;
+}
+
+.auth_card {
+  background: rgba(0, 0, 0, 0.478);
+  border: none;
+  border-radius: 10px;
+  font-size: 60px;
+  font-weight: 400;
+  text-align: center;
+  color: #ffffff;
+  line-height: 75px;
+}
+
+.auth_logo {
+  text-align: center;
+  font-size: 3em;
+  font-weight: 600;
+  color: #ff7f58;
+  margin: 100px auto;
+}
+
+a {
+  color: #ff7f58;
+}
