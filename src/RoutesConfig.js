@@ -5,6 +5,8 @@ import ForgotPassword from "./features/auth/forgot-password/ForgotPassword";
 import Login from "./features/auth/login/Login";
 import Signup from "./features/auth/signup/Signup";
 import AllBoards from "./features/boards/all_boards/AllBoards";
+import OwnedBoards from "./features/boards/all_boards/OwnedBoards";
+import SharedBoards from "./features/boards/all_boards/SharedBoards";
 import BoardsLayout from "./features/boards/BoardsLayout";
 import SelectedBoard from "./features/boards/selected_board/SelectedBoard";
 import LandingLayout from "./features/landing/LandingLayout";
@@ -23,8 +25,10 @@ export default function RoutesConfig() {
         <Route path="profile" element={<ProfileLayout />}></Route>
         <Route path="boards" element={<BoardsLayout />}>
           <Route index element={<AllBoards />} />
-          <Route path=":boardId" element={<SelectedBoard />} />
+          <Route path="shared" element={<SharedBoards />} />
+          <Route path="owned" element={<OwnedBoards />} />
         </Route>
+        <Route path="boards/:boardId" element={<SelectedBoard />} />
       </Routes>
     </BrowserRouter>
   );

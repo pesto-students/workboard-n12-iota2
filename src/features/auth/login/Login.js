@@ -1,12 +1,15 @@
 import { Col, Row, Form, Input, Button } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/Auth.css";
 import GoogleLogo from "../../../assets/google.png";
 import FacebookLogo from "../../../assets/facebook.png";
 
 export default function Login() {
-  const login = () => {};
+  const navigate = useNavigate();
+  const login = () => {
+    navigate("/boards");
+  };
   const onError = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
