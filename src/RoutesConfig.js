@@ -8,9 +8,10 @@ import AllBoards from "./features/boards/all_boards/AllBoards";
 import OwnedBoards from "./features/boards/all_boards/OwnedBoards";
 import SharedBoards from "./features/boards/all_boards/SharedBoards";
 import BoardsLayout from "./features/boards/BoardsLayout";
-import SelectedBoard from "./features/boards/selected_board/SelectedBoard";
 import LandingLayout from "./features/landing/LandingLayout";
 import ProfileLayout from "./features/profile/ProfileLayout";
+import SelectedBoardLayout from "./features/selected_boards/SelectedBoardLayout";
+import SelectedBoard from "./features/selected_boards/selected_board/SelectedBoard";
 
 export default function RoutesConfig() {
   return (
@@ -28,7 +29,9 @@ export default function RoutesConfig() {
           <Route path="shared" element={<SharedBoards />} />
           <Route path="owned" element={<OwnedBoards />} />
         </Route>
-        <Route path="boards/:boardId" element={<SelectedBoard />} />
+        <Route path="board" element={<SelectedBoardLayout />}>
+          <Route path=":boardId" element={<SelectedBoard />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

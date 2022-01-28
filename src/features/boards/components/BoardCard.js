@@ -16,8 +16,8 @@ export default function BoardCard({ name, coverImg, isShared, lastUpdatedOn }) {
   return (
     <Card
       hoverable
-      onClick={() => navigate("/boards/my-board")}
-      style={{ width: 240, borderRadius: 10 }}
+      onClick={() => navigate("/board/my-board")}
+      style={{ width: "100%", borderRadius: 5 }}
       bodyStyle={{ padding: "10px 15px" }}
       cover={<img alt="coverImage" src={coverImg} />}
     >

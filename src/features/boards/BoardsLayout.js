@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router";
 import { Layout, Breadcrumb } from "antd";
-import "./css/Board.css";
+import "./css/Boards.css";
 import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 const { Header, Content, Footer } = Layout;

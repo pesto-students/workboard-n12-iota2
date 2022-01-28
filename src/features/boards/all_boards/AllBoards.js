@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Dropdown, Menu, PageHeader, Row } from "antd";
+import { Col, Divider, PageHeader, Row } from "antd";
 import React from "react";
 import BoardCard from "../components/BoardCard";
 
@@ -43,9 +43,9 @@ export default function AllBoards() {
   return (
     <div>
       <PageHeader title="Recent boards" backIcon={null} />
-      <Row>
+      <Row gutter={[20, 20]}>
         {allBoards.map((data) => (
-          <Col span={4}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={4}>
             <BoardCard {...data} />
           </Col>
         ))}
@@ -53,9 +53,9 @@ export default function AllBoards() {
       <Divider />
 
       <PageHeader title="My boards" backIcon={null} />
-      <Row>
+      <Row gutter={[20, 20]}>
         {allBoards.map((data) => (
-          <Col span={4}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={4}>
             <BoardCard {...data} />
           </Col>
         ))}
@@ -63,9 +63,9 @@ export default function AllBoards() {
       <Divider />
 
       <PageHeader title="Shared with me" backIcon={null} />
-      <Row>
+      <Row gutter={[20, 20]}>
         {allBoards.map((data) => (
-          <Col span={4}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={4}>
             <BoardCard {...data} />
           </Col>
         ))}

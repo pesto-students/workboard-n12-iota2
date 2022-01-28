@@ -1,0 +1,63 @@
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+
+.content-layout {
+  min-height: calc(100vh - 64px);
+}
+
+.site-layout {
+  background-size: cover;
+}
+
+.site-layout .site-layout-background {
+  background: rgba(255, 255, 255, 0.45) !important;
+  padding: 0;
+}
+
+.selected_board_logo {
+  text-align: center;
+  font-size: 2em;
+  font-weight: 600;
+  color: #ff7f58;
+  margin: 0;
+  transition: all 0.3s;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item-group-title {
+  color: #666;
+  font-weight: bold;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item-group {
+  border-bottom: 1px solid #f6f6f6;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item {
+  padding-left: 16px;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item.show-all {
+  text-align: center;
+  cursor: default;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu {
+  max-height: 300px;
+}
+
+.board-background {
+  background-size: cover;
+}
+
+.tag {
+  height: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}

@@ -5,7 +5,7 @@ import {
   LogoutOutlined,
   LayoutOutlined,
 } from "@ant-design/icons";
-import "../css/Board.css";
+import "../css/Boards.css";
 import { NavLink } from "react-router-dom";
 
 const { SubMenu } = Menu;
@@ -28,6 +28,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       theme="light"
       zeroWidthTriggerStyle={{ top: 0 }}
       trigger={null}
+      className="boards_sidebar"
     >
       <div>
         <p className="board_logo">workboard</p>
