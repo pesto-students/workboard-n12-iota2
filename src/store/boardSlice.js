@@ -1,16 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { db } from '../firebase-config';
+import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 
 const boardSlice = createSlice({
   name: 'board',
   initialState: {
-    items: [],
-    totalQuantity: 0,
-    changed: false,
+    boards: {
+      name: "test-board",
+      stories: [
+      ]
+    }
   },
   reducers: {
-    replaceBoard(state, action) {
-      state.totalQuantity = action.payload.totalQuantity;
-      state.items = action.payload.items;
+    replaceStories (state, action) {
+      state.boards.stories = [...action.payload.stories]
     },
     addItemToBoard(state, action) {
       const newItem = action.payload;
@@ -29,19 +32,7 @@ const boardSlice = createSlice({
         existingItem.quantity++;
         existingItem.totalPrice = existingItem.totalPrice + newItem.price;
       }
-    },
-    removeItemFromBoard(state, action) {
-      const id = action.payload;
-      const existingItem = state.items.find((item) => item.id === id);
-      state.totalQuantity--;
-      state.changed = true;
-      if (existingItem.quantity === 1) {
-        state.items = state.items.filter((item) => item.id !== id);
-      } else {
-        existingItem.quantity--;
-        existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
-      }
-    },
+    }
   },
 });
 

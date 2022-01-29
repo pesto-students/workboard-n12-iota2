@@ -6,7 +6,9 @@ import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 const { Header, Content, Footer } = Layout;
 
+
 export default function BoardsLayout() {
+
   const [collapsed, setCollapsed] = useState(false);
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -35,7 +37,7 @@ export default function BoardsLayout() {
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          workboard ©2022 Created by Syed Vali
+          workboard ©2022 Created by Pesto n12-iota2 Team
         </Footer>
       </Layout>
     </Layout>
