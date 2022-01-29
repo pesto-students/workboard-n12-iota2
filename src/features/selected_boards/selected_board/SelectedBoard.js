@@ -2,12 +2,14 @@ import { Button, Col, Row, Input } from "antd";
 import React, { useState } from "react";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import "../css/Board.css";
 
 export default function SelectedBoard() {
   const [addingNewList, setAddingNewList] = useState(false);
   return (
-    <div>
+    <DndProvider backend={HTML5Backend}>
       <Row
         style={{
           overflowX: "scroll",
@@ -85,6 +87,6 @@ export default function SelectedBoard() {
           </Col>
         )}
       </Row>
-    </div>
+    </DndProvider>
   );
 }
