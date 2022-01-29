@@ -7,10 +7,11 @@ import { useDrop } from "react-dnd";
 export default function ListBoard() {
   const [addingNewCard, setAddingNewCard] = useState(false);
   const [allCards, setAllCards] = useState([]);
-  const [{}, drop] = useDrop({
+  const [{ props }, drop] = useDrop({
     accept: "card",
     drop: () => {
       setAllCards(allCards.concat({}));
+      console.log(props);
     },
   });
   return (
