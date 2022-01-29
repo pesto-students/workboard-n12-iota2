@@ -1,16 +1,23 @@
 import { Button, Card, Col, Row, Input } from "antd";
 import React, { useState } from "react";
 import CardBoard from "./CardBoard";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
+import { useDrop } from "react-dnd";
 
 export default function ListBoard() {
   const [addingNewCard, setAddingNewCard] = useState(false);
   const [allCards, setAllCards] = useState([]);
+  const [{}, drop] = useDrop({
+    accept: "card",
+    drop: () => {
+      setAllCards(allCards.concat({}));
+    },
+  });
   return (
-    <Col style={{ maxHeight: "calc(100vh - 64px)" }}>
+    <Col ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
       <Card
         title="Default size card"
-        extra={<a>More</a>}
+        extra={<EllipsisOutlined />}
         style={{
           width: 300,
           margin: 10,
