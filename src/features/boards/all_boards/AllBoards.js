@@ -13,14 +13,8 @@ export default function AllBoards() {
       lastUpdatedOn: String(new Date().toLocaleDateString()),
     };
 
-  const [allBoards, setAllBoards] = useState([]);
   const getStateBoards = useSelector((state) => state.boards.boards);
-  useEffect(()=> {
-    if(getStateBoards) {
-      const allStateBoards = getStateBoards.map((board) => {return {...board, ...dummyBoards}});
-      setAllBoards([...allStateBoards]);
-    }
-  },[getStateBoards]);
+  const allBoards = getStateBoards ? getStateBoards.map((board) => {return {...board, ...dummyBoards}}) : [];
 
    return (
     <div>

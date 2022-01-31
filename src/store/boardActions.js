@@ -187,9 +187,7 @@ export const getBoards = () => dispatch => {
     return unsubscribe;
 }
 
-export const updateBoard = (boardId = "bqGjdMo740Vv1rridpEo", data = {
-    name: "Board @"
-}) => {
+export const updateBoard = (boardId, data) => {
     return async (dispatch) => {
         const dataBoardRef = doc(db, "boards", boardId);
         const updateData = async () => {
@@ -218,7 +216,7 @@ export const updateBoard = (boardId = "bqGjdMo740Vv1rridpEo", data = {
     }
 }
 
-export const deleteBoard = (boardId = "oLVmxG0od3Jl17ZE4YXt") => {
+export const deleteBoard = (boardId) => {
     return async (dispatch) => {
         const dataBoardRef = doc(db, "boards", boardId);
         const deleteData = async () => {
