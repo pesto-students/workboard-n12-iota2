@@ -1,12 +1,18 @@
 import { Button, Card, Col, Row, Input } from "antd";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import CardBoard from "./CardBoard";
 import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import { useDrop } from "react-dnd";
 
-export default function ListBoard() {
+import { createStoryInBoard } from "../../../store/boardActions";
+
+export default function ListBoard({ id, name, allStories }) {
+  const dispatch = useDispatch();
+  const stageStories = allStories ? allStories.filter((story) => story.stageId === id) : [];
   const [addingNewCard, setAddingNewCard] = useState(false);
   const [allCards, setAllCards] = useState([]);
+  const [cardName, setCardName] = useState("");
   const [{ props }, drop] = useDrop({
     accept: "card",
     drop: () => {
@@ -15,9 +21,9 @@ export default function ListBoard() {
     },
   });
   return (
-    <Col ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
+    <Col key={id} ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
       <Card
-        title="Default size card"
+        title={name}
         extra={<EllipsisOutlined />}
         style={{
           width: 300,
@@ -31,8 +37,8 @@ export default function ListBoard() {
           maxHeight: "calc(100vh - 150px)",
         }}
       >
-        {allCards.map(() => (
-          <CardBoard />
+        {stageStories.map((story) => (
+          <CardBoard name={story.name} desc={story.desc}/>
         ))}
         <Col style={{ margin: 10 }}>
           {addingNewCard ? (
@@ -42,6 +48,7 @@ export default function ListBoard() {
                   style={{ border: "none", borderRadius: 5 }}
                   placeholder="Enter title for card"
                   autoFocus
+                  onChange={(e) => setCardName(e.target.value)}
                 />
               </Col>
               <Col span={24}>
@@ -68,7 +75,13 @@ export default function ListBoard() {
                         borderRadius: 5,
                       }}
                       onClick={() => {
-                        setAllCards(allCards.concat({}));
+                        const story = {
+                          name: `${cardName}`,
+                          desc: `Description ${cardName}`,
+                          stageId: `${id}`
+                        };
+                        dispatch(createStoryInBoard(story));
+                        // setAllCards(allCards.concat({}));
                         setAddingNewCard(false);
                       }}
                     >

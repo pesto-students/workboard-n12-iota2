@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Outlet } from "react-router";
 import { Layout, Breadcrumb } from "antd";
+import { getBoards } from "../../store/boardActions";
 import "./css/Boards.css";
 import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 const { Header, Content, Footer } = Layout;
-
 export default function BoardsLayout() {
+
+  const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
+  let unsub;    //Execute this to disconnect from firrebase to recieve live updates.
+
+
+  useEffect(() => {
+    unsub = dispatch(getBoards());
+  }, []);
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
@@ -35,7 +44,7 @@ export default function BoardsLayout() {
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          workboard ©2022 Created by Syed Vali
+          workboard ©2022 Created by Pesto n12-iota2 Team
         </Footer>
       </Layout>
     </Layout>
