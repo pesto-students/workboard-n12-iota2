@@ -1,28 +1,28 @@
 import { Col, Divider, PageHeader, Row } from "antd";
-import React, { useState, useEffect } from "react";
-import { db } from '../../../firebase-config';
-import { collection, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createBoard } from '../../../store/boardActions';
 import BoardCard from "../components/BoardCard";
 
 export default function AllBoards() {
-  const [allBoards, setAllBoards] = useState([
-    {
+  const dispatch = useDispatch();       //execute dispatch(createBoard()); to create a new board and more.
+  const dummyBoards = {
       coverImg:
         "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       isShared: true,
       lastUpdatedOn: String(new Date().toLocaleDateString()),
+    };
+
+  const [allBoards, setAllBoards] = useState([]);
+  const getStateBoards = useSelector((state) => state.boards.boards);
+  useEffect(()=> {
+    if(getStateBoards) {
+      const allStateBoards = getStateBoards.map((board) => {return {...board, ...dummyBoards}});
+      setAllBoards([...allStateBoards]);
     }
-  ]);
-  useEffect( async () => {
-    const dataCollectionRef = collection(db, "board");
-    const data = await getDocs(dataCollectionRef);
-    const getBoards = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-    const updateData = getBoards[0];
-    setAllBoards((allBoards) => [{...allBoards[0], ...updateData}])
-  }, []);
+  },[getStateBoards]);
 
-
-  return (
+   return (
     <div>
       <PageHeader title="Recent boards" backIcon={null} />
       <Row gutter={[20, 20]}>

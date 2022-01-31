@@ -4,7 +4,7 @@ import authSlice from './authSlice';
 import boardSlice from './boardSlice';
 
 const store = configureStore({
-  reducer: { auth: authSlice.reducer, board: boardSlice.reducer },
+  reducer: { auth: authSlice.reducer, boards: boardSlice.reducer },
 });
 
 export default store;

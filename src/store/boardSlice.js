@@ -3,36 +3,40 @@ import { db } from '../firebase-config';
 import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 
 const boardSlice = createSlice({
-  name: 'board',
-  initialState: {
-    boards: {
-      name: "test-board",
-      stories: [
-      ]
-    }
-  },
+  name: 'boards',
+  initialState: {},
   reducers: {
-    replaceStories (state, action) {
-      state.boards.stories = [...action.payload.stories]
+    // createBoard (state, action) {
+    //   state.boards = [...state.boards, {...action.payload.board}]
+    // },
+    setBoards (state, action) {
+      state.boards = [...action.payload.boards]
     },
-    addItemToBoard(state, action) {
-      const newItem = action.payload;
-      const existingItem = state.items.find((item) => item.id === newItem.id);
-      state.totalQuantity++;
-      state.changed = true;
-      if (!existingItem) {
-        state.items.push({
-          id: newItem.id,
-          price: newItem.price,
-          quantity: 1,
-          totalPrice: newItem.price,
-          name: newItem.title,
-        });
-      } else {
-        existingItem.quantity++;
-        existingItem.totalPrice = existingItem.totalPrice + newItem.price;
-      }
-    }
+    // updateStateBoard (state, action) {
+    //   const allUpdatedBoards = state.boards.map((board) => {
+    //     if(board.id === action.payload.boardId)
+    //       return {...board, ...action.payload.updateData}
+    //     return board;
+    //   });
+    //   state.boards = [...allUpdatedBoards]
+    // },
+    // deleteStateBoard (state, action) {
+    //   const deleteBoardIndex = state.boards.findIndex((board) => board.id === action.payload.boardId);
+    //   const allRemainingBoards = state.boards.slice();
+    //   allRemainingBoards.splice( deleteBoardIndex, 1);
+    //   state.boards = [...allRemainingBoards]
+    // },
+    // addStoryInTheBoard (state, action) {
+    //   const copyAllBoards = state.boards.slice();
+    //   const boardIndex = state.boards.findIndex((board) => board.id === action.payload.boardId);
+    //   const copyBoard = state.boards[boardIndex].slice();
+    //   copyAllBoards.splice(boardIndex,1);
+    //   copyBoard.stories = [...copyBoard.stories, action.payload.story ];
+    //   state.boards = [...copyAllBoards, ...copyBoard]
+    // },
+    // addStoryToBoard(state, action) {
+    //   state.boards.stories = [...state.boards.stories,action.payload.story]
+    // }
   },
 });
 

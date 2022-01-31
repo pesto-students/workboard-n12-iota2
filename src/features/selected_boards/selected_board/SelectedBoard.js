@@ -1,22 +1,14 @@
 import { Button, Col, Row, Input } from "antd";
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "../css/Board.css";
 
-import { getStoriesForBoard } from "../../../store/boardActions";
-
 export default function SelectedBoard() {
-  const dispatch = useDispatch();
-  useEffect(()=> {
-    dispatch(getStoriesForBoard());
-  },[dispatch]);
-
   const [addingNewList, setAddingNewList] = useState(false);
-  return (
+return (
     <DndProvider backend={HTML5Backend}>
       <Row
         style={{
@@ -25,7 +17,7 @@ export default function SelectedBoard() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {Array(5)
+        {Array(3)
           .fill(null)
           .map(() => (
             <ListBoard />

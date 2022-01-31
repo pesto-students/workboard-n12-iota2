@@ -1,23 +1,16 @@
 import { Button, Card, Col, Row, Input } from "antd";
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import CardBoard from "./CardBoard";
 import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import { useDrop } from "react-dnd";
 
-import { addStoryToBoard, getStoriesForBoard, deleteStoryFromBoard } from '../../../store/boardActions';
-
 export default function ListBoard() {
-  const dispatch = useDispatch();
-
   const [addingNewCard, setAddingNewCard] = useState(false);
-  const allCards = useSelector((state) => state.board.boards.stories);
-  // const [allCards, setAllCards] = useState([]);
-
+  const [allCards, setAllCards] = useState([]);
   const [{ props }, drop] = useDrop({
     accept: "card",
     drop: () => {
-      // setAllCards(allCards.concat({}));
+      setAllCards(allCards.concat({}));
       console.log(props);
     },
   });
@@ -38,12 +31,8 @@ export default function ListBoard() {
           maxHeight: "calc(100vh - 150px)",
         }}
       >
-        {allCards.map((card) => (
-          <CardBoard 
-          key={card.id} 
-          name={card.name} 
-          desc={card.description}         
-          />
+        {allCards.map(() => (
+          <CardBoard />
         ))}
         <Col style={{ margin: 10 }}>
           {addingNewCard ? (
@@ -79,8 +68,7 @@ export default function ListBoard() {
                         borderRadius: 5,
                       }}
                       onClick={() => {
-                        // setAllCards(allCards.concat({}));
-                        dispatch(addStoryToBoard());
+                        setAllCards(allCards.concat({}));
                         setAddingNewCard(false);
                       }}
                     >
@@ -101,8 +89,7 @@ export default function ListBoard() {
                 border: "none",
                 borderRadius: "5px",
               }}
-              onClick={() => {setAddingNewCard(true);
-              dispatch(deleteStoryFromBoard());}}
+              onClick={() => setAddingNewCard(true)}
             >
               Add new card
             </Button>

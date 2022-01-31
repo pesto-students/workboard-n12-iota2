@@ -1,104 +1,372 @@
 import { db } from '../firebase-config';
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
+import { setDoc, collection, deleteDoc, doc, getDocs, updateDoc, addDoc, query, onSnapshot } from "firebase/firestore";
 
 import { boardActions } from './boardSlice';
 
-export const addStoryToBoard = () => {
+//CUD for stories with real time read at boards level.
+export const createStoryInBoard = (boardInfo = {
+    id: "NloePyCF1BViiCqr6Gap",
+    stories: [{
+        name: "Story *",
+        desc: "Description *",
+        stageId: "0"
+    }]
+}, data = {
+    story: {
+        name: "Story $",
+        desc: "Description $",
+        stageId: "3"
+    }
+}) => {
     return async (dispatch) => {
-        const dataCollectionRef = collection(db, "board");
-        const postData = async () => {
-            const response = await addDoc(dataCollectionRef, {
-                description: "Lorem Ipsum 3",
-                name: "third",
-                owner: "workboard",
-                status: "qa",
-                users: ['test5', 'test6']
-            });
+        const dataStoriesBoardRef = doc(db, "boards", boardInfo.id);
+        const updateStoryInBoard = async () => {
+            const response = await updateDoc(dataStoriesBoardRef,
+                { stories: [...boardInfo.stories, data.story] });
 
-            if(!response) {
-                console.log("create error");
-            }
+            // if (!response) {
+            //     console.log(response);
+            // }
         };
 
         try {
-            await postData();
-            console.log("success post");
+            await updateStoryInBoard();
+            // dispatch(
+            //     boardActions.updateStateBoard({
+            //         boardId,
+            //         updateData : {...data}
+            //     })
+            // );
+            console.log("success update board");
         }
         catch (error) {
-            console.log("try catch create error");
+            console.log("try catch update board error");
         }
     }
 }
 
-export const getStoriesForBoard = () => {
+export const updateStoryInBoard = (boardInfo = {
+    id: "NloePyCF1BViiCqr6Gap",
+    stories: [{
+        name: "Story *",
+        desc: "Description *",
+        stageId: "0"
+    },
+    {
+        name: "Story 0",
+        desc: "Description 0",
+        stageId: "0"
+    }]
+}, data = {
+    storyIndex: 1,
+    updatedStory: {
+        name: "Story $",
+        desc: "Description $",
+        stageId: "3"
+    }
+}) => {
     return async (dispatch) => {
-        const dataCollectionRef = collection(db, "board");
-        const getData = async () => {
-            const response = await getDocs(dataCollectionRef);
+        const dataStoriesBoardRef = doc(db, "boards", boardInfo.id);
+        const updateStoryTheBoard = async () => {
+            boardInfo.stories[data.storyIndex] = {...boardInfo.stories[data.storyIndex], ...data.updatedStory}
+            const response = await updateDoc(dataStoriesBoardRef,
+                { stories: [...boardInfo.stories] });
 
-            if(!response) {
-                console.log("read error");
-            }
-
-            const data = await response.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-            return data;
+            // if (!response) {
+            //     console.log(response);
+            // }
         };
 
         try {
-            const storiesData =  await getData();
-            console.log(storiesData);
-            dispatch(
-                boardActions.replaceStories({
-                    stories: [...storiesData]
-                })
-            );
+            await updateStoryTheBoard();
+            // dispatch(
+            //     boardActions.updateStateBoard({
+            //         boardId,
+            //         updateData : {...data}
+            //     })
+            // );
+            console.log("success update board");
         }
         catch (error) {
-            console.log("try catch read error");
+            console.log("try catch update board error");
         }
     }
 }
 
-export const updateStoryInBoard = (key, data, updateData) => {
+export const deleteStoryFromBoard = (boardInfo = {
+    id: "NloePyCF1BViiCqr6Gap",
+    stories: [{
+        name: "Story *",
+        desc: "Description *",
+        stageId: "0"
+    },
+    {
+        name: "Story 0",
+        desc: "Description 0",
+        stageId: "0"
+    }]
+}, data = {
+    storyIndex: 1
+}) => {
     return async (dispatch) => {
-        const dataDocRef = doc(db, "board", key);
+        const dataStoriesBoardRef = doc(db, "boards", boardInfo.id);
+        const deleteStoryFromTheBoard = async () => {
+            boardInfo.stories.splice(data.storyIndex,1);
+            const response = await updateDoc(dataStoriesBoardRef,
+                { stories: [...boardInfo.stories] });
+
+            // if (!response) {
+            //     console.log(response);
+            // }
+        };
+
+        try {
+            await deleteStoryFromTheBoard();
+            // dispatch(
+            //     boardActions.updateStateBoard({
+            //         boardId,
+            //         updateData : {...data}
+            //     })
+            // );
+            console.log("success update board");
+        }
+        catch (error) {
+            console.log("try catch update board error");
+        }
+    }
+}
+
+//CRUD for boards with real time listening for changes.
+export const createBoard = (newBoard = {
+    members: ['slave *', 'servent *'],
+    name: "Board *",
+    owner: "master *"
+}) => {
+    return async (dispatch) => {
+        const dataCollectionBoardRef = collection(db, 'boards');
+        const postBoard = async () => {
+            const response = await addDoc(dataCollectionBoardRef, { ...newBoard });
+
+            if (!response) {
+                console.log("create board error");
+            }
+        };
+
+        try {
+            // dispatch(
+            //     boardActions.createBoard({
+            //         board: { ...newBoard }
+            //     })
+            // );
+            await postBoard();
+            console.log("success post board");
+        }
+        catch (error) {
+            console.log("try catch create board error");
+        }
+    }
+}
+
+export const getBoards = () => dispatch => {
+    const dataCollectionBoardRef = collection(db, "boards");
+    const unsubscribe = onSnapshot(query(dataCollectionBoardRef), (querySnapshot) => {
+        const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
+        console.log(source);
+        const getAllBoards = [];
+        querySnapshot.forEach((doc) => {
+            getAllBoards.push({ ...doc.data(), id: doc.id });
+        })
+        dispatch(
+            boardActions.setBoards({
+                boards: [...getAllBoards]
+            })
+        );
+    }, (error) => {
+        console.log("Real Time Data Getting has an error.")
+    });
+    return unsubscribe;
+}
+
+export const updateBoard = (boardId = "bqGjdMo740Vv1rridpEo", data = {
+    name: "Board @"
+}) => {
+    return async (dispatch) => {
+        const dataBoardRef = doc(db, "boards", boardId);
         const updateData = async () => {
-            const response = await updateDoc(dataDocRef, {
-                ...data,
-                ...updateData
+            const response = await updateDoc(dataBoardRef, {
+                ...data
             });
 
-            if(!response) {
-                console.log("update error");
+            if (!response) {
+                console.log("update board error");
             }
         };
 
         try {
             await updateData();
-            console.log("success update");
+            // dispatch(
+            //     boardActions.updateStateBoard({
+            //         boardId,
+            //         updateData : {...data}
+            //     })
+            // );
+            console.log("success update board");
         }
         catch (error) {
-            console.log("try catch update error");
+            console.log("try catch update board error");
         }
     }
 }
 
-export const deleteStoryFromBoard = (key="WvHhaVyyONJubId87mBQ") => {
+export const deleteBoard = (boardId = "oLVmxG0od3Jl17ZE4YXt") => {
     return async (dispatch) => {
-        const dataDocRef = doc(db, "board", key);
+        const dataBoardRef = doc(db, "boards", boardId);
         const deleteData = async () => {
-            const response = await deleteDoc(dataDocRef);
-            if(!response) {
+            const response = await deleteDoc(dataBoardRef);
+            if (!response) {
                 console.log("delete error");
             }
         };
 
         try {
             await deleteData();
+            // dispatch(
+            //     boardActions.deleteStateBoard({
+            //         boardId
+            //     })
+            // );
             console.log("success delete");
         }
         catch (error) {
             console.log("try catch delete error");
+        }
+    }
+}
+
+// CUD for stages with real time read at boards level.
+export const createStageInBoard = (boardInfo = {
+    id: "NloePyCF1BViiCqr6Gap",
+    stages: [
+        { name: "To Do", id: "0"},
+        { name: "In Progress", id: "1"},
+        { name: "QA", id: "2"},
+        { name: "ITG", id: "3"},
+        { name: "Prod", id: "4"}
+    ]
+}, data = {
+    newStageName: {
+        name: "New Stage",
+        id: "n"
+    }
+}) => {
+    return async (dispatch) => {
+        const dataStoriesBoardRef = doc(db, "boards", boardInfo.id);
+        const updateStageInBoard = async () => {
+            const response = await updateDoc(dataStoriesBoardRef,
+                { stages: [...boardInfo.stages, data.newStageName] });
+
+            // if (!response) {
+            //     console.log(response);
+            // }
+        };
+
+        try {
+            await updateStageInBoard();
+            // dispatch(
+            //     boardActions.updateStateBoard({
+            //         boardId,
+            //         updateData : {...data}
+            //     })
+            // );
+            console.log("success create stage in board");
+        }
+        catch (error) {
+            console.log("try catch create stage in board error");
+        }
+    }
+}
+
+export const updateStageInBoard = (boardInfo = {
+    id: "NloePyCF1BViiCqr6Gap",
+    stages: [
+        { name: "To Do", id: "0"},
+        { name: "In Progress", id: "1"},
+        { name: "QA", id: "2"},
+        { name: "ITG", id: "3"},
+        { name: "Prod", id: "4"}
+    ]
+}, data = {
+    updateStage: {
+        name: "To Do *",
+        id: "0 *"
+    }
+}) => {
+    return async (dispatch) => {
+        const dataStoriesBoardRef = doc(db, "boards", boardInfo.id);
+        const updateStageInBoard = async () => {
+            const updateStageIndex = boardInfo.stages.findIndex((stage) => stage.id === data.updateStage.id);
+            boardInfo.stages[updateStageIndex] = data.updateStage;
+            const response = await updateDoc(dataStoriesBoardRef,
+                { stages: [...boardInfo.stages] });
+
+            // if (!response) {
+            //     console.log(response);
+            // }
+        };
+
+        try {
+            await updateStageInBoard();
+            // dispatch(
+            //     boardActions.updateStateBoard({
+            //         boardId,
+            //         updateData : {...data}
+            //     })
+            // );
+            console.log("success update stage in board");
+        }
+        catch (error) {
+            console.log("try catch update stage in board error");
+        }
+    }
+}
+
+export const deleteStageInBoard = (boardInfo = {
+    id: "NloePyCF1BViiCqr6Gap",
+    stages: [
+        { name: "To Do", id: "0"},
+        { name: "In Progress", id: "1"},
+        { name: "QA", id: "2"},
+        { name: "ITG", id: "3"},
+        { name: "Prod", id: "4"}
+    ]
+}, data = {
+    deleteStageId: "0"
+}) => {
+    return async (dispatch) => {
+        const dataStoriesBoardRef = doc(db, "boards", boardInfo.id);
+        const deleteStageInBoard = async () => {
+            const deleteStageIndex = boardInfo.stages.findIndex((stage) => stage.id === data.deleteStageId);
+            boardInfo.stages.splice(deleteStageIndex, 1);
+            const response = await updateDoc(dataStoriesBoardRef,
+                { stages: [...boardInfo.stages] });
+
+            // if (!response) {
+            //     console.log(response);
+            // }
+        };
+
+        try {
+            await deleteStageInBoard();
+            // dispatch(
+            //     boardActions.updateStateBoard({
+            //         boardId,
+            //         updateData : {...data}
+            //     })
+            // );
+            console.log("success delete stage in board");
+        }
+        catch (error) {
+            console.log("try catch delete stage in board error");
         }
     }
 }

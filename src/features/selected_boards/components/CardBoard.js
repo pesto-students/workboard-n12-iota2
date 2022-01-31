@@ -3,7 +3,7 @@ import React from "react";
 
 const { Text } = Typography;
 
-export default function CardBoard({ name, desc }) {
+export default function CardBoard() {
   return (
     <Card
       hoverable
@@ -13,9 +13,10 @@ export default function CardBoard({ name, desc }) {
     >
       <Row gutter={[10, 10]}>
         <Col span={24}>
-          <h4>{name}</h4>
+          <h4>Start designing</h4>
           <EllipsisMiddle suffixCount={12}>
-            {desc}
+            In the process of internal desktop applications development, and
+            reduce the efficiency of development.
           </EllipsisMiddle>
         </Col>
         <Col span={24}>
