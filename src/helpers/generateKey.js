@@ -1,6 +1,7 @@
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-const generateKey = (input = '') => {
-    let str = input;
+const generateKey = () => {
+    let str = `${Math.random()}`.split('.')[1];
+    console.log(str);
     let output = '';
     for (let block = 0, charCode, i = 0, map = chars;
     str.charAt(i | 0) || (map = '=', i % 1);

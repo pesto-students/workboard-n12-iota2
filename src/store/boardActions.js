@@ -3,50 +3,22 @@ import { setDoc, collection, deleteDoc, doc, getDocs, updateDoc, addDoc, query, 
 
 import { boardActions } from './boardSlice';
 
+const firebaseRootCollectionName = "newSchemaBoards";
+
 //CRUD for boards with real time listening for changes.
-export const createBoard = (newBoard = {
-    members: ['slave *', 'servent *'],
-    name: "Board *",
-    owner: "master *",
-    stages: [],
-    stories: []
-}) => {
-    return async (dispatch) => {
-        const dataCollectionBoardRef = collection(db, 'boards');
-        const postBoard = async () => {
-            const response = await addDoc(dataCollectionBoardRef, { ...newBoard });
-
-            if (!response) {
-                console.log("create board error");
-            }
-        };
-
-        try {
-            // dispatch(
-            //     boardActions.createBoard({
-            //         board: { ...newBoard }
-            //     })
-            // );
-            await postBoard();
-            console.log("success post board");
-        }
-        catch (error) {
-            console.log("try catch create board error");
-        }
-    }
-}
 
 export const getBoards = () => dispatch => {
-    const dataCollectionBoardRef = collection(db, "boards");
-    const unsubscribe = onSnapshot(query(dataCollectionBoardRef), (querySnapshot) => {
+    const dataCollectionBoardsRef = collection(db, firebaseRootCollectionName);
+    const unsubscribe = onSnapshot(query(dataCollectionBoardsRef), (querySnapshot) => {
         const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
         console.log(source);
         const getAllBoards = [];
         querySnapshot.forEach((doc) => {
-            getAllBoards.push({ ...doc.data(), id: doc.id });
+            getAllBoards.push({ ...doc.data()});
         })
+        console.log(getAllBoards);
         dispatch(
-            boardActions.setBoards({
+            boardActions.setAllBoards({
                 boards: [...getAllBoards]
             })
         );
@@ -56,27 +28,36 @@ export const getBoards = () => dispatch => {
     return unsubscribe;
 }
 
+export const createBoard = (newBoard) => {
+    return async () => {
+        const dataCollectionBoardsDocumentBoardRef = doc(db, firebaseRootCollectionName, newBoard.id);
+        const postBoard = async () => {
+            const response = await setDoc(dataCollectionBoardsDocumentBoardRef, { ...newBoard });
+        };
+
+        try {
+            await postBoard();
+            console.log("success create board");
+        }
+        catch (error) {
+            console.log("try catch create board error");
+        }
+    }
+}
+
 export const updateBoard = (boardId, data) => {
-    return async (dispatch) => {
-        const dataBoardRef = doc(db, "boards", boardId);
+    return async () => {
+        const dataBoardRef = doc(db, firebaseRootCollectionName, boardId);
         const updateData = async () => {
             const response = await updateDoc(dataBoardRef, {
                 ...data
             });
-
             if (!response) {
                 console.log("update board error");
             }
         };
-
         try {
             await updateData();
-            // dispatch(
-            //     boardActions.updateStateBoard({
-            //         boardId,
-            //         updateData : {...data}
-            //     })
-            // );
             console.log("success update board");
         }
         catch (error) {
@@ -87,21 +68,12 @@ export const updateBoard = (boardId, data) => {
 
 export const deleteBoard = (boardId) => {
     return async (dispatch) => {
-        const dataBoardRef = doc(db, "boards", boardId);
+        const dataBoardRef = doc(db, firebaseRootCollectionName, boardId);
         const deleteData = async () => {
             const response = await deleteDoc(dataBoardRef);
-            if (!response) {
-                console.log("delete error");
-            }
         };
-
         try {
             await deleteData();
-            // dispatch(
-            //     boardActions.deleteStateBoard({
-            //         boardId
-            //     })
-            // );
             console.log("success delete");
         }
         catch (error) {
@@ -111,6 +83,40 @@ export const deleteBoard = (boardId) => {
 }
 
 // CUD for stages with real time read at boards level.
+
+export const getBoardStages_Stories = (boardId) => dispatch => {
+    const dataDocumentBoardRef = doc(db, firebaseRootCollectionName, boardId);
+    const dataCollectionBoardsDocumentBoardCollectionStoriesRef = collection(db, firebaseRootCollectionName, boardId, "stories");
+    const unsubscribeBoard = onSnapshot(dataDocumentBoardRef, (doc) => {
+        const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+        console.log(source);
+        const getBoard = doc.data();
+        dispatch(
+            boardActions.setBoard({
+                board: getBoard
+            })
+        );
+    }, (error) => {
+        console.log("Real Time Data Getting has an error.")
+    });
+    const unsubscribeStories = onSnapshot(query(dataCollectionBoardsDocumentBoardCollectionStoriesRef), (querySnapshot) => {
+        const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
+        console.log(source);
+        const getAllStories = [];
+        querySnapshot.forEach((doc) => {
+            getAllStories.push({ ...doc.data()});
+        })
+    }, (error) => {
+        console.log("Real Time Data Getting has an error.")
+    });
+
+    const returnUnsubscribeRefs = {
+        unsubBoard: unsubscribeBoard,
+        unsubStories: unsubscribeStories
+    };
+    
+    return returnUnsubscribeRefs;
+}
 export const createStageInBoard = (updatedStages , key) => {
     return async (dispatch) => {
         console.log(key);
@@ -351,3 +357,127 @@ export const deleteStoryFromBoard = (boardInfo = {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////     For Future Reference Do not touch
+
+
+
+// export const createStageInBoard = (updatedStages , key) => {
+//     return async (dispatch) => {
+//         console.log(key);
+//         const dataStoriesBoardRef = doc(db, "boards", key);
+//         const updateStageInBoard = async () => {
+//             const response = await updateDoc(dataStoriesBoardRef,
+//                 { stages: [...updatedStages] });
+
+//             // if (!response) {
+//             //     console.log(response);
+//             // }
+//         };
+
+//         try {
+//             await updateStageInBoard();
+//             // dispatch(
+//             //     boardActions.updateStateBoard({
+//             //         boardId,
+//             //         updateData : {...data}
+//             //     })
+//             // );
+//             console.log("success create stage in board");
+//         }
+//         catch (error) {
+//             console.log("try catch create stage in board error");
+//         }
+//     }
+// }

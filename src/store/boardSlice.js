@@ -4,14 +4,22 @@ import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 
 const boardSlice = createSlice({
   name: 'boards',
-  initialState: {},
+  initialState: {
+    boards: []
+  },
   reducers: {
     // createBoard (state, action) {
     //   state.boards = [...state.boards, {...action.payload.board}]
     // },
-    setBoards (state, action) {
+    setAllBoards (state, action) {
       state.boards = [...action.payload.boards]
     },
+    setBoard (state, action) {
+      const boardIndex = state.boards.findIndex((board) => board.id === action.payload.board.id);
+      const copyAllBoards = state.boards.slice();
+      boardIndex !== -1 ? copyAllBoards[boardIndex] = action.payload.board : copyAllBoards.push(action.payload.board);
+      state.boards = [...copyAllBoards]
+    }
     // updateStateBoard (state, action) {
     //   const allUpdatedBoards = state.boards.map((board) => {
     //     if(board.id === action.payload.boardId)

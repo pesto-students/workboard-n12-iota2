@@ -1,7 +1,8 @@
 import { Button, Col, Row, Input } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createStageInBoard } from "../../../store/boardActions";
+import { getBoardStages_Stories } from '../../../store/boardActions';
+// import { createStageInBoard } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
 import { DndProvider } from "react-dnd";
@@ -9,21 +10,22 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import "../css/Board.css";
 
 import generateKey from "../../../helpers/generateKey";
+import { useLocation } from "react-router-dom";
 
 export default function SelectedBoard() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const message = useOutletContext();
+  const boardId = useLocation().pathname.split('/')[2];
   const [addingNewList, setAddingNewList] = useState(false);
-  const getStateBoardsForStages_Stories = useSelector(
-    (state) => state.boards.boards
-  );
-  const allStages = getStateBoardsForStages_Stories
-    ? getStateBoardsForStages_Stories[0].stages
-    : [{}];
-  const allStories = getStateBoardsForStages_Stories
-    ? getStateBoardsForStages_Stories[0].stories
-    : [];
+  const allStages =  [{}];
+  const allStories =  [];
+
+  useEffect(()=> {
+    console.log("new connection at board level");
+    const { unsubBoard, unsubStories} = dispatch(getBoardStages_Stories(boardId));
+  }, []);
+
+  const getStateBoard = useSelector((state) => state.boards.boards.filter((board) => board.id === boardId)[0]);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Row
@@ -44,7 +46,6 @@ export default function SelectedBoard() {
                   style={{ border: "none", borderRadius: 5 }}
                   placeholder="Enter title for card"
                   autoFocus
-                  onChange={(e) => setStageName(e.target.value)}
                 />
               </Col>
               <Col span={24}>
@@ -77,7 +78,7 @@ export default function SelectedBoard() {
                           name: "New Stage",
                           id: "n",
                         };
-                        dispatch(createStageInBoard(newStage));
+                        // dispatch(createStageInBoard(newStage));
                       }}
                     >
                       add

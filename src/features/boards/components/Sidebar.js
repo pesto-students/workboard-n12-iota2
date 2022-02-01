@@ -56,7 +56,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         <Menu.Item key="9" icon={<UserOutlined />}>
           <Link to="/boards/profile">Profile</Link>
         </Menu.Item>
-        <Menu.Item key="10" icon={<LogoutOutlined />} onClick={() => {dispatch(createBoard());}}>
+        <Menu.Item key="10" icon={<LogoutOutlined />}>
           Logout
         </Menu.Item>
       </Menu>

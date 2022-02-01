@@ -1,8 +1,13 @@
 import { Button, Col, Menu, Modal, Row, Input, Select } from "antd";
 import React, { useState } from "react";
 import { SettingOutlined } from "@ant-design/icons";
+import { createBoard } from "../../../store/boardActions";
+
+import generateKey from "../../../helpers/generateKey";
+import { useDispatch } from "react-redux";
 
 export default function AddNewBoard() {
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
   const children = [];
@@ -12,8 +17,33 @@ export default function AddNewBoard() {
     );
   }
   const createNewBoard = () => {};
-  function handleChange(value) {
-    console.log(`selected ${value}`);
+  const [boardName, setBoardName] = useState("");
+  const [members, setMembers] = useState([]);
+
+  const closeModal = () => {
+    console.log("fire me");
+    setBoardName("");
+    setMembers([]);
+    setModalVisible(false);
+  }
+
+
+
+  const createBoardFunctionForAction = () => {
+    closeModal();
+    const creationDate = String(new Date().toLocaleDateString());
+    const board = {
+      id: generateKey(boardName),
+      name: boardName,
+      backImg: "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      owners: members,
+      editors: members,
+      viewers: members,
+      createdOn: creationDate,
+      lastUpdatedOn: creationDate,
+      stories: [],
+    };
+    dispatch(createBoard(board));
   }
   return (
     <>
@@ -23,21 +53,22 @@ export default function AddNewBoard() {
       <Modal
         title="Create new board"
         visible={modalVisible}
-        onCancel={() => setModalVisible(false)}
+        onCancel={closeModal}
         footer={null}
         bodyStyle={{ borderRadius: 15 }}
       >
         <Row gutter={[20, 20]} justify="center">
           <Col span={18}>
-            <Input placeholder="Enter board name" />
+            <Input placeholder="Enter board name" value={boardName} onChange={(e) => setBoardName(e.target.value)}/>
           </Col>
           <Col span={18}>
             <Select
               mode="tags"
               allowClear
               style={{ width: "100%" }}
-              placeholder="Please select"
-              onChange={handleChange}
+              placeholder="Please select members to add."
+              value={members}
+              onChange={(value) => setMembers(value)}
             >
               {children}
             </Select>
@@ -48,7 +79,7 @@ export default function AddNewBoard() {
                 <Button
                   type="ghost"
                   style={{ borderRadius: "5px" }}
-                  onClick={() => setModalVisible(false)}
+                  onClick={closeModal}
                 >
                   Cancel
                 </Button>
@@ -57,7 +88,7 @@ export default function AddNewBoard() {
                 <Button
                   className="primary_button"
                   style={{ color: "white" }}
-                  onClick={() => createNewBoard()}
+                  onClick={createBoardFunctionForAction}
                 >
                   Create
                 </Button>

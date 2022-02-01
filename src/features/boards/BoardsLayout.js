@@ -16,9 +16,15 @@ export default function BoardsLayout() {
   
   // let unsub;    //Execute this to disconnect from firrebase to recieve live updates.
 
-  // useEffect(() => {
-  //   unsub = dispatch(getBoards());
-  // }, []);
+  useEffect(() => {
+    console.log("connection established");
+    const unsub = dispatch(getBoards());
+
+    return () => {
+      console.log("connection broken");
+      unsub();
+    }
+  }, []);
 
 
 
