@@ -1,6 +1,7 @@
 import { Button, Col, Row, Input } from "antd";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { createStageInBoard } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
@@ -10,16 +11,26 @@ import "../css/Board.css";
 
 export default function SelectedBoard() {
   const dispatch = useDispatch();
+  const boardId = useLocation().pathname.split("/")[2];
   const [addingNewList, setAddingNewList] = useState(false);
   const getStateBoardsForStages_Stories = useSelector(
     (state) => state.boards.boards
   );
+
   const allStages = getStateBoardsForStages_Stories
-    ? getStateBoardsForStages_Stories[0].stages
+    ? getStateBoardsForStages_Stories.filter((board) => board.id === boardId)[0].stages
     : [{}];
   const allStories = getStateBoardsForStages_Stories
-    ? getStateBoardsForStages_Stories[0].stories
+    ? getStateBoardsForStages_Stories.filter((board) => board.id === boardId)[0].stories
     : [];
+
+
+  const storiesForStage = (stageId) => {
+    const releventStories = allStories.filter((story) => story.stageId === stageId);
+    return releventStories;
+  }
+
+  const [listName, setListName] = useState("");
   return (
     <DndProvider backend={HTML5Backend}>
       <Row
@@ -29,17 +40,19 @@ export default function SelectedBoard() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {allStages.map((stage) => (
-          <ListBoard id={stage.id} name={stage.name} allStories={allStories} />
-        ))}
+        {allStages.map((stage) => {
+          const sendStories = storiesForStage(stage.id);
+          return <ListBoard boardId={boardId} id={stage.id} name={stage.name} allStories={sendStories} />
+        })}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>
             <Row gutter={[10, 10]} style={{ width: 300 }}>
               <Col span={24}>
                 <Input
                   style={{ border: "none", borderRadius: 5 }}
-                  placeholder="Enter title for card"
+                  placeholder="Enter title for list"
                   autoFocus
+                  onChange={(e) => setListName(e.target.value)}
                 />
               </Col>
               <Col span={24}>
@@ -69,10 +82,10 @@ export default function SelectedBoard() {
                         // setAllCards(allCards.concat({}));
                         setAddingNewList(false);
                         const newStage = {
-                          name: "New Stage",
-                          id: "n",
+                          name: listName,
+                          id: `${allStages.length}`,
                         };
-                        dispatch(createStageInBoard(newStage));
+                        dispatch(createStageInBoard(newStage, boardId, allStages));
                       }}
                     >
                       add

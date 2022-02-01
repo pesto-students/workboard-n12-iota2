@@ -24,6 +24,7 @@ export default function BoardCard({ id, name, coverImg, isShared, lastUpdatedOn 
       bodyStyle={{ padding: "10px 15px" }}
       cover={<img alt="coverImage" src={coverImg} />}
     >
+      {console.log(id)}
       <Meta
         title={
           <Row justify="space-between">
