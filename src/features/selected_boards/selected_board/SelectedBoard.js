@@ -1,7 +1,7 @@
 import { Button, Col, Row, Input } from "antd";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createStageInBoard } from '../../../store/boardActions';
+import { createStageInBoard } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
 import { DndProvider } from "react-dnd";
@@ -11,9 +11,15 @@ import "../css/Board.css";
 export default function SelectedBoard() {
   const dispatch = useDispatch();
   const [addingNewList, setAddingNewList] = useState(false);
-  const getStateBoardsForStages_Stories = useSelector((state) => state.boards.boards);
-  const allStages = getStateBoardsForStages_Stories ? getStateBoardsForStages_Stories[0].stages : [];
-  const allStories = getStateBoardsForStages_Stories ? getStateBoardsForStages_Stories[0].stories : [];
+  const getStateBoardsForStages_Stories = useSelector(
+    (state) => state.boards.boards
+  );
+  const allStages = getStateBoardsForStages_Stories
+    ? getStateBoardsForStages_Stories[0].stages
+    : [{}];
+  const allStories = getStateBoardsForStages_Stories
+    ? getStateBoardsForStages_Stories[0].stories
+    : [];
   return (
     <DndProvider backend={HTML5Backend}>
       <Row
@@ -23,10 +29,9 @@ export default function SelectedBoard() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {allStages
-          .map((stage) => (
-            <ListBoard id={stage.id} name={stage.name} allStories={allStories} />
-          ))}
+        {allStages.map((stage) => (
+          <ListBoard id={stage.id} name={stage.name} allStories={allStories} />
+        ))}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>
             <Row gutter={[10, 10]} style={{ width: 300 }}>
@@ -65,7 +70,7 @@ export default function SelectedBoard() {
                         setAddingNewList(false);
                         const newStage = {
                           name: "New Stage",
-                          id: "n"
+                          id: "n",
                         };
                         dispatch(createStageInBoard(newStage));
                       }}

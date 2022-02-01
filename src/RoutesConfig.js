@@ -23,11 +23,11 @@ export default function RoutesConfig() {
           <Route path="signup" element={<Signup />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
         </Route>
-        <Route path="profile" element={<ProfileLayout />}></Route>
         <Route path="boards" element={<BoardsLayout />}>
           <Route index element={<AllBoards />} />
           <Route path="shared" element={<SharedBoards />} />
           <Route path="owned" element={<OwnedBoards />} />
+          <Route path="profile" element={<ProfileLayout />} />
         </Route>
         <Route path="board" element={<SelectedBoardLayout />}>
           <Route path=":boardId" element={<SelectedBoard />} />
