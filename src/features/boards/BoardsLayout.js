@@ -6,6 +6,7 @@ import { getBoards } from "../../store/boardActions";
 import "./css/Boards.css";
 import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import AddNewBoard from "./components/AddNewBoard";
 const { Header, Content, Footer } = Layout;
 export default function BoardsLayout() {
 

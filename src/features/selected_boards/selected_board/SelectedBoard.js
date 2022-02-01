@@ -1,8 +1,7 @@
 import { Button, Col, Row, Input } from "antd";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation, useOutletContext } from "react-router-dom";
-import { createStageInBoard } from '../../../store/boardActions';
+import { createStageInBoard } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
 import { DndProvider } from "react-dnd";
@@ -16,10 +15,15 @@ export default function SelectedBoard() {
   const location = useLocation();
   const message = useOutletContext();
   const [addingNewList, setAddingNewList] = useState(false);
-  const [stageName, setStageName] = useState("");
-  const getStateBoardsForStages_Stories = useSelector((state) => state.boards.boards);
-  const allStages = [];
-  const allStories = [];
+  const getStateBoardsForStages_Stories = useSelector(
+    (state) => state.boards.boards
+  );
+  const allStages = getStateBoardsForStages_Stories
+    ? getStateBoardsForStages_Stories[0].stages
+    : [{}];
+  const allStories = getStateBoardsForStages_Stories
+    ? getStateBoardsForStages_Stories[0].stories
+    : [];
   return (
     <DndProvider backend={HTML5Backend}>
       <Row
@@ -29,12 +33,9 @@ export default function SelectedBoard() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {console.log(getStateBoardsForStages_Stories)}
-        {console.log(location)}
-        {allStages
-          .map((stage) => (
-            <ListBoard id={stage.id} name={stage.name} allStories={allStories} />
-          ))}
+        {allStages.map((stage) => (
+          <ListBoard id={stage.id} name={stage.name} allStories={allStories} />
+        ))}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>
             <Row gutter={[10, 10]} style={{ width: 300 }}>
@@ -72,13 +73,11 @@ export default function SelectedBoard() {
                       onClick={() => {
                         // setAllCards(allCards.concat({}));
                         setAddingNewList(false);
-                        // const newStage = {
-                        //   name: "New Stage",
-                        //   id: "n"
-                        // };
-                        // console.log(id);
-                        // dispatch(createStageInBoard([...allStages, {name: stageName, id: generateKey(stageName)}], id));
-                        setStageName("");
+                        const newStage = {
+                          name: "New Stage",
+                          id: "n",
+                        };
+                        dispatch(createStageInBoard(newStage));
                       }}
                     >
                       add

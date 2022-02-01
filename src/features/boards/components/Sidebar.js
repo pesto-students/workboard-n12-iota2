@@ -5,10 +5,12 @@ import {
   SettingOutlined,
   LogoutOutlined,
   LayoutOutlined,
+  UserOutlined,
+  PlusCircleOutlined,
 } from "@ant-design/icons";
 import "../css/Boards.css";
-import { NavLink } from "react-router-dom";
-import { createBoard } from "../../../store/boardActions";
+import { Link, NavLink } from "react-router-dom";
+import AddNewBoard from "./AddNewBoard";
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
@@ -48,8 +50,11 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             <MenuLink to="/boards/owned">Owned by me</MenuLink>
           </Menu.Item>
         </SubMenu>
-        <Menu.Item key="9" icon={<SettingOutlined />}>
-          Settings
+        <Menu.Item key="8" icon={<PlusCircleOutlined />}>
+          <AddNewBoard />
+        </Menu.Item>
+        <Menu.Item key="9" icon={<UserOutlined />}>
+          <Link to="/boards/profile">Profile</Link>
         </Menu.Item>
         <Menu.Item key="10" icon={<LogoutOutlined />} onClick={() => {dispatch(createBoard());}}>
           Logout

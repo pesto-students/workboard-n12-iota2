@@ -9,7 +9,11 @@ import { createStoryInBoard } from "../../../store/boardActions";
 
 export default function ListBoard({ id, name, allStories }) {
   const dispatch = useDispatch();
-  const stageStories = allStories ? allStories.filter((story) => story.stageId === id) : [];
+  const stageStories =
+    //   allStories
+    //     ? allStories.filter((story) => story.stageId === id)
+    //     :
+    [{ name: "dummy", desc: "this is a description" }];
   const [addingNewCard, setAddingNewCard] = useState(false);
   const [allCards, setAllCards] = useState([]);
   const [cardName, setCardName] = useState("");
@@ -38,7 +42,7 @@ export default function ListBoard({ id, name, allStories }) {
         }}
       >
         {stageStories.map((story) => (
-          <CardBoard name={story.name} desc={story.desc}/>
+          <CardBoard name={story.name} desc={story.desc} />
         ))}
         <Col style={{ margin: 10 }}>
           {addingNewCard ? (
@@ -78,7 +82,7 @@ export default function ListBoard({ id, name, allStories }) {
                         const story = {
                           name: `${cardName}`,
                           desc: `Description ${cardName}`,
-                          stageId: `${id}`
+                          stageId: `${id}`,
                         };
                         dispatch(createStoryInBoard(story));
                         // setAllCards(allCards.concat({}));
