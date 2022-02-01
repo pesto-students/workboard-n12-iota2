@@ -11,7 +11,7 @@ export default function AddNewBoard() {
       <Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>
     );
   }
-
+  const createNewBoard = () => {};
   function handleChange(value) {
     console.log(`selected ${value}`);
   }
@@ -27,21 +27,42 @@ export default function AddNewBoard() {
         footer={null}
         bodyStyle={{ borderRadius: 15 }}
       >
-        <Row justify="center">
+        <Row gutter={[20, 20]} justify="center">
           <Col span={18}>
             <Input placeholder="Enter board name" />
           </Col>
           <Col span={18}>
             <Select
-              mode="multiple"
+              mode="tags"
               allowClear
               style={{ width: "100%" }}
               placeholder="Please select"
-              defaultValue={["a10", "c12"]}
               onChange={handleChange}
             >
               {children}
             </Select>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[10, 10]} justify="end">
+              <Col>
+                <Button
+                  type="ghost"
+                  style={{ borderRadius: "5px" }}
+                  onClick={() => setModalVisible(false)}
+                >
+                  Cancel
+                </Button>
+              </Col>
+              <Col>
+                <Button
+                  className="primary_button"
+                  style={{ color: "white" }}
+                  onClick={() => createNewBoard()}
+                >
+                  Create
+                </Button>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Modal>
