@@ -7,13 +7,13 @@ import { useDrop } from "react-dnd";
 
 import { createStoryInBoard } from "../../../store/boardActions";
 
-export default function ListBoard({ id, name, allStories }) {
+export default function ListBoard({ boardId, id, name, allStories }) {
   const dispatch = useDispatch();
-  const stageStories =
-    //   allStories
-    //     ? allStories.filter((story) => story.stageId === id)
-    //     :
-    [{ name: "dummy", desc: "this is a description" }];
+  // const stageStories =
+  //   //   allStories
+  //   //     ? allStories.filter((story) => story.stageId === id)
+  //   //     :
+  //   [{ name: "dummy", desc: "this is a description" }];
   const [addingNewCard, setAddingNewCard] = useState(false);
   const [allCards, setAllCards] = useState([]);
   const [cardName, setCardName] = useState("");
@@ -41,7 +41,7 @@ export default function ListBoard({ id, name, allStories }) {
           maxHeight: "calc(100vh - 150px)",
         }}
       >
-        {stageStories.map((story) => (
+        {allStories.map((story) => (
           <CardBoard name={story.name} desc={story.desc} />
         ))}
         <Col style={{ margin: 10 }}>
@@ -84,7 +84,7 @@ export default function ListBoard({ id, name, allStories }) {
                           desc: `Description ${cardName}`,
                           stageId: `${id}`,
                         };
-                        dispatch(createStoryInBoard(story));
+                        dispatch(createStoryInBoard(story, boardId, allStories));
                         // setAllCards(allCards.concat({}));
                         setAddingNewCard(false);
                       }}

@@ -12,12 +12,12 @@ export default function BoardsLayout() {
 
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
-  let unsub;    //Execute this to disconnect from firrebase to recieve live updates.
+  // let unsub;    //Execute this to disconnect from firrebase to recieve live updates.
 
 
-  useEffect(() => {
-    unsub = dispatch(getBoards());
-  }, []);
+  // useEffect(() => {
+  //   unsub = dispatch(getBoards());
+  // }, []);
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };

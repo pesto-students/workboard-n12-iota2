@@ -4,19 +4,12 @@ import { setDoc, collection, deleteDoc, doc, getDocs, updateDoc, addDoc, query, 
 import { boardActions } from './boardSlice';
 
 //CUD for stories with real time read at boards level.
-export const createStoryInBoard = (story, boardInfo = {
-    id: "NloePyCF1BViiCqr6Gap",
-    stories: [{
-        name: "Story *",
-        desc: "Description *",
-        stageId: "0"
-    }]
-}) => {
+export const createStoryInBoard = (story, boardId, stories) => {
     return async (dispatch) => {
-        const dataStoriesBoardRef = doc(db, "boards", boardInfo.id);
+        const dataStoriesBoardRef = doc(db, "boards", boardId);
         const updateStoryInBoard = async () => {
             const response = await updateDoc(dataStoriesBoardRef,
-                { stories: [...boardInfo.stories, story] });
+                { stories: [...stories, story] });
 
             // if (!response) {
             //     console.log(response);
@@ -236,21 +229,12 @@ export const deleteBoard = (boardId) => {
 }
 
 // CUD for stages with real time read at boards level.
-export const createStageInBoard = (data, boardInfo = {
-    id: "NloePyCF1BViiCqr6Gap",
-    stages: [
-        { name: "To Do", id: "0" },
-        { name: "In Progress", id: "1" },
-        { name: "QA", id: "2" },
-        { name: "ITG", id: "3" },
-        { name: "Prod", id: "4" }
-    ]
-}) => {
+export const createStageInBoard = (data, boardId, stages) => {
     return async (dispatch) => {
-        const dataStoriesBoardRef = doc(db, "boards", boardInfo.id);
+        const dataStoriesBoardRef = doc(db, "boards", boardId);
         const updateStageInBoard = async () => {
             const response = await updateDoc(dataStoriesBoardRef,
-                { stages: [...boardInfo.stages, data] });
+                { stages: [...stages, data] });
 
             // if (!response) {
             //     console.log(response);
