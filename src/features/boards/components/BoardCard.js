@@ -6,12 +6,12 @@ import { useDispatch } from "react-redux";
 import { updateBoard , deleteBoard } from '../../../store/boardActions';
 const { Meta } = Card;
 
-export default function BoardCard({ id, name, coverImg, isShared, lastUpdatedOn }) {
+export default function BoardCard({ id, name, coverImg, isShared, lastUpdatedOn, stories }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const menu = (
     <Menu>
-      <Menu.Item onClick={() => dispatch(updateBoard(id, { name: "New Board Name" }))}>Edit Board</Menu.Item>
+      <Menu.Item onClick={() => dispatch(updateBoard())}>Edit Board</Menu.Item>
       <Menu.Item danger onClick={() => dispatch(deleteBoard(id))}>Delete Board</Menu.Item>
     </Menu>
   );

@@ -1,5 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
+import { useDispatch } from "react-redux";
 import {
   SettingOutlined,
   LogoutOutlined,
@@ -7,11 +8,13 @@ import {
 } from "@ant-design/icons";
 import "../css/Boards.css";
 import { NavLink } from "react-router-dom";
+import { createBoard } from "../../../store/boardActions";
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 export default function Sidebar({ collapsed, setCollapsed }) {
+  const dispatch = useDispatch();
   return (
     <Sider
       collapsible
@@ -48,7 +51,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         <Menu.Item key="9" icon={<SettingOutlined />}>
           Settings
         </Menu.Item>
-        <Menu.Item key="10" icon={<LogoutOutlined />}>
+        <Menu.Item key="10" icon={<LogoutOutlined />} onClick={() => {dispatch(createBoard());}}>
           Logout
         </Menu.Item>
       </Menu>

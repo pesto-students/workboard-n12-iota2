@@ -21,7 +21,7 @@ export default function ListBoard({ id, name, allStories }) {
     },
   });
   return (
-    <Col key={id} ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
+    <Col id={id} ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
       <Card
         title={name}
         extra={<EllipsisOutlined />}

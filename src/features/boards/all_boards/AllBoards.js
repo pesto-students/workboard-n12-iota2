@@ -20,9 +20,9 @@ export default function AllBoards() {
     <div>
       <PageHeader title="Recent boards" backIcon={null} />
       <Row gutter={[20, 20]}>
-        {allBoards.map((data) => (
-          <Col key={data.id} xs={24} sm={24} md={12} lg={8} xl={6} xxl={4}>
-            <BoardCard {...data} />
+        {allBoards.map((board) => (
+          <Col key={board.id} xs={24} sm={24} md={12} lg={8} xl={6} xxl={4}>
+            <BoardCard {...board} />
           </Col>
         ))}
       </Row>
