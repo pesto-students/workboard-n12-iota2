@@ -124,11 +124,7 @@ export const deleteStoryFromBoard = (boardInfo = {
 }
 
 //CRUD for boards with real time listening for changes.
-export const createBoard = (newBoard = {
-    members: ['slave *', 'servent *'],
-    name: "Board *",
-    owner: "master *"
-}) => {
+export const createBoard = (newBoard) => {
     return async (dispatch) => {
         const dataCollectionBoardRef = collection(db, 'boards');
         const postBoard = async () => {

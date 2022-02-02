@@ -43,18 +43,18 @@ export default function SelectedBoard() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {allStages &&
-          allStages.map((stage) => {
-            const sendStories = storiesForStage(stage.id);
-            return (
-              <ListBoard
-                boardId={boardId}
-                id={stage.id}
-                name={stage.name}
-                allStories={sendStories}
-              />
-            );
-          })}
+        {allStages.map((stage) => {
+          const sendStageStories = storiesForStage(stage.id);
+          return (
+            <ListBoard
+              boardId={boardId}
+              id={stage.id}
+              name={stage.name}
+              allStageStories={sendStageStories}
+              allStories={allStories}
+            />
+          );
+        })}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>
             <Row gutter={[10, 10]} style={{ width: 300 }}>
