@@ -18,17 +18,20 @@ export default function SelectedBoard() {
   );
 
   const allStages = getStateBoardsForStages_Stories
-    ? getStateBoardsForStages_Stories.filter((board) => board.id === boardId)[0].stages
+    ? getStateBoardsForStages_Stories.filter((board) => board.id === boardId)[0]
+        ?.stages
     : [{}];
   const allStories = getStateBoardsForStages_Stories
-    ? getStateBoardsForStages_Stories.filter((board) => board.id === boardId)[0].stories
+    ? getStateBoardsForStages_Stories.filter((board) => board.id === boardId)[0]
+        ?.stories
     : [];
 
-
   const storiesForStage = (stageId) => {
-    const releventStories = allStories.filter((story) => story.stageId === stageId);
+    const releventStories = allStories.filter(
+      (story) => story.stageId === stageId
+    );
     return releventStories;
-  }
+  };
 
   const [listName, setListName] = useState("");
   return (
@@ -40,10 +43,18 @@ export default function SelectedBoard() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {allStages.map((stage) => {
-          const sendStories = storiesForStage(stage.id);
-          return <ListBoard boardId={boardId} id={stage.id} name={stage.name} allStories={sendStories} />
-        })}
+        {allStages &&
+          allStages.map((stage) => {
+            const sendStories = storiesForStage(stage.id);
+            return (
+              <ListBoard
+                boardId={boardId}
+                id={stage.id}
+                name={stage.name}
+                allStories={sendStories}
+              />
+            );
+          })}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>
             <Row gutter={[10, 10]} style={{ width: 300 }}>
@@ -83,9 +94,11 @@ export default function SelectedBoard() {
                         setAddingNewList(false);
                         const newStage = {
                           name: listName,
-                          id: `${allStages.length}`,
+                          id: `${allStages ? allStages.length : 0}`,
                         };
-                        dispatch(createStageInBoard(newStage, boardId, allStages));
+                        dispatch(
+                          createStageInBoard(newStage, boardId, allStages)
+                        );
                       }}
                     >
                       add
