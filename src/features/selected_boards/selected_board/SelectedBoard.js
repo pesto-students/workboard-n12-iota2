@@ -41,8 +41,8 @@ export default function SelectedBoard() {
         }}
       >
         {allStages.map((stage) => {
-          const sendStories = storiesForStage(stage.id);
-          return <ListBoard boardId={boardId} id={stage.id} name={stage.name} allStories={sendStories} />
+          const sendStageStories = storiesForStage(stage.id);
+          return <ListBoard boardId={boardId} id={stage.id} name={stage.name} allStageStories={sendStageStories} allStories={allStories} />
         })}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>

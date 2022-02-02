@@ -7,7 +7,7 @@ import { useDrop } from "react-dnd";
 
 import { createStoryInBoard } from "../../../store/boardActions";
 
-export default function ListBoard({ boardId, id, name, allStories }) {
+export default function ListBoard({ boardId, id, name, allStageStories, allStories }) {
   const dispatch = useDispatch();
   // const stageStories =
   //   //   allStories
@@ -41,7 +41,7 @@ export default function ListBoard({ boardId, id, name, allStories }) {
           maxHeight: "calc(100vh - 150px)",
         }}
       >
-        {allStories.map((story) => (
+        {allStageStories.map((story) => (
           <CardBoard name={story.name} desc={story.desc} />
         ))}
         <Col style={{ margin: 10 }}>
