@@ -10,7 +10,7 @@ const { Header, Content } = Layout;
 
 export default function SelectedBoardLayout() {
   const boardId = useLocation().pathname.split('/')[2];
-  const getStateBoard = useSelector((state) => state.boards.boards.filter((board) => board.id === boardId)[0]);
+  const getStateBoard = useSelector((state) => state.boards.boards.find((board) => board.id === boardId));
   return (
     <Layout
       style={{

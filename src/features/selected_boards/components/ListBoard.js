@@ -1,22 +1,20 @@
 import { Button, Card, Col, Row, Input } from "antd";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import CardBoard from "./CardBoard";
 import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import { useDrop } from "react-dnd";
 
-import { createStoryInBoard } from "../../../store/boardActions";
-
-export default function ListBoard({ id, name, allStories }) {
+import generateKey from "../../../helpers/generateKey";
+import { createStoryInBoard, deleteStageInBoard, deleteStoryFromBoard } from "../../../store/boardActions";
+export default function ListBoard({ stageId, name, position, allStages, allStories }) {
   const dispatch = useDispatch();
-  const stageStories =
-    //   allStories
-    //     ? allStories.filter((story) => story.stageId === id)
-    //     :
-    [{ name: "dummy", desc: "this is a description" }];
+  const boardId = useLocation().pathname.split('/')[2];
+  const stageStories = allStories.filter((story) => story.stageId === stageId);
   const [addingNewCard, setAddingNewCard] = useState(false);
   const [allCards, setAllCards] = useState([]);
-  const [cardName, setCardName] = useState("");
+  const [storyName, setStoryName] = useState("");
   const [{ props }, drop] = useDrop({
     accept: "card",
     drop: () => {
@@ -24,8 +22,32 @@ export default function ListBoard({ id, name, allStories }) {
       console.log(props);
     },
   });
+  console.log(stageId);
+
+  const createStoryFunctionForAction = () => {
+    const story = {
+      id: generateKey(),
+      stageId: stageId,
+      stagePosition: position,
+      name: storyName,
+      description: "",
+      assignees: [],
+      labels: [],
+      comments: []
+    };
+    dispatch(createStoryInBoard(boardId, story))
+  };
+
+  const deleteStageFunctionForAction = () => {
+    console.log("delete me");
+    const updatedStages = allStages.filter((stage) => stage.id !== stageId);
+    for (const story in stageStories) {
+      dispatch(deleteStoryFromBoard(boardId, story.id));
+    }
+    dispatch(deleteStageInBoard(boardId, updatedStages));
+  }
   return (
-    <Col id={id} ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
+    <Col id={stageId} ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
       <Card
         title={name}
         extra={<EllipsisOutlined />}
@@ -40,9 +62,10 @@ export default function ListBoard({ id, name, allStories }) {
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
+      // onClick={() => deleteStageFunctionForAction()}
       >
         {stageStories.map((story) => (
-          <CardBoard name={story.name} desc={story.desc} />
+          <CardBoard name={story.name} description={story.description} onClick={() => { }} />
         ))}
         <Col style={{ margin: 10 }}>
           {addingNewCard ? (
@@ -52,7 +75,7 @@ export default function ListBoard({ id, name, allStories }) {
                   style={{ border: "none", borderRadius: 5 }}
                   placeholder="Enter title for card"
                   autoFocus
-                  onChange={(e) => setCardName(e.target.value)}
+                  onChange={(e) => setStoryName(e.target.value)}
                 />
               </Col>
               <Col span={24}>
@@ -66,6 +89,7 @@ export default function ListBoard({ id, name, allStories }) {
                       }}
                       onClick={() => {
                         setAddingNewCard(false);
+                        setStoryName("");
                       }}
                     >
                       cancel
@@ -79,14 +103,8 @@ export default function ListBoard({ id, name, allStories }) {
                         borderRadius: 5,
                       }}
                       onClick={() => {
-                        const story = {
-                          name: `${cardName}`,
-                          desc: `Description ${cardName}`,
-                          stageId: `${id}`,
-                        };
-                        dispatch(createStoryInBoard(story));
-                        // setAllCards(allCards.concat({}));
                         setAddingNewCard(false);
+                        createStoryFunctionForAction();
                       }}
                     >
                       add
@@ -112,7 +130,7 @@ export default function ListBoard({ id, name, allStories }) {
             </Button>
           )}
         </Col>
-      </Card>
-    </Col>
+      </Card >
+    </Col >
   );
 }

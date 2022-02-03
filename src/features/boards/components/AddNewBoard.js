@@ -16,7 +16,7 @@ export default function AddNewBoard() {
       <Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>
     );
   }
-  const createNewBoard = () => {};
+  const createNewBoard = () => { };
   const [boardName, setBoardName] = useState("");
   const [members, setMembers] = useState([]);
 
@@ -41,6 +41,7 @@ export default function AddNewBoard() {
       viewers: members,
       createdOn: creationDate,
       lastUpdatedOn: creationDate,
+      stages: [],
       stories: [],
     };
     dispatch(createBoard(board));
@@ -59,7 +60,7 @@ export default function AddNewBoard() {
       >
         <Row gutter={[20, 20]} justify="center">
           <Col span={18}>
-            <Input placeholder="Enter board name" value={boardName} onChange={(e) => setBoardName(e.target.value)}/>
+            <Input placeholder="Enter board name" value={boardName} onChange={(e) => setBoardName(e.target.value)} />
           </Col>
           <Col span={18}>
             <Select

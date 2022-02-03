@@ -1,25 +1,37 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { db } from '../firebase-config';
+import { createSlice } from "@reduxjs/toolkit";
+import { db } from "../firebase-config";
 import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 
 const boardSlice = createSlice({
-  name: 'boards',
+  name: "boards",
   initialState: {
-    boards: []
+    boards: [],
   },
   reducers: {
     // createBoard (state, action) {
     //   state.boards = [...state.boards, {...action.payload.board}]
     // },
-    setAllBoards (state, action) {
-      state.boards = [...action.payload.boards]
+    setAllBoards(state, action) {
+      state.boards = [...action.payload.boards];
     },
-    setBoard (state, action) {
-      const boardIndex = state.boards.findIndex((board) => board.id === action.payload.board.id);
+    setBoard(state, action) {
+      const boardIndex = state.boards.findIndex(
+        (board) => board.id === action.payload.board.id
+      );
       const copyAllBoards = state.boards.slice();
-      boardIndex !== -1 ? copyAllBoards[boardIndex] = action.payload.board : copyAllBoards.push(action.payload.board);
-      state.boards = [...copyAllBoards]
-    }
+      boardIndex !== -1
+        ? (copyAllBoards[boardIndex] = action.payload.board)
+        : copyAllBoards.push(action.payload.board);
+      state.boards = [...copyAllBoards];
+    },
+    setStoriesForBoard(state, action) {
+      const boardIndex = state.boards.findIndex(
+        (board) => board.id === action.payload.boardId
+      );
+      const copyAllBoards = state.boards.slice();
+      copyAllBoards[boardIndex].stories = [...action.payload.stories];
+      state.boards = [...copyAllBoards];
+    },
     // updateStateBoard (state, action) {
     //   const allUpdatedBoards = state.boards.map((board) => {
     //     if(board.id === action.payload.boardId)

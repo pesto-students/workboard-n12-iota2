@@ -1,7 +1,7 @@
 import { Button, Col, Row, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getBoardStages_Stories } from '../../../store/boardActions';
+import { getBoardStages_Stories, createNewStageInBoard } from '../../../store/boardActions';
 // import { createStageInBoard } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
@@ -16,18 +16,37 @@ export default function SelectedBoard() {
   const dispatch = useDispatch();
   const boardId = useLocation().pathname.split('/')[2];
   const [addingNewList, setAddingNewList] = useState(false);
-  const allStages =  [{}];
-  const allStories =  [];
 
-  useEffect(()=> {
-    console.log("new connection at board level");
-    const { unsubBoard, unsubStories} = dispatch(getBoardStages_Stories(boardId));
+  useEffect(() => {
+    console.log("connection established with board document");
+    const { unsubBoard, unsubStories } = dispatch(getBoardStages_Stories(boardId));
+
+    return () => {
+      unsubBoard();
+      unsubStories();
+      console.log("connection broken with board document");
+    }
   }, []);
 
-  const getStateBoard = useSelector((state) => state.boards.boards.filter((board) => board.id === boardId)[0]);
+  const getStateBoard = useSelector((state) => state.boards.boards.find((board) => board.id === boardId));
+  const allStages = getStateBoard ? getStateBoard.stages : [];
+  const allStories = getStateBoard ? getStateBoard.stories : [];
+
+  const [newStageName, setNewStageName] = useState("");
+
+  const createStageFunctionForAction = () => {
+    const newStage = {
+      id: generateKey(),
+      name: newStageName,
+      position: allStages.length
+    }
+    const newStages = [...allStages, newStage];
+    dispatch(createNewStageInBoard(boardId, newStages));
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
+      {allStories.map(story => console.log(story.id))}
       <Row
         style={{
           overflowX: "scroll",
@@ -36,7 +55,7 @@ export default function SelectedBoard() {
         }}
       >
         {allStages.map((stage) => (
-          <ListBoard id={stage.id} name={stage.name} allStories={allStories} />
+          <ListBoard stageId={stage.id} name={stage.name} position={stage.position} allStages={allStages} allStories={allStories} />
         ))}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>
@@ -46,6 +65,7 @@ export default function SelectedBoard() {
                   style={{ border: "none", borderRadius: 5 }}
                   placeholder="Enter title for card"
                   autoFocus
+                  onChange={(e) => setNewStageName(e.target.value)}
                 />
               </Col>
               <Col span={24}>
@@ -59,6 +79,7 @@ export default function SelectedBoard() {
                       }}
                       onClick={() => {
                         setAddingNewList(false);
+                        setNewStageName("");
                       }}
                     >
                       cancel
@@ -72,13 +93,8 @@ export default function SelectedBoard() {
                         borderRadius: 5,
                       }}
                       onClick={() => {
-                        // setAllCards(allCards.concat({}));
                         setAddingNewList(false);
-                        const newStage = {
-                          name: "New Stage",
-                          id: "n",
-                        };
-                        // dispatch(createStageInBoard(newStage));
+                        createStageFunctionForAction();
                       }}
                     >
                       add
@@ -105,7 +121,7 @@ export default function SelectedBoard() {
                 setAddingNewList(true);
               }}
             >
-              Add new list
+              Add New Stage
             </Button>
           </Col>
         )}
