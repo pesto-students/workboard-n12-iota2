@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import RoutesConfig from "./RoutesConfig";
-import {
-  // useDispatch,
-  useSelector,
-} from "react-redux";
-// import { getBoards } from "./store/boardActions";
+import { useDispatch, useSelector } from "react-redux";
+import { getBoards } from "./store/boardActions";
 // import { db } from './firebase-config';
 // import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 
 function App() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // const dataCollectionRef = collection(db, "board");
   // useEffect(async () => {
   //   updateDoc
@@ -27,7 +24,10 @@ function App() {
   // }, [])
 
   useEffect(() => {
-    // const unsub = dispatch(getBoards());
+    const unsub = dispatch(getBoards());
+    return () => {
+      unsub();
+    };
   }, []);
 
   const getStateBoards = useSelector((state) => state.boards.boards);
