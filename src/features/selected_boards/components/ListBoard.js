@@ -22,7 +22,6 @@ export default function ListBoard({ stageId, name, position, allStages, allStori
       console.log(props);
     },
   });
-  console.log(stageId);
 
   const createStoryFunctionForAction = () => {
     const story = {
@@ -41,13 +40,13 @@ export default function ListBoard({ stageId, name, position, allStages, allStori
   const deleteStageFunctionForAction = () => {
     console.log("delete me");
     const updatedStages = allStages.filter((stage) => stage.id !== stageId);
-    for (const story in stageStories) {
+    stageStories.forEach(story => {
       dispatch(deleteStoryFromBoard(boardId, story.id));
-    }
+    });
     dispatch(deleteStageInBoard(boardId, updatedStages));
   }
   return (
-    <Col id={stageId} ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
+    <Col key={stageId} id={stageId} ref={drop} style={{ maxHeight: "calc(100vh - 64px)" }}>
       <Card
         title={name}
         extra={<EllipsisOutlined />}
@@ -65,7 +64,7 @@ export default function ListBoard({ stageId, name, position, allStages, allStori
       // onClick={() => deleteStageFunctionForAction()}
       >
         {stageStories.map((story) => (
-          <CardBoard name={story.name} description={story.description} onClick={() => { }} />
+          <CardBoard key={story.id} name={story.name} description={story.description} onClick={() => { }} />
         ))}
         <Col style={{ margin: 10 }}>
           {addingNewCard ? (

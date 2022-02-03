@@ -46,7 +46,7 @@ export default function SelectedBoard() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      {allStories.map(story => console.log(story.id))}
+      {console.log(allStories.length)}
       <Row
         style={{
           overflowX: "scroll",
@@ -55,7 +55,7 @@ export default function SelectedBoard() {
         }}
       >
         {allStages.map((stage) => (
-          <ListBoard stageId={stage.id} name={stage.name} position={stage.position} allStages={allStages} allStories={allStories} />
+          <ListBoard key={stage.id} stageId={stage.id} name={stage.name} position={stage.position} allStages={allStages} allStories={allStories} />
         ))}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>
