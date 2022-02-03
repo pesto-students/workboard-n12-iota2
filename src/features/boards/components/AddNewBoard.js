@@ -1,8 +1,6 @@
-import { Button, Col, Menu, Modal, Row, Input, Select } from "antd";
+import { Button, Col, Modal, Row, Input, Select } from "antd";
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
-import { SettingOutlined } from "@ant-design/icons";
-
+import { useDispatch } from "react-redux";
 import { createBoard } from "../../../store/boardActions";
 
 export default function AddNewBoard() {
@@ -15,7 +13,7 @@ export default function AddNewBoard() {
       <Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>
     );
   }
-  const createNewBoard = () => {};
+  //   const createNewBoard = () => {};
 
   const [boardName, setBoardName] = useState("");
   const [boardMembers, setBoardMembers] = useState([]);
@@ -27,9 +25,9 @@ export default function AddNewBoard() {
       owner: "master",
       stages: [],
       stories: [],
-    }
+    };
     dispatch(createBoard(newBoard));
-  }
+  };
   return (
     <>
       <p onClick={() => setModalVisible(true)} style={{ margin: 0 }}>
@@ -44,7 +42,10 @@ export default function AddNewBoard() {
       >
         <Row gutter={[20, 20]} justify="center">
           <Col span={18}>
-            <Input placeholder="Enter board name" onChange={(e) => setBoardName(e.target.value)} />
+            <Input
+              placeholder="Enter board name"
+              onChange={(e) => setBoardName(e.target.value)}
+            />
           </Col>
           <Col span={18}>
             <Select

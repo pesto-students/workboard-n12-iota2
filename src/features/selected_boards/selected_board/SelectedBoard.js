@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Col, Row, Input } from "antd";
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { createStageInBoard } from "../../../store/boardActions";
@@ -7,6 +8,7 @@ import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import update from "immutability-helper";
 import "../css/Board.css";
 
 export default function SelectedBoard() {
@@ -25,6 +27,7 @@ export default function SelectedBoard() {
     ? getStateBoardsForStages_Stories.filter((board) => board.id === boardId)[0]
         ?.stories
     : [];
+  const [stages, setStages] = useState([]);
 
   const storiesForStage = (stageId) => {
     const releventStories = allStories.filter(
@@ -34,6 +37,32 @@ export default function SelectedBoard() {
   };
 
   const [listName, setListName] = useState("");
+
+  const moveList = useCallback(
+    (dragIndex, hoverIndex) => {
+      const dragStage = stages[dragIndex];
+      setStages(
+        update(stages, {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, dragStage],
+          ],
+        })
+      );
+    },
+    [stages]
+  );
+
+  useEffect(() => {
+    setStages(
+      getStateBoardsForStages_Stories
+        ? getStateBoardsForStages_Stories.filter(
+            (board) => board.id === boardId
+          )[0]?.stages
+        : [{}]
+    );
+  }, [getStateBoardsForStages_Stories]);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Row
@@ -43,18 +72,24 @@ export default function SelectedBoard() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {allStages.map((stage) => {
-          const sendStageStories = storiesForStage(stage.id);
-          return (
-            <ListBoard
-              boardId={boardId}
-              id={stage.id}
-              name={stage.name}
-              allStageStories={sendStageStories}
-              allStories={allStories}
-            />
-          );
-        })}
+        {stages &&
+          stages.map((stage, index) => {
+            if (stage) {
+              const sendStageStories = storiesForStage(stage.id);
+              return (
+                <ListBoard
+                  boardId={boardId}
+                  id={stage.id}
+                  index={index}
+                  name={stage.name}
+                  allStageStories={sendStageStories}
+                  allStories={allStories}
+                  moveList={moveList}
+                />
+              );
+            }
+            return null;
+          })}
         {addingNewList ? (
           <Col style={{ margin: 10 }}>
             <Row gutter={[10, 10]} style={{ width: 300 }}>
