@@ -1,6 +1,6 @@
 import { Card, Col, Row, Typography, Tag, Modal, Input } from "antd";
-import React, { useState } from "react";
-import { useDrag } from "react-dnd";
+import React, { useState, useRef } from "react";
+import { useDrag, useDrop } from "react-dnd";
 import {
   CloseOutlined,
   UserOutlined,
@@ -10,22 +10,78 @@ import {
 
 const { Text } = Typography;
 
-export default function CardBoard({ name, desc }) {
+export default function CardBoard({ name, desc, index, moveCard, id }) {
   const [cardVisible, setCardVisible] = useState(false);
+  const ref = useRef(null);
+  const [{ handlerId }, drop] = useDrop({
+    accept: "card",
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      // Don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      // Determine rectangle on screen
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      // Get vertical middle
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+      // Get pixels to the top
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      moveCard(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+  const [{ isDragging }, drag] = useDrag({
+    type: "card",
+    item: () => {
+      return { id, index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  drag(drop(ref));
   const handleOk = () => {};
   const handleCancel = () => {
     setCardVisible(false);
   };
+  console.log(isDragging);
   return (
-    <>
+    <div ref={ref}>
       <Card
-        hoverable
         bordered={false}
-        style={{ margin: 10, borderRadius: "5px" }}
-        bodyStyle={{ padding: 10 }}
+        style={{ margin: 10, borderRadius: "5px", cursor: "pointer" }}
+        bodyStyle={{ padding: 0 }}
         onClick={() => setCardVisible(true)}
       >
-        <Row gutter={[10, 10]}>
+        <Row
+          //   ref={ref}
+          data-handler-id={handlerId}
+          style={{ padding: 10, margin: 0 }}
+          gutter={[10, 10]}
+        >
           <Col span={24}>
             <h4>{name}</h4>
             <EllipsisMiddle suffixCount={12}>{desc}</EllipsisMiddle>
@@ -139,7 +195,7 @@ export default function CardBoard({ name, desc }) {
           </Col>
         </Row>
       </Modal>
-    </>
+    </div>
   );
 }
 

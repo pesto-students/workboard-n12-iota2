@@ -1,16 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { db } from '../firebase-config';
-import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
+import { createSlice } from "@reduxjs/toolkit";
+// import { db } from '../firebase-config';
+// import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 
 const boardSlice = createSlice({
-  name: 'boards',
+  name: "boards",
   initialState: {},
   reducers: {
     // createBoard (state, action) {
     //   state.boards = [...state.boards, {...action.payload.board}]
     // },
-    setBoards (state, action) {
-      state.boards = [...action.payload.boards]
+    setBoards(state, action) {
+      state.boards = [...action.payload.boards];
     },
     // updateStateBoard (state, action) {
     //   const allUpdatedBoards = state.boards.map((board) => {

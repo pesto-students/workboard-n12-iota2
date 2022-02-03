@@ -1,8 +1,10 @@
-import { Button, Col, Menu, Modal, Row, Input, Select } from "antd";
+import { Button, Col, Modal, Row, Input, Select } from "antd";
 import React, { useState } from "react";
-import { SettingOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { createBoard } from "../../../store/boardActions";
 
 export default function AddNewBoard() {
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
   const children = [];
@@ -11,10 +13,21 @@ export default function AddNewBoard() {
       <Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>
     );
   }
-  const createNewBoard = () => {};
-  function handleChange(value) {
-    console.log(`selected ${value}`);
-  }
+  //   const createNewBoard = () => {};
+
+  const [boardName, setBoardName] = useState("");
+  const [boardMembers, setBoardMembers] = useState([]);
+
+  const createTheBoardFunction = () => {
+    const newBoard = {
+      name: boardName,
+      members: boardMembers,
+      owner: "master",
+      stages: [],
+      stories: [],
+    };
+    dispatch(createBoard(newBoard));
+  };
   return (
     <>
       <p onClick={() => setModalVisible(true)} style={{ margin: 0 }}>
@@ -29,7 +42,10 @@ export default function AddNewBoard() {
       >
         <Row gutter={[20, 20]} justify="center">
           <Col span={18}>
-            <Input placeholder="Enter board name" />
+            <Input
+              placeholder="Enter board name"
+              onChange={(e) => setBoardName(e.target.value)}
+            />
           </Col>
           <Col span={18}>
             <Select
@@ -37,7 +53,7 @@ export default function AddNewBoard() {
               allowClear
               style={{ width: "100%" }}
               placeholder="Please select"
-              onChange={handleChange}
+              onChange={(members) => setBoardMembers(members)}
             >
               {children}
             </Select>
@@ -57,7 +73,7 @@ export default function AddNewBoard() {
                 <Button
                   className="primary_button"
                   style={{ color: "white" }}
-                  onClick={() => createNewBoard()}
+                  onClick={createTheBoardFunction}
                 >
                   Create
                 </Button>
