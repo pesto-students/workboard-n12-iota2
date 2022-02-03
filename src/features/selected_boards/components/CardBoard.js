@@ -10,7 +10,7 @@ import {
 
 const { Text } = Typography;
 
-export default function CardBoard({ name, desc, index, moveCard, id }) {
+export default function CardBoard({ name, description, index, moveCard, id }) {
   const [cardVisible, setCardVisible] = useState(false);
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -63,7 +63,7 @@ export default function CardBoard({ name, desc, index, moveCard, id }) {
     }),
   });
   drag(drop(ref));
-  const handleOk = () => {};
+  const handleOk = () => { };
   const handleCancel = () => {
     setCardVisible(false);
   };
@@ -84,7 +84,7 @@ export default function CardBoard({ name, desc, index, moveCard, id }) {
         >
           <Col span={24}>
             <h4>{name}</h4>
-            <EllipsisMiddle suffixCount={12}>{desc}</EllipsisMiddle>
+            <EllipsisMiddle suffixCount={12}>{description}</EllipsisMiddle>
           </Col>
           <Col span={24}>
             <Row gutter={[10, 10]}>
@@ -142,7 +142,7 @@ export default function CardBoard({ name, desc, index, moveCard, id }) {
                     fontSize: "1.2em",
                     borderRadius: 5,
                   }}
-                  value={desc}
+                  value={description}
                 ></Input.TextArea>
               </Col>
             </Row>

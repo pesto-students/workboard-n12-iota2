@@ -1,5 +1,7 @@
 import { Layout, Menu } from "antd";
 import React from "react";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { Outlet } from "react-router";
 import SearchBoard from "./components/SearchBoard";
 import "./css/Board.css";
@@ -7,6 +9,8 @@ import "./css/Board.css";
 const { Header, Content } = Layout;
 
 export default function SelectedBoardLayout() {
+  const boardId = useLocation().pathname.split('/')[2];
+  const getStateBoard = useSelector((state) => state.boards.boards.find((board) => board.id === boardId));
   return (
     <Layout
       style={{
@@ -32,7 +36,7 @@ export default function SelectedBoardLayout() {
           </Menu.Item>
           <Menu.Item disabled style={{ cursor: "initial" }}>
             <div>
-              <h3 style={{ margin: 0 }}>My personal board</h3>
+              <h3 style={{ margin: 0 }}>{getStateBoard?.name}</h3>
             </div>
           </Menu.Item>
           <Menu.Item disabled style={{ float: "right" }}>

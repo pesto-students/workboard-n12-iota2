@@ -1,21 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { useDispatch } from "react-redux";
 import { Outlet } from "react-router";
+import { useDispatch } from "react-redux";
 import { Layout, Breadcrumb } from "antd";
-// import { getBoards } from "../../store/boardActions";
+import { getBoards } from "../../store/boardActions";
 import "./css/Boards.css";
 import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 // import AddNewBoard from "./components/AddNewBoard";
 const { Header, Content, Footer } = Layout;
 export default function BoardsLayout() {
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
+
+
   // let unsub;    //Execute this to disconnect from firrebase to recieve live updates.
 
-  // useEffect(() => {
-  //   unsub = dispatch(getBoards());
-  // }, []);
+  useEffect(() => {
+    console.log("connection established with boards collection");
+    const unsub = dispatch(getBoards());
+
+    return () => {
+      console.log("connection broken with boards collection");
+      unsub();
+    }
+  }, []);
+
+
+
+
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };

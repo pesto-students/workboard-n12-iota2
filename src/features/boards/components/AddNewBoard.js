@@ -1,7 +1,10 @@
 import { Button, Col, Modal, Row, Input, Select } from "antd";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { SettingOutlined } from "@ant-design/icons";
 import { createBoard } from "../../../store/boardActions";
+
+import generateKey from "../../../helpers/generateKey";
+import { useDispatch } from "react-redux";
 
 export default function AddNewBoard() {
   const dispatch = useDispatch();
@@ -13,21 +16,35 @@ export default function AddNewBoard() {
       <Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>
     );
   }
-  //   const createNewBoard = () => {};
-
+  const createNewBoard = () => { };
   const [boardName, setBoardName] = useState("");
-  const [boardMembers, setBoardMembers] = useState([]);
+  const [members, setMembers] = useState([]);
 
-  const createTheBoardFunction = () => {
-    const newBoard = {
+  const closeModal = () => {
+    setBoardName("");
+    setMembers([]);
+    setModalVisible(false);
+  }
+
+
+
+  const createBoardFunctionForAction = () => {
+    closeModal();
+    const creationDate = String(new Date().toLocaleDateString());
+    const board = {
+      id: generateKey(),
       name: boardName,
-      members: boardMembers,
-      owner: "master",
+      backImg: "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      owners: members,
+      editors: members,
+      viewers: members,
+      createdOn: creationDate,
+      lastUpdatedOn: creationDate,
       stages: [],
       stories: [],
     };
-    dispatch(createBoard(newBoard));
-  };
+    dispatch(createBoard(board));
+  }
   return (
     <>
       <p onClick={() => setModalVisible(true)} style={{ margin: 0 }}>
@@ -36,24 +53,22 @@ export default function AddNewBoard() {
       <Modal
         title="Create new board"
         visible={modalVisible}
-        onCancel={() => setModalVisible(false)}
+        onCancel={closeModal}
         footer={null}
         bodyStyle={{ borderRadius: 15 }}
       >
         <Row gutter={[20, 20]} justify="center">
           <Col span={18}>
-            <Input
-              placeholder="Enter board name"
-              onChange={(e) => setBoardName(e.target.value)}
-            />
+            <Input placeholder="Enter board name" value={boardName} onChange={(e) => setBoardName(e.target.value)} />
           </Col>
           <Col span={18}>
             <Select
               mode="tags"
               allowClear
               style={{ width: "100%" }}
-              placeholder="Please select"
-              onChange={(members) => setBoardMembers(members)}
+              placeholder="Please select members to add."
+              value={members}
+              onChange={(value) => setMembers(value)}
             >
               {children}
             </Select>
@@ -64,7 +79,7 @@ export default function AddNewBoard() {
                 <Button
                   type="ghost"
                   style={{ borderRadius: "5px" }}
-                  onClick={() => setModalVisible(false)}
+                  onClick={closeModal}
                 >
                   Cancel
                 </Button>
@@ -73,7 +88,7 @@ export default function AddNewBoard() {
                 <Button
                   className="primary_button"
                   style={{ color: "white" }}
-                  onClick={createTheBoardFunction}
+                  onClick={createBoardFunctionForAction}
                 >
                   Create
                 </Button>

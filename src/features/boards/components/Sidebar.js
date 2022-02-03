@@ -1,5 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
+import { useDispatch } from "react-redux";
 import {
   LogoutOutlined,
   LayoutOutlined,
@@ -9,11 +10,14 @@ import {
 import "../css/Boards.css";
 import { Link, NavLink } from "react-router-dom";
 import AddNewBoard from "./AddNewBoard";
+import { db } from '../../../firebase-config';
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 export default function Sidebar({ collapsed, setCollapsed }) {
+  const dispatch = useDispatch();
   return (
     <Sider
       collapsible
@@ -53,7 +57,15 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         <Menu.Item key="9" icon={<UserOutlined />}>
           <Link to="/boards/profile">Profile</Link>
         </Menu.Item>
-        <Menu.Item key="10" icon={<LogoutOutlined />}>
+        <Menu.Item key="10" icon={<LogoutOutlined />} onClick={() => {
+          // setDoc(doc(db, "newSchemaBoards", "NTA0MTMyMzgxMTg2NTkxMg==",
+          //   "stories", "4LgQpImm4j07fzC8mjcI"
+          // ), { new: "work" });
+          // const timeToDelete = () => deleteDoc(doc(db, "newSchemaBoards", "NTA0MTMyMzgxMTg2NTkxMg==",
+          //   "stories", "4LgQpImm4j07fzC8mjcI"
+          // ));
+          // setTimeout(function () { console.log("time to work"); timeToDelete(); }, 5000);
+        }}>
           Logout
         </Menu.Item>
       </Menu>
