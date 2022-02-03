@@ -1,4 +1,4 @@
-import { Button, Col, Menu, Modal, Row, Input, Select } from "antd";
+import { Button, Col, Modal, Row, Input, Select } from "antd";
 import React, { useState } from "react";
 import { SettingOutlined } from "@ant-design/icons";
 import { createBoard } from "../../../store/boardActions";
@@ -21,7 +21,6 @@ export default function AddNewBoard() {
   const [members, setMembers] = useState([]);
 
   const closeModal = () => {
-    console.log("fire me");
     setBoardName("");
     setMembers([]);
     setModalVisible(false);
@@ -33,7 +32,7 @@ export default function AddNewBoard() {
     closeModal();
     const creationDate = String(new Date().toLocaleDateString());
     const board = {
-      id: generateKey(boardName),
+      id: generateKey(),
       name: boardName,
       backImg: "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       owners: members,

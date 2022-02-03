@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
+// import { useDispatch } from "react-redux";
 import { Outlet } from "react-router";
 import { Layout, Breadcrumb } from "antd";
-import { getBoards } from "../../store/boardActions";
+// import { getBoards } from "../../store/boardActions";
 import "./css/Boards.css";
 import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import AddNewBoard from "./components/AddNewBoard";
+// import AddNewBoard from "./components/AddNewBoard";
 const { Header, Content, Footer } = Layout;
 export default function BoardsLayout() {
-
-  const dispatch = useDispatch();
+  //   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
 
-  
+
   // let unsub;    //Execute this to disconnect from firrebase to recieve live updates.
 
   useEffect(() => {

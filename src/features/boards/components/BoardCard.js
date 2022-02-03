@@ -32,6 +32,7 @@ export default function BoardCard(board) {
       bodyStyle={{ padding: "10px 15px" }}
       cover={<img alt="coverImage" src={board.coverImg} />}
     >
+      {console.log(id)}
       <Meta
         title={
           <Row justify="space-between">

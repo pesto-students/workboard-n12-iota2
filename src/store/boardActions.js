@@ -2,7 +2,7 @@ import { db } from '../firebase-config';
 import generateKey from '../helpers/generateKey';
 import { setDoc, collection, deleteDoc, doc, getDocs, updateDoc, addDoc, query, onSnapshot } from "firebase/firestore";
 
-import { boardActions } from './boardSlice';
+import { boardActions } from "./boardSlice";
 
 const firebaseRootCollectionName = "newSchemaBoards";
 
@@ -65,7 +65,8 @@ export const updateBoard = (boardId, data) => {
             console.log("try catch update board error");
         }
     }
-}
+};
+};
 
 export const deleteBoard = (boardId) => {
     return async (dispatch) => {
@@ -253,7 +254,8 @@ export const deleteStoryFromBoard = (boardId, storyId) => {
             console.log("try catch update board error");
         }
     }
-}
+};
+};
 
 
 

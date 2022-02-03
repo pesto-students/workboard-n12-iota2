@@ -1,6 +1,6 @@
 import { Avatar, Col, PageHeader, Row, Form, Button, Input } from "antd";
 import React, { useState } from "react";
-import { UserOutlined, EditOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 
 export default function Profile() {
   const [form] = Form.useForm();
@@ -107,7 +107,10 @@ export default function Profile() {
             <Avatar
               style={{ width: "100%", height: "100%" }}
               icon={
-                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
+                <img
+                  alt="user_img"
+                  src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                />
               }
             />
           </Col>

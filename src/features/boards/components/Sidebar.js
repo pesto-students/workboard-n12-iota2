@@ -2,7 +2,6 @@ import React from "react";
 import { Layout, Menu } from "antd";
 import { useDispatch } from "react-redux";
 import {
-  SettingOutlined,
   LogoutOutlined,
   LayoutOutlined,
   UserOutlined,
