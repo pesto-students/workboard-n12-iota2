@@ -10,7 +10,7 @@ import {
 
 const { Text } = Typography;
 
-export default function CardBoard({ name, desc, index, moveCard, id }) {
+export default function CardBoard({ name, description, index, moveCard, id }) {
   const [cardVisible, setCardVisible] = useState(false);
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({

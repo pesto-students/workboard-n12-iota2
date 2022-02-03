@@ -1,25 +1,29 @@
 import { Button, Card, Col, Row, Input } from "antd";
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useDrop, useDrag } from "react-dnd";
 import CardBoard from "./CardBoard";
 import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import update from "immutability-helper";
+import { createStoryInBoard, deleteStageInBoard, deleteStoryFromBoard } from "../../../store/boardActions";
+import generateKey from '../../../helpers/generateKey';
 
 
 export default function ListBoard({
   boardId,
-  id,
+  stageId,
   name,
+  allStages,
   allStageStories,
   allStories,
   index,
-  moveList
+  moveList,
+  position
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
   const [allCards, setAllCards] = useState([...allStageStories]);
-  const [cardName, setCardName] = useState("");
+  const [storyName, setStoryName] = useState("");
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -65,7 +69,7 @@ export default function ListBoard({
   const [{ isDragging }, drag] = useDrag({
     type: "list",
     item: () => {
-      return { id, index };
+      return { stageId, index };
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -74,12 +78,13 @@ export default function ListBoard({
   drag(drop(ref));
 
   const addNewCard = () => {
-    const story = {
-      name: `${cardName}`,
-      desc: `Description ${cardName}`,
-      stageId: `${id}`,
+    const newStory = {
+      id: generateKey(),
+      name: `${storyName}`,
+      desc: `Description ${storyName}`,
+      stageId: `${stageId}`,
     };
-    dispatch(createStoryInBoard(story, boardId, allStories));
+    dispatch(createStoryInBoard(boardId, newStory));
     // setAllCards(allCards.concat({ }));
     setAddingNewCard(false);
   };
@@ -128,13 +133,13 @@ export default function ListBoard({
   const deleteStageFunctionForAction = () => {
     console.log("delete me");
     const updatedStages = allStages.filter((stage) => stage.id !== stageId);
-    stageStories.forEach(story => {
+    allStageStories.forEach(story => {
       dispatch(deleteStoryFromBoard(boardId, story.id));
     });
     dispatch(deleteStageInBoard(boardId, updatedStages));
   }
   return (
-    <Col ref={ref} key={id} style={{ maxHeight: "calc(100vh - 64px)" }}>
+    <Col ref={ref} key={stageId} style={{ maxHeight: "calc(100vh - 64px)" }}>
       <Card
         title={name}
         extra={<EllipsisOutlined />}
@@ -152,7 +157,7 @@ export default function ListBoard({
       // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
-          {stageStories.map(
+          {allStageStories.map(
             (story, idx) =>
               story && (
                 <CardBoard

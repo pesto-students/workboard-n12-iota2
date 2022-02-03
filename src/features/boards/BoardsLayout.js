@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { useDispatch } from "react-redux";
 import { Outlet } from "react-router";
+import { useDispatch } from "react-redux";
 import { Layout, Breadcrumb } from "antd";
-// import { getBoards } from "../../store/boardActions";
+import { getBoards } from "../../store/boardActions";
 import "./css/Boards.css";
 import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 // import AddNewBoard from "./components/AddNewBoard";
 const { Header, Content, Footer } = Layout;
 export default function BoardsLayout() {
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
 
 

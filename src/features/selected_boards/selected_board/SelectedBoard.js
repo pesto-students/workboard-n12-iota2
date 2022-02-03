@@ -12,7 +12,6 @@ import update from "immutability-helper";
 import "../css/Board.css";
 
 import generateKey from "../../../helpers/generateKey";
-import { useLocation } from "react-router-dom";
 
 export default function SelectedBoard() {
   const dispatch = useDispatch();

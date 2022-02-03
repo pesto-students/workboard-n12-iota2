@@ -66,7 +66,6 @@ export const updateBoard = (boardId, data) => {
         }
     }
 };
-};
 
 export const deleteBoard = (boardId) => {
     return async (dispatch) => {
@@ -254,7 +253,6 @@ export const deleteStoryFromBoard = (boardId, storyId) => {
             console.log("try catch update board error");
         }
     }
-};
 };
 
 
