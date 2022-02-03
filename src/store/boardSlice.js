@@ -19,9 +19,8 @@ const boardSlice = createSlice({
         (board) => board.id === action.payload.board.id
       );
       const copyAllBoards = state.boards.slice();
-      boardIndex !== -1
-        ? (copyAllBoards[boardIndex] = action.payload.board)
-        : copyAllBoards.push(action.payload.board);
+      if (boardIndex !== -1) { const copyStories = copyAllBoards[boardIndex].stories; copyAllBoards[boardIndex] = action.payload.board; copyAllBoards[boardIndex].stories = copyStories; }
+      else { copyAllBoards.push(action.payload.board); }
       state.boards = [...copyAllBoards];
     },
     setStoriesForBoard(state, action) {
