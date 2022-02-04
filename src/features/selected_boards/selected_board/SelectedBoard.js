@@ -91,10 +91,10 @@ export default function SelectedBoard() {
   };
 
   useEffect(() => {
-    if (cardId) {
+    if (cardId && getStateBoard) {
       setSelectedCard(allStories.find((story) => story.id === cardId));
     } else setSelectedCard(false);
-  }, [cardId]);
+  }, [cardId, getStateBoard]);
 
   return (
     <DndProvider backend={HTML5Backend}>
