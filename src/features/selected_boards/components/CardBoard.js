@@ -58,9 +58,13 @@ export default function CardBoard({ name, description, index, moveCard, id }) {
     }),
   });
   drag(drop(ref));
-  console.log(isDragging);
   return (
-    <div ref={ref}>
+    <div
+      ref={ref}
+      style={{
+        transform: "translate3d(0, 0, 0)",
+      }}
+    >
       <Card
         bordered={false}
         style={{ margin: 10, borderRadius: "5px", cursor: "pointer" }}

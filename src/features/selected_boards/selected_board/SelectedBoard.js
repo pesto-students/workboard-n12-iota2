@@ -96,6 +96,10 @@ export default function SelectedBoard() {
     } else setSelectedCard(false);
   }, [cardId, getStateBoard]);
 
+  useEffect(() => {
+    setStages(allStages);
+  }, [allStages]);
+
   return (
     <DndProvider backend={HTML5Backend}>
       {console.log(allStories.length)}
@@ -106,8 +110,8 @@ export default function SelectedBoard() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {allStages &&
-          allStages.map((stage, index) => {
+        {stages &&
+          stages.map((stage, index) => {
             if (stage) {
               const sendStageStories = storiesForStage(stage.id);
               return (
@@ -137,6 +141,10 @@ export default function SelectedBoard() {
                   placeholder="Enter title for list"
                   autoFocus
                   onChange={(e) => setNewStageName(e.target.value)}
+                  onPressEnter={() => {
+                    setAddingNewList(false);
+                    createStageFunctionForAction();
+                  }}
                 />
               </Col>
               <Col span={24}>

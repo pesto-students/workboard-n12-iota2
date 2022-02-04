@@ -79,7 +79,6 @@ export default function ListBoard({
       isDragging: monitor.isDragging(),
     }),
   });
-  drag(drop(ref));
 
   const addNewCard = () => {
     const newStory = {
@@ -95,14 +94,6 @@ export default function ListBoard({
   const moveCard = useCallback(
     (dragIndex, hoverIndex) => {
       const dragCard = allCards[dragIndex];
-      console.log(
-        update(allCards, {
-          $splice: [
-            [dragIndex, 1],
-            [hoverIndex, 0, dragCard],
-          ],
-        })
-      );
       setAllCards(
         update(allCards, {
           $splice: [
@@ -141,8 +132,21 @@ export default function ListBoard({
     });
     dispatch(deleteStageInBoard(boardId, updatedStages));
   };
+
+  useEffect(() => {
+    setAllCards(allStageStories);
+  }, [allStageStories]);
+
+  drag(drop(ref));
   return (
-    <Col ref={ref} key={stageId} style={{ maxHeight: "calc(100vh - 64px)" }}>
+    <Col
+      ref={ref}
+      key={stageId}
+      style={{
+        maxHeight: "calc(100vh - 64px)",
+        transform: "translate3d(0, 0, 0)",
+      }}
+    >
       <Card
         title={name}
         extra={<EllipsisOutlined />}
@@ -160,7 +164,7 @@ export default function ListBoard({
         // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
-          {allStageStories.map(
+          {allCards.map(
             (story, idx) =>
               story && (
                 <CardBoard
@@ -185,6 +189,10 @@ export default function ListBoard({
                   placeholder="Enter title for card"
                   autoFocus
                   onChange={(e) => setStoryName(e.target.value)}
+                  onPressEnter={() => {
+                    setAddingNewCard(false);
+                    createStoryFunctionForAction();
+                  }}
                 />
               </Col>
               <Col span={24}>
