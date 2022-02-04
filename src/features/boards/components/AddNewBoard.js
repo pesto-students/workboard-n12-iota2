@@ -1,7 +1,7 @@
 import { Button, Col, Modal, Row, Input, Select, Empty } from "antd";
 import React, { useState } from "react";
 import { SettingOutlined } from "@ant-design/icons";
-import { createBoard } from "../../../store/boardActions";
+import { createBoard, updateBoard } from "../../../store/boardActions";
 
 import generateKey from "../../../helpers/generateKey";
 import { useDispatch } from "react-redux";
@@ -11,14 +11,37 @@ export default function AddNewBoard({ edit, boardDetails }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
   const children = []; //push the users in this array
-  const createNewBoard = () => {};
+  const createNewBoard = () => { };
   const [boardName, setBoardName] = useState("");
-  const [members, setMembers] = useState([]);
+  const [ownerMembers, setOwnerMembers] = useState([]);
+  const [viewerMembers, setViewerMembers] = useState([]);
+  const [editorMembers, setEditorMembers] = useState([]);
 
   const closeModal = () => {
     setBoardName("");
-    setMembers([]);
+    setOwnerMembers([]);
+    setViewerMembers([]);
+    setEditorMembers([]);
     setModalVisible(false);
+  };
+
+  const updateBoardFunctionForAction = () => {
+    closeModal();
+    const updateDate = String(new Date().toLocaleDateString());
+    const board = {
+      id: boardDetails.id,
+      name: boardName,
+      backImg:
+        "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      owners: [...boardDetails.owners, ...ownerMembers],
+      editors: [...boardDetails.editors, ...editorMembers],
+      viewers: [...boardDetails.viewers, ...viewerMembers],
+      createdOn: boardDetails.createdOn,
+      lastUpdatedOn: updateDate,
+      stages: boardDetails.stages,
+      stories: boardDetails.stories,
+    };
+    dispatch(updateBoard(board));
   };
 
   const createBoardFunctionForAction = () => {
@@ -29,9 +52,9 @@ export default function AddNewBoard({ edit, boardDetails }) {
       name: boardName,
       backImg:
         "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      owners: members,
-      editors: members,
-      viewers: members,
+      owners: ownerMembers,
+      editors: editorMembers,
+      viewers: viewerMembers,
       createdOn: creationDate,
       lastUpdatedOn: creationDate,
       stages: [],
@@ -67,45 +90,41 @@ export default function AddNewBoard({ edit, boardDetails }) {
               allowClear
               style={{ width: "100%" }}
               placeholder="Please enter or select members to add."
-              value={members}
-              onChange={(value) => setMembers(value)}
+              value={ownerMembers}
+              onChange={(value) => setOwnerMembers(value)}
               notFoundContent={<Empty description="No users found" />}
             >
               {children}
             </Select>
           </Col>
-          {edit && (
-            <Col span={18}>
-              <label>Editors</label>
-              <Select
-                mode="tags"
-                allowClear
-                style={{ width: "100%" }}
-                placeholder="Please enter or select members to add."
-                value={members}
-                onChange={(value) => setMembers(value)}
-                notFoundContent={<Empty description="No users found" />}
-              >
-                {children}
-              </Select>
-            </Col>
-          )}
-          {edit && (
-            <Col span={18}>
-              <label>Viewers</label>
-              <Select
-                mode="tags"
-                allowClear
-                style={{ width: "100%" }}
-                placeholder="Please enter or select members to add."
-                value={members}
-                onChange={(value) => setMembers(value)}
-                notFoundContent={<Empty description="No users found" />}
-              >
-                {children}
-              </Select>
-            </Col>
-          )}
+          <Col span={18}>
+            <label>Editors</label>
+            <Select
+              mode="tags"
+              allowClear
+              style={{ width: "100%" }}
+              placeholder="Please enter or select members to add."
+              value={editorMembers}
+              onChange={(value) => setEditorMembers(value)}
+              notFoundContent={<Empty description="No users found" />}
+            >
+              {children}
+            </Select>
+          </Col>
+          <Col span={18}>
+            <label>Viewers</label>
+            <Select
+              mode="tags"
+              allowClear
+              style={{ width: "100%" }}
+              placeholder="Please enter or select members to add."
+              value={viewerMembers}
+              onChange={(value) => setViewerMembers(value)}
+              notFoundContent={<Empty description="No users found" />}
+            >
+              {children}
+            </Select>
+          </Col>
           <Col span={24}>
             <Row gutter={[10, 10]} justify="end">
               <Col>
@@ -121,7 +140,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
                 <Button
                   className="primary_button"
                   style={{ color: "white" }}
-                  onClick={createBoardFunctionForAction}
+                  onClick={edit ? updateBoardFunctionForAction : createBoardFunctionForAction}
                 >
                   Create
                 </Button>

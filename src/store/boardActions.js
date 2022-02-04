@@ -11,8 +11,8 @@ const firebaseRootCollectionName = "newSchemaBoards";
 export const getBoards = () => dispatch => {
     const dataCollectionBoardsRef = collection(db, firebaseRootCollectionName);
     const unsubscribe = onSnapshot(query(dataCollectionBoardsRef), (querySnapshot) => {
-        const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
-        console.log(source);
+        // const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
+        // console.log(source);
         const getAllBoards = [];
         querySnapshot.forEach((doc) => {
             getAllBoards.push({ ...doc.data() });
@@ -46,12 +46,12 @@ export const createBoard = (newBoard) => {
     }
 }
 
-export const updateBoard = (boardId, data) => {
+export const updateBoard = (board) => {
     return async () => {
-        const dataBoardRef = doc(db, firebaseRootCollectionName, boardId);
+        const dataBoardRef = doc(db, firebaseRootCollectionName, board.id);
         const updateData = async () => {
             const response = await updateDoc(dataBoardRef, {
-                ...data
+                ...board
             });
             if (!response) {
                 console.log("update board error");
@@ -90,8 +90,8 @@ export const getBoardStages_Stories = (boardId) => dispatch => {
     const dataCollectionBoardsDocumentBoardCollectionStoriesRef = collection(db, firebaseRootCollectionName, boardId, "stories");
 
     const unsubscribeBoard = onSnapshot(dataDocumentBoardRef, (doc) => {
-        const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-        console.log(source);
+        // const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+        // console.log(source);
         const getBoard = doc.data();
         dispatch(
             boardActions.setBoard({
@@ -102,8 +102,8 @@ export const getBoardStages_Stories = (boardId) => dispatch => {
         console.log("Real Time Data Getting has an error.")
     });
     const unsubscribeStories = onSnapshot(query(dataCollectionBoardsDocumentBoardCollectionStoriesRef), (querySnapshot) => {
-        const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
-        console.log(source);
+        // const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
+        // console.log(source);
         const getAllStoriesOfBoard = [];
         querySnapshot.forEach((doc) => {
             if (Object.entries(doc.data()).length !== 0) {        //this condition checks whether the doc.data() is empty object or not
