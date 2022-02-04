@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Input } from "antd";
+import { Button, Card, Col, Row, Input, Dropdown, Menu } from "antd";
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
@@ -26,8 +26,12 @@ export default function ListBoard({
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
+  const [listTitle, setListTitle] = useState(name);
   const [allCards, setAllCards] = useState([...allStageStories]);
   const [storyName, setStoryName] = useState("");
+
+  const deleteList = () => {};
+  const deleteListItems = () => {};
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -138,6 +142,18 @@ export default function ListBoard({
   }, [allStageStories]);
 
   drag(drop(ref));
+
+  const menu = (
+    <Menu>
+      <Menu.Item danger onClick={deleteList}>
+        Delete list
+      </Menu.Item>
+      <Menu.Item danger onClick={deleteListItems}>
+        Delete list items
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <Col
       ref={ref}
@@ -148,8 +164,19 @@ export default function ListBoard({
       }}
     >
       <Card
-        title={name}
-        extra={<EllipsisOutlined />}
+        title={
+          <Input
+            bordered={false}
+            value={listTitle}
+            style={{ fontSize: "1.1em", fontWeight: "500", padding: 0 }}
+            onChange={(e) => setListTitle(e.target.value)}
+          />
+        }
+        extra={
+          <Dropdown overlay={menu}>
+            <EllipsisOutlined />
+          </Dropdown>
+        }
         style={{
           width: 300,
           margin: 10,
