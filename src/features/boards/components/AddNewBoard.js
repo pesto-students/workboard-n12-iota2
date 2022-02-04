@@ -12,7 +12,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
   const { Option } = Select;
   const children = []; //push the users in this array
   const createNewBoard = () => {};
-  const [boardName, setBoardName] = useState("");
+  const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
   const [members, setMembers] = useState([]);
 
   const closeModal = () => {
