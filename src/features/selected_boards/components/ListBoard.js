@@ -18,21 +18,21 @@ export default function ListBoard({
   name,
   allStages,
   allStageStories,
-  allStories,
   index,
   moveList,
   position,
-  setSelectedCard,
-  updateStageFunctionForAction
+  moveCard,
+  stage,
+  updateStageFunctionForAction,
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
   const [stageTitle, setStageTitle] = useState(name);
-  const [allCards, setAllCards] = useState([...allStageStories]);
+  const [allCards, setAllCards] = useState([]);
   const [storyName, setStoryName] = useState("");
 
-  const deleteList = () => { };
-  const deleteListItems = () => { };
+  const deleteList = () => {};
+  const deleteListItems = () => {};
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -96,24 +96,21 @@ export default function ListBoard({
     // setAllCards(allCards.concat({ }));
     setAddingNewCard(false);
   };
-  const moveCard = useCallback(
-    (dragIndex, hoverIndex) => {
-      const dragCard = allCards[dragIndex];
-      setAllCards(
-        update(allCards, {
-          $splice: [
-            [dragIndex, 1],
-            [hoverIndex, 0, dragCard],
-          ],
-        })
-      );
-    },
-    [allCards]
-  );
+  // const moveCard = useCallback(
+  //   (dragIndex, hoverIndex) => {
+  //     const dragCard = allCards[dragIndex];
+  //     setAllCards(
+  //       update(allCards, {
+  //         $splice: [
+  //           [dragIndex, 1],
+  //           [hoverIndex, 0, dragCard],
+  //         ],
+  //       })
+  //     );
+  //   },
+  //   [allCards]
+  // );
   // console.log(handlerId, isDragging);
-  useEffect(() => {
-    setAllCards(allStageStories);
-  }, [allStageStories]);
 
   const createStoryFunctionForAction = () => {
     const story = {
@@ -139,8 +136,14 @@ export default function ListBoard({
   };
 
   useEffect(() => {
-    setAllCards(allStageStories);
-  }, [allStageStories]);
+    if (stage) {
+      setAllCards([
+        ...stage.storyIds.map((story) => {
+          return allStageStories.find((findStory) => findStory.id === story);
+        }),
+      ]);
+    }
+  }, [stage, allStageStories]);
 
   drag(drop(ref));
 
@@ -171,10 +174,20 @@ export default function ListBoard({
           <Input
             bordered={stageNameUI}
             value={stageTitle}
-            style={{ fontSize: "1.1em", fontWeight: "500", padding: 0, width: "20vw" }}
-            onClick={() => setStageNameUI(true)}
+            style={{
+              fontSize: "1.1em",
+              fontWeight: "500",
+              padding: 0,
+              width: "20vw",
+            }}
+            onFocus={() => setStageNameUI(true)}
+            onBlur={() => setStageNameUI(false)}
             onChange={(e) => setStageTitle(e.target.value)}
-            onPressEnter={(e) => { updateStageFunctionForAction(stageId, stageTitle, position); setStageNameUI(false); e.target.blur(); }}
+            onPressEnter={(e) => {
+              updateStageFunctionForAction(stageId, stageTitle, position);
+              setStageNameUI(false);
+              e.target.blur();
+            }}
           />
         }
         extra={
@@ -193,7 +206,7 @@ export default function ListBoard({
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
-      // onClick={() => deleteStageFunctionForAction()}
+        // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
           {allCards.map(
@@ -205,8 +218,9 @@ export default function ListBoard({
                   description={story.description}
                   index={idx}
                   id={story.id}
+                  stageId={stageId}
+                  stageIndex={index}
                   moveCard={moveCard}
-                  setSelectedCard={setSelectedCard}
                   cardDetails={story}
                 />
               )

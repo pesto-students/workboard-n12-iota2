@@ -15,11 +15,10 @@ export default function Login() {
   const [pass, setPass] = useState("");
   const login = () => {
     dispatch(loginAction(email, pass));
-    if (auth.currentUser.emailVerified) {
+    if (auth.currentUser && auth.currentUser.emailVerified) {
       dispatch(getProfile(auth.currentUser.uid));
       navigate("/boards/profile");
-    }
-    else {
+    } else {
       alert("Please verify email first");
     }
   };
@@ -50,7 +49,10 @@ export default function Login() {
                   },
                 ]}
               >
-                <Input placeholder="Email address" onChange={(e) => setEmail(e.target.value)} />
+                <Input
+                  placeholder="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
 
               <Form.Item
@@ -59,7 +61,10 @@ export default function Login() {
                   { required: true, message: "Please input your password!" },
                 ]}
               >
-                <Input.Password placeholder="Password" onChange={(e) => setPass(e.target.value)} />
+                <Input.Password
+                  placeholder="Password"
+                  onChange={(e) => setPass(e.target.value)}
+                />
               </Form.Item>
 
               <Row
