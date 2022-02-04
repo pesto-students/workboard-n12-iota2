@@ -1,14 +1,26 @@
 import { Avatar, Col, PageHeader, Row, Form, Button, Input } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { EditOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import generateKey from '../../../helpers/generateKey';
+import { setProfile } from "../../../store/authActions";
 
 export default function Profile() {
+  const formRef = useRef(null);
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [formDisabled, setFormDisabled] = useState(true);
-  const onFinish = () => {};
-  const onFinishFailed = () => {};
+  const profileState = useSelector((state) => state.auth.profile);
+  const onFinish = (profile) => {
+    profile['id'] = profileState.id;
+    dispatch(setProfile(profile));
+  };
+  const onFinishFailed = () => { };
+
   return (
     <Row>
+      {console.log(profileState)}
       <Col xs={24} sm={24} md={20} lg={18} xl={18}>
         <PageHeader
           className="site-page-header"
@@ -25,11 +37,11 @@ export default function Profile() {
         >
           <Col xs={24} sm={24} md={12} lg={10} xl={14}>
             <Form
+              ref={formRef}
               form={form}
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
               onFinish={onFinish}
-              initialValues={{ displayName: "John doe" }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
