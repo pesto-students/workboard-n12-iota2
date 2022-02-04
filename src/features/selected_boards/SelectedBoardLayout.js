@@ -1,16 +1,20 @@
 import { Layout, Menu } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Outlet } from "react-router";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import SearchBoard from "./components/SearchBoard";
 import "./css/Board.css";
 
 const { Header, Content } = Layout;
 
 export default function SelectedBoardLayout() {
-  const boardId = useLocation().pathname.split('/')[2];
-  const getStateBoard = useSelector((state) => state.boards.boards.find((board) => board.id === boardId));
+  const { boardId } = useParams();
+  const navigate = useNavigate();
+  const getStateBoard = useSelector((state) =>
+    state.boards.boards.find((board) => board.id === boardId)
+  );
   return (
     <Layout
       style={{
@@ -29,6 +33,13 @@ export default function SelectedBoardLayout() {
             borderBottom: "none",
           }}
         >
+          <Menu.Item disabled style={{ cursor: "pointer" }}>
+            <div>
+              <ArrowLeftOutlined
+                onClick={() => navigate("/boards", { replace: true })}
+              />
+            </div>
+          </Menu.Item>
           <Menu.Item disabled style={{ cursor: "pointer" }}>
             <div>
               <p className="selected_board_logo">workboard</p>

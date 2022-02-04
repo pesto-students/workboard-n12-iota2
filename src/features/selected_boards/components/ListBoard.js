@@ -1,13 +1,16 @@
-import { Button, Card, Col, Row, Input } from "antd";
+import { Button, Card, Col, Row, Input, Dropdown, Menu } from "antd";
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
 import CardBoard from "./CardBoard";
 import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import update from "immutability-helper";
-import { createStoryInBoard, deleteStageInBoard, deleteStoryFromBoard } from "../../../store/boardActions";
-import generateKey from '../../../helpers/generateKey';
-
+import {
+  createStoryInBoard,
+  deleteStageInBoard,
+  deleteStoryFromBoard,
+} from "../../../store/boardActions";
+import generateKey from "../../../helpers/generateKey";
 
 export default function ListBoard({
   boardId,
@@ -18,12 +21,17 @@ export default function ListBoard({
   allStories,
   index,
   moveList,
-  position
+  position,
+  setSelectedCard,
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
+  const [listTitle, setListTitle] = useState(name);
   const [allCards, setAllCards] = useState([...allStageStories]);
   const [storyName, setStoryName] = useState("");
+
+  const deleteList = () => {};
+  const deleteListItems = () => {};
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -75,7 +83,6 @@ export default function ListBoard({
       isDragging: monitor.isDragging(),
     }),
   });
-  drag(drop(ref));
 
   const addNewCard = () => {
     const newStory = {
@@ -91,14 +98,6 @@ export default function ListBoard({
   const moveCard = useCallback(
     (dragIndex, hoverIndex) => {
       const dragCard = allCards[dragIndex];
-      console.log(
-        update(allCards, {
-          $splice: [
-            [dragIndex, 1],
-            [hoverIndex, 0, dragCard],
-          ],
-        })
-      );
       setAllCards(
         update(allCards, {
           $splice: [
@@ -115,7 +114,6 @@ export default function ListBoard({
     setAllCards(allStageStories);
   }, [allStageStories]);
 
-
   const createStoryFunctionForAction = () => {
     const story = {
       id: generateKey(),
@@ -125,24 +123,60 @@ export default function ListBoard({
       description: "",
       assignees: [],
       labels: [],
-      comments: []
+      comments: [],
     };
-    dispatch(createStoryInBoard(boardId, story))
+    dispatch(createStoryInBoard(boardId, story));
   };
 
   const deleteStageFunctionForAction = () => {
     console.log("delete me");
     const updatedStages = allStages.filter((stage) => stage.id !== stageId);
-    allStageStories.forEach(story => {
+    allStageStories.forEach((story) => {
       dispatch(deleteStoryFromBoard(boardId, story.id));
     });
     dispatch(deleteStageInBoard(boardId, updatedStages));
-  }
+  };
+
+  useEffect(() => {
+    setAllCards(allStageStories);
+  }, [allStageStories]);
+
+  drag(drop(ref));
+
+  const menu = (
+    <Menu>
+      <Menu.Item danger onClick={deleteList}>
+        Delete list
+      </Menu.Item>
+      <Menu.Item danger onClick={deleteListItems}>
+        Delete list items
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
-    <Col ref={ref} key={stageId} style={{ maxHeight: "calc(100vh - 64px)" }}>
+    <Col
+      ref={ref}
+      key={stageId}
+      style={{
+        maxHeight: "calc(100vh - 64px)",
+        transform: "translate3d(0, 0, 0)",
+      }}
+    >
       <Card
-        title={name}
-        extra={<EllipsisOutlined />}
+        title={
+          <Input
+            bordered={false}
+            value={listTitle}
+            style={{ fontSize: "1.1em", fontWeight: "500", padding: 0 }}
+            onChange={(e) => setListTitle(e.target.value)}
+          />
+        }
+        extra={
+          <Dropdown overlay={menu}>
+            <EllipsisOutlined />
+          </Dropdown>
+        }
         style={{
           width: 300,
           margin: 10,
@@ -154,10 +188,10 @@ export default function ListBoard({
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
-      // onClick={() => deleteStageFunctionForAction()}
+        // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
-          {allStageStories.map(
+          {allCards.map(
             (story, idx) =>
               story && (
                 <CardBoard
@@ -167,6 +201,8 @@ export default function ListBoard({
                   index={idx}
                   id={story.id}
                   moveCard={moveCard}
+                  setSelectedCard={setSelectedCard}
+                  cardDetails={story}
                 />
               )
           )}
@@ -180,6 +216,10 @@ export default function ListBoard({
                   placeholder="Enter title for card"
                   autoFocus
                   onChange={(e) => setStoryName(e.target.value)}
+                  onPressEnter={() => {
+                    setAddingNewCard(false);
+                    createStoryFunctionForAction();
+                  }}
                 />
               </Col>
               <Col span={24}>
@@ -234,7 +274,7 @@ export default function ListBoard({
             </Button>
           )}
         </Col>
-      </Card >
-    </Col >
+      </Card>
+    </Col>
   );
 }
