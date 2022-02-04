@@ -87,7 +87,7 @@ export default function SelectedBoard() {
 
   const handleOk = () => {};
   const handleCancel = () => {
-    navigate(-1);
+    navigate(`/board/${boardId}`, { replace: true });
   };
 
   useEffect(() => {
