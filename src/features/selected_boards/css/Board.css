@@ -66,3 +66,7 @@
   width: 0; /* Remove scrollbar space */
   background: transparent; /* Optional: just make scrollbar invisible */
 }
+
+.ant-modal-content {
+  border-radius: 5px !important;
+}

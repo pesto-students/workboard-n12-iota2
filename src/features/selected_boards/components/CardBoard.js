@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 
 const { Text } = Typography;
 
-export default function CardBoard({ name, description, index, moveCard, id }) {
+export default function CardBoard({ name, index, moveCard, id, cardDetails }) {
   const navigate = useNavigate();
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -58,6 +58,7 @@ export default function CardBoard({ name, description, index, moveCard, id }) {
     }),
   });
   drag(drop(ref));
+  console.log(cardDetails);
   return (
     <div
       ref={ref}
@@ -77,26 +78,25 @@ export default function CardBoard({ name, description, index, moveCard, id }) {
           style={{ padding: 10, margin: 0 }}
           gutter={[10, 10]}
         >
-          <Col span={24}>
+          <Col span={24} style={{ height: "fit-content" }}>
             <h4>{name}</h4>
-            <EllipsisMiddle suffixCount={12}>{description}</EllipsisMiddle>
+            {cardDetails && cardDetails.description.length > 1 && (
+              <EllipsisMiddle suffixCount={12}>
+                {cardDetails.description}
+              </EllipsisMiddle>
+            )}
           </Col>
-          <Col span={24}>
-            <Row gutter={[10, 10]}>
-              <Tag className="tag" color="#f50">
-                &emsp;&emsp;
-              </Tag>
-              <Tag className="tag" color="#2db7f5">
-                &emsp;&emsp;
-              </Tag>
-              <Tag className="tag" color="#87d068">
-                &emsp;&emsp;
-              </Tag>
-              <Tag className="tag" color="#108ee9">
-                &emsp;&emsp;
-              </Tag>
-            </Row>
-          </Col>
+          {cardDetails && cardDetails.labels.length > 1 && (
+            <Col span={24}>
+              <Row gutter={[10, 10]}>
+                {cardDetails.labels.map((label) => (
+                  <Tag className="tag" color="#f50">
+                    &emsp;&emsp;
+                  </Tag>
+                ))}
+              </Row>
+            </Col>
+          )}
         </Row>
       </Card>
     </div>

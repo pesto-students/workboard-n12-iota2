@@ -14,13 +14,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import "../css/Board.css";
 
-import {
-  CloseOutlined,
-  UserOutlined,
-  PlusCircleOutlined,
-  ClockCircleOutlined,
-} from "@ant-design/icons";
 import generateKey from "../../../helpers/generateKey";
+import ViewCard from "../components/ViewCard";
 
 export default function SelectedBoard() {
   const dispatch = useDispatch();
@@ -83,11 +78,6 @@ export default function SelectedBoard() {
     };
     const newStages = [...allStages, newStage];
     dispatch(createNewStageInBoard(boardId, newStages));
-  };
-
-  const handleOk = () => {};
-  const handleCancel = () => {
-    navigate(`/board/${boardId}`, { replace: true });
   };
 
   useEffect(() => {
@@ -205,97 +195,7 @@ export default function SelectedBoard() {
           </Col>
         )}
       </Row>
-      <Modal
-        closeIcon={
-          <CloseOutlined
-            style={{
-              position: "absolute",
-              top: -25,
-              right: -25,
-              background: "#c2c2c2",
-              borderRadius: 20,
-              padding: 5,
-            }}
-          />
-        }
-        width={800}
-        footer={null}
-        visible={selectedCard}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Row gutter={[20, 20]}>
-          <Col span={18}>
-            <Row gutter={[20, 20]}>
-              <Col span={24}>
-                <Input
-                  value={selectedCard?.name}
-                  bordered={false}
-                  style={{ fontSize: "2em" }}
-                />
-              </Col>
-              <Col span={24}>
-                <Input.TextArea
-                  rows={4}
-                  bordered={false}
-                  style={{
-                    background: "#e2e2e2",
-                    fontSize: "1.2em",
-                    borderRadius: 5,
-                  }}
-                  value={selectedCard?.description}
-                ></Input.TextArea>
-              </Col>
-            </Row>
-          </Col>
-          <Col span={6}>
-            <Row align="middle" gutter={[20, 20]}>
-              <Col span={24}>
-                <h3>Scheduled</h3>
-                <p style={{ justifyItems: "center" }}>
-                  <ClockCircleOutlined
-                    style={{
-                      fontSize: "1.5em",
-                      borderRadius: 20,
-                      padding: 5,
-                    }}
-                  />
-                  <span style={{ fontSize: "1.3em" }}>19:00</span>
-                </p>
-              </Col>
-              <Col span={24}>
-                <h3>Members</h3>
-                <UserOutlined
-                  style={{
-                    background: "#c2c2c2",
-                    fontSize: "2em",
-                    borderRadius: 20,
-                    padding: 5,
-                  }}
-                />
-              </Col>
-              <Col span={24}>
-                <h3>Labels</h3>
-                <Row>
-                  <Col>
-                    <Tag className="tag-card" color="#f50">
-                      &emsp;&emsp;
-                    </Tag>
-                  </Col>
-                  <Col>
-                    <Tag className="tag-card" color="#2db7f5">
-                      &emsp;&emsp;
-                    </Tag>
-                  </Col>
-                  <PlusCircleOutlined
-                    style={{ fontSize: "2em", cursor: "pointer" }}
-                  />
-                </Row>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Modal>
+      <ViewCard boardId={boardId} selectedCard={selectedCard} />
     </DndProvider>
   );
 }
