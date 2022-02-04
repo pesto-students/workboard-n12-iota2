@@ -5,9 +5,12 @@ import { useDrop, useDrag } from "react-dnd";
 import CardBoard from "./CardBoard";
 import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import update from "immutability-helper";
-import { createStoryInBoard, deleteStageInBoard, deleteStoryFromBoard } from "../../../store/boardActions";
-import generateKey from '../../../helpers/generateKey';
-
+import {
+  createStoryInBoard,
+  deleteStageInBoard,
+  deleteStoryFromBoard,
+} from "../../../store/boardActions";
+import generateKey from "../../../helpers/generateKey";
 
 export default function ListBoard({
   boardId,
@@ -18,7 +21,8 @@ export default function ListBoard({
   allStories,
   index,
   moveList,
-  position
+  position,
+  setSelectedCard,
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
@@ -115,7 +119,6 @@ export default function ListBoard({
     setAllCards(allStageStories);
   }, [allStageStories]);
 
-
   const createStoryFunctionForAction = () => {
     const story = {
       id: generateKey(),
@@ -125,19 +128,19 @@ export default function ListBoard({
       description: "",
       assignees: [],
       labels: [],
-      comments: []
+      comments: [],
     };
-    dispatch(createStoryInBoard(boardId, story))
+    dispatch(createStoryInBoard(boardId, story));
   };
 
   const deleteStageFunctionForAction = () => {
     console.log("delete me");
     const updatedStages = allStages.filter((stage) => stage.id !== stageId);
-    allStageStories.forEach(story => {
+    allStageStories.forEach((story) => {
       dispatch(deleteStoryFromBoard(boardId, story.id));
     });
     dispatch(deleteStageInBoard(boardId, updatedStages));
-  }
+  };
   return (
     <Col ref={ref} key={stageId} style={{ maxHeight: "calc(100vh - 64px)" }}>
       <Card
@@ -154,7 +157,7 @@ export default function ListBoard({
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
-      // onClick={() => deleteStageFunctionForAction()}
+        // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
           {allStageStories.map(
@@ -167,6 +170,8 @@ export default function ListBoard({
                   index={idx}
                   id={story.id}
                   moveCard={moveCard}
+                  setSelectedCard={setSelectedCard}
+                  cardDetails={story}
                 />
               )
           )}
@@ -234,7 +239,7 @@ export default function ListBoard({
             </Button>
           )}
         </Col>
-      </Card >
-    </Col >
+      </Card>
+    </Col>
   );
 }

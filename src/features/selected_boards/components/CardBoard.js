@@ -1,17 +1,12 @@
-import { Card, Col, Row, Typography, Tag, Modal, Input } from "antd";
-import React, { useState, useRef } from "react";
+import { Card, Col, Row, Typography, Tag } from "antd";
+import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import {
-  CloseOutlined,
-  UserOutlined,
-  PlusCircleOutlined,
-  ClockCircleOutlined,
-} from "@ant-design/icons";
+import { useNavigate } from "react-router";
 
 const { Text } = Typography;
 
 export default function CardBoard({ name, description, index, moveCard, id }) {
-  const [cardVisible, setCardVisible] = useState(false);
+  const navigate = useNavigate();
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
     accept: "card",
@@ -63,10 +58,6 @@ export default function CardBoard({ name, description, index, moveCard, id }) {
     }),
   });
   drag(drop(ref));
-  const handleOk = () => { };
-  const handleCancel = () => {
-    setCardVisible(false);
-  };
   console.log(isDragging);
   return (
     <div ref={ref}>
@@ -74,7 +65,7 @@ export default function CardBoard({ name, description, index, moveCard, id }) {
         bordered={false}
         style={{ margin: 10, borderRadius: "5px", cursor: "pointer" }}
         bodyStyle={{ padding: 0 }}
-        onClick={() => setCardVisible(true)}
+        onClick={() => navigate(id)}
       >
         <Row
           //   ref={ref}
@@ -104,97 +95,6 @@ export default function CardBoard({ name, description, index, moveCard, id }) {
           </Col>
         </Row>
       </Card>
-      <Modal
-        closeIcon={
-          <CloseOutlined
-            style={{
-              position: "absolute",
-              top: -25,
-              right: -25,
-              background: "#c2c2c2",
-              borderRadius: 20,
-              padding: 5,
-            }}
-          />
-        }
-        width={800}
-        footer={null}
-        visible={cardVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Row gutter={[20, 20]}>
-          <Col span={18}>
-            <Row gutter={[20, 20]}>
-              <Col span={24}>
-                <Input
-                  value={name}
-                  bordered={false}
-                  style={{ fontSize: "2em" }}
-                />
-              </Col>
-              <Col span={24}>
-                <Input.TextArea
-                  rows={4}
-                  bordered={false}
-                  style={{
-                    background: "#e2e2e2",
-                    fontSize: "1.2em",
-                    borderRadius: 5,
-                  }}
-                  value={description}
-                ></Input.TextArea>
-              </Col>
-            </Row>
-          </Col>
-          <Col span={6}>
-            <Row align="middle" gutter={[20, 20]}>
-              <Col span={24}>
-                <h3>Scheduled</h3>
-                <p style={{ justifyItems: "center" }}>
-                  <ClockCircleOutlined
-                    style={{
-                      fontSize: "1.5em",
-                      borderRadius: 20,
-                      padding: 5,
-                    }}
-                  />
-                  <span style={{ fontSize: "1.3em" }}>19:00</span>
-                </p>
-              </Col>
-              <Col span={24}>
-                <h3>Members</h3>
-                <UserOutlined
-                  style={{
-                    background: "#c2c2c2",
-                    fontSize: "2em",
-                    borderRadius: 20,
-                    padding: 5,
-                  }}
-                />
-              </Col>
-              <Col span={24}>
-                <h3>Labels</h3>
-                <Row>
-                  <Col>
-                    <Tag className="tag-card" color="#f50">
-                      &emsp;&emsp;
-                    </Tag>
-                  </Col>
-                  <Col>
-                    <Tag className="tag-card" color="#2db7f5">
-                      &emsp;&emsp;
-                    </Tag>
-                  </Col>
-                  <PlusCircleOutlined
-                    style={{ fontSize: "2em", cursor: "pointer" }}
-                  />
-                </Row>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Modal>
     </div>
   );
 }
