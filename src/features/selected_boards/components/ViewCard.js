@@ -21,7 +21,7 @@ import "../css/Board.css";
 import { tagColors } from "../../../helpers/tagColors";
 
 export default function ViewCard({ boardId, selectedCard }) {
-  console.log(selectedCard);
+  // console.log(selectedCard);
   const navigate = useNavigate();
   const [cardName, setCardName] = useState(
     selectedCard ? selectedCard.name : ""
@@ -46,11 +46,11 @@ export default function ViewCard({ boardId, selectedCard }) {
     }
   }, [selectedCard]);
 
-  const handleOk = () => {};
+  const handleOk = () => { };
   const handleCancel = () => {
     navigate(`/board/${boardId}`, { replace: true });
   };
-  const handleAddUsers = () => {};
+  const handleAddUsers = () => { };
   const handleAddUsersCancel = () => {
     setUserSelection(false);
   };

@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import "../css/Boards.css";
 import { Link, NavLink } from "react-router-dom";
+import { logoutAction } from "../../../store/authActions";
 import AddNewBoard from "./AddNewBoard";
 import { db } from '../../../firebase-config';
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
@@ -18,6 +19,9 @@ const { Sider } = Layout;
 
 export default function Sidebar({ collapsed, setCollapsed }) {
   const dispatch = useDispatch();
+  const logoutFunctionForAction = () => {
+    dispatch(logoutAction());
+  }
   return (
     <Sider
       collapsible
@@ -58,13 +62,6 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           <Link to="/boards/profile">Profile</Link>
         </Menu.Item>
         <Menu.Item key="10" icon={<LogoutOutlined />} onClick={() => {
-          // setDoc(doc(db, "newSchemaBoards", "NTA0MTMyMzgxMTg2NTkxMg==",
-          //   "stories", "4LgQpImm4j07fzC8mjcI"
-          // ), { new: "work" });
-          // const timeToDelete = () => deleteDoc(doc(db, "newSchemaBoards", "NTA0MTMyMzgxMTg2NTkxMg==",
-          //   "stories", "4LgQpImm4j07fzC8mjcI"
-          // ));
-          // setTimeout(function () { console.log("time to work"); timeToDelete(); }, 5000);
         }}>
           Logout
         </Menu.Item>

@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   getBoardStages_Stories,
   createNewStageInBoard,
+  updateStageInBoard,
 } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
@@ -80,6 +81,17 @@ export default function SelectedBoard() {
     dispatch(createNewStageInBoard(boardId, newStages));
   };
 
+  const updateStageFunctionForAction = (stageId, updatedName, updatedPosition) => {
+    const newStages = allStages.map(stage => {
+      if (stage.id === stageId) {
+        return { id: stageId, name: updatedName, position: updatedPosition }
+      }
+      else
+        return stage;
+    });
+    dispatch(updateStageInBoard(boardId, newStages));
+  };
+
   useEffect(() => {
     if (cardId && getStateBoard) {
       setSelectedCard(allStories.find((story) => story.id === cardId));
@@ -90,9 +102,11 @@ export default function SelectedBoard() {
     setStages(allStages);
   }, [allStages]);
 
+
+
   return (
     <DndProvider backend={HTML5Backend}>
-      {console.log(allStories.length)}
+      {/* {console.log(allStories.length)} */}
       <Row
         style={{
           overflowX: "scroll",
@@ -117,6 +131,7 @@ export default function SelectedBoard() {
                   allStories={allStories}
                   moveList={moveList}
                   setSelectedCard={setSelectedCard}
+                  updateStageFunctionForAction={updateStageFunctionForAction}
                 />
               );
             }

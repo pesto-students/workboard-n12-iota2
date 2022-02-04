@@ -2,13 +2,16 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: { isLoggedIn: false },
+  initialState: { isLoggedIn: false, profile: {} },
   reducers: {
-    login(state) {
+    signup(state, action) {
       state.isLoggedIn = true;
+      console.log(action.payload);
+      state.profile = { ...action.payload }
     },
     logout(state) {
-        state.isLoggedIn = false;
+      state.isLoggedIn = false;
+      state.profile = {}
     }
     // ,
     // showNotification(state, action) {

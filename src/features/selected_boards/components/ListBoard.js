@@ -23,15 +23,16 @@ export default function ListBoard({
   moveList,
   position,
   setSelectedCard,
+  updateStageFunctionForAction
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
-  const [listTitle, setListTitle] = useState(name);
+  const [stageTitle, setStageTitle] = useState(name);
   const [allCards, setAllCards] = useState([...allStageStories]);
   const [storyName, setStoryName] = useState("");
 
-  const deleteList = () => {};
-  const deleteListItems = () => {};
+  const deleteList = () => { };
+  const deleteListItems = () => { };
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -109,7 +110,7 @@ export default function ListBoard({
     },
     [allCards]
   );
-  console.log(handlerId, isDragging);
+  // console.log(handlerId, isDragging);
   useEffect(() => {
     setAllCards(allStageStories);
   }, [allStageStories]);
@@ -154,6 +155,8 @@ export default function ListBoard({
     </Menu>
   );
 
+  const [stageNameUI, setStageNameUI] = useState(false);
+
   return (
     <Col
       ref={ref}
@@ -166,10 +169,12 @@ export default function ListBoard({
       <Card
         title={
           <Input
-            bordered={false}
-            value={listTitle}
-            style={{ fontSize: "1.1em", fontWeight: "500", padding: 0 }}
-            onChange={(e) => setListTitle(e.target.value)}
+            bordered={stageNameUI}
+            value={stageTitle}
+            style={{ fontSize: "1.1em", fontWeight: "500", padding: 0, width: "20vw" }}
+            onClick={() => setStageNameUI(true)}
+            onChange={(e) => setStageTitle(e.target.value)}
+            onPressEnter={(e) => { updateStageFunctionForAction(stageId, stageTitle, position); setStageNameUI(false); e.target.blur(); }}
           />
         }
         extra={
@@ -188,7 +193,7 @@ export default function ListBoard({
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
-        // onClick={() => deleteStageFunctionForAction()}
+      // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
           {allCards.map(
@@ -270,7 +275,7 @@ export default function ListBoard({
               }}
               onClick={() => setAddingNewCard(true)}
             >
-              Add new card
+              Add new story
             </Button>
           )}
         </Col>
