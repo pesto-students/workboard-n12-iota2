@@ -1,10 +1,9 @@
-import { Button, Card, Col, Row, Input, Dropdown, Menu } from "antd";
+import { Button, Card, Col, Row, Input, Dropdown, Menu, Form } from "antd";
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
 import CardBoard from "./CardBoard";
 import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
-import update from "immutability-helper";
 import {
   createStoryInBoard,
   deleteStageInBoard,
@@ -86,15 +85,8 @@ export default function ListBoard({
   });
 
   const addNewCard = () => {
-    const newStory = {
-      id: generateKey(),
-      name: `${storyName}`,
-      desc: `Description ${storyName}`,
-      stageId: `${stageId}`,
-    };
-    dispatch(createStoryInBoard(boardId, newStory));
-    // setAllCards(allCards.concat({ }));
     setAddingNewCard(false);
+    createStoryFunctionForAction();
   };
 
   const createStoryFunctionForAction = () => {
@@ -213,54 +205,59 @@ export default function ListBoard({
         </div>
         <Col style={{ margin: 10 }}>
           {addingNewCard ? (
-            <Row gutter={[10, 10]}>
-              <Col span={24}>
-                <Input
-                  style={{ border: "none", borderRadius: 5 }}
-                  placeholder="Enter title for card"
-                  autoFocus
-                  onChange={(e) => setStoryName(e.target.value)}
-                  onPressEnter={() => {
-                    setAddingNewCard(false);
-                    createStoryFunctionForAction();
-                  }}
-                />
-              </Col>
-              <Col span={24}>
-                <Row gutter={[10, 10]} justify="end">
-                  <Col>
-                    <Button
-                      style={{
-                        background: "#fff",
-                        color: "#c2c2c2",
-                        borderRadius: 5,
-                      }}
-                      onClick={() => {
-                        setAddingNewCard(false);
-                        setStoryName("");
-                      }}
-                    >
-                      cancel
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      style={{
-                        background: "#ff7f58",
-                        color: "#fff",
-                        borderRadius: 5,
-                      }}
-                      onClick={() => {
-                        setAddingNewCard(false);
-                        createStoryFunctionForAction();
-                      }}
-                    >
-                      add
-                    </Button>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+            <Form name="newStory" onFinish={addNewCard}>
+              <Row gutter={[10, 10]}>
+                <Col span={24}>
+                  <Form.Item
+                    name="storyName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter card name",
+                      },
+                    ]}
+                  >
+                    <Input
+                      style={{ border: "none", borderRadius: 5 }}
+                      placeholder="Enter title for card"
+                      autoFocus
+                      onChange={(e) => setStoryName(e.target.value)}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Row gutter={[10, 10]} justify="end">
+                    <Col>
+                      <Button
+                        style={{
+                          background: "#fff",
+                          color: "#c2c2c2",
+                          borderRadius: 5,
+                        }}
+                        onClick={() => {
+                          setAddingNewCard(false);
+                          setStoryName("");
+                        }}
+                      >
+                        cancel
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                        style={{
+                          background: "#ff7f58",
+                          color: "#fff",
+                          borderRadius: 5,
+                        }}
+                        htmlType="submit"
+                      >
+                        add
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Form>
           ) : (
             <Button
               icon={<PlusOutlined />}

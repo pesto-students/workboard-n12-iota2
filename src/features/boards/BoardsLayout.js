@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 // import { useDispatch } from "react-redux";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { Layout, Breadcrumb } from "antd";
 import { getBoards } from "../../store/boardActions";
+import { useAuthState } from "react-firebase-hooks/auth";
 import "./css/Boards.css";
 import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { getAuth } from "firebase/auth";
 // import AddNewBoard from "./components/AddNewBoard";
 const { Header, Content, Footer } = Layout;
 export default function BoardsLayout() {
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
-
-
   // let unsub;    //Execute this to disconnect from firrebase to recieve live updates.
-
   useEffect(() => {
     console.log("connection established with boards collection");
     const unsub = dispatch(getBoards());
@@ -23,11 +25,14 @@ export default function BoardsLayout() {
     return () => {
       console.log("connection broken with boards collection");
       unsub();
-    }
+    };
   }, []);
 
-
-
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth", { replace: true });
+    }
+  }, [user, loading]);
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
