@@ -31,8 +31,8 @@ export default function ListBoard({
   const [allCards, setAllCards] = useState([]);
   const [storyName, setStoryName] = useState("");
 
-  const deleteList = () => {};
-  const deleteListItems = () => {};
+  const deleteList = () => { };
+  const deleteListItems = () => { };
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -178,7 +178,7 @@ export default function ListBoard({
               fontSize: "1.1em",
               fontWeight: "500",
               padding: 0,
-              width: "20vw",
+              width: "10vw",
             }}
             onFocus={() => setStageNameUI(true)}
             onBlur={() => setStageNameUI(false)}
@@ -206,7 +206,7 @@ export default function ListBoard({
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
-        // onClick={() => deleteStageFunctionForAction()}
+      // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
           {allCards.map(
