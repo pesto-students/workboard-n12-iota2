@@ -1,20 +1,39 @@
-import { Layout, Menu } from "antd";
-import React from "react";
-import { useSelector } from "react-redux";
+import { Input, Layout, Menu } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Outlet } from "react-router";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import SearchBoard from "./components/SearchBoard";
 import "./css/Board.css";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { getTeamMembers } from "../../store/teamActions";
 
 const { Header, Content } = Layout;
 
 export default function SelectedBoardLayout() {
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
+  const dispatch = useDispatch();
   const { boardId } = useParams();
   const navigate = useNavigate();
+  const [boardName, setBoardName] = useState("");
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
   );
+  const updateBoardName = () => {};
+  useEffect(() => {
+    setBoardName(getStateBoard?.name);
+    dispatch(getTeamMembers());
+  }, [getStateBoard?.name]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth", { replace: true });
+    }
+  }, [user, loading]);
+
   return (
     <Layout
       style={{
@@ -47,7 +66,13 @@ export default function SelectedBoardLayout() {
           </Menu.Item>
           <Menu.Item disabled style={{ cursor: "initial" }}>
             <div>
-              <h3 style={{ margin: 0 }}>{getStateBoard?.name}</h3>
+              <Input
+                value={boardName}
+                bordered={false}
+                style={{ fontSize: "1.2em", fontWeight: 600 }}
+                onPressEnter={() => updateBoardName()}
+                onChange={(e) => setBoardName(e.target.value)}
+              />
             </div>
           </Menu.Item>
           <Menu.Item disabled style={{ float: "right" }}>

@@ -2,7 +2,7 @@ import { Col, Row, Form, Input, Button } from "antd";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getProfile, loginAction } from "../../../store/authActions";
+import { loginAction } from "../../../store/authActions";
 import "../css/Auth.css";
 import GoogleLogo from "../../../assets/google.png";
 import FacebookLogo from "../../../assets/facebook.png";
@@ -15,12 +15,6 @@ export default function Login() {
   const [pass, setPass] = useState("");
   const login = () => {
     dispatch(loginAction(email, pass));
-    if (auth.currentUser && auth.currentUser.emailVerified) {
-      dispatch(getProfile(auth.currentUser.uid));
-      navigate("/boards/profile");
-    } else {
-      alert("Please verify email first");
-    }
   };
   const onError = (errorInfo) => {
     console.log("Failed:", errorInfo);

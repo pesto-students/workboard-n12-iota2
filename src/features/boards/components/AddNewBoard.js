@@ -1,16 +1,17 @@
 import { Button, Col, Modal, Row, Input, Select, Empty } from "antd";
 import React, { useState } from "react";
 import { SettingOutlined } from "@ant-design/icons";
+import { auth } from "../../../firebase-config";
 import { createBoard, updateBoard } from "../../../store/boardActions";
 
 import generateKey from "../../../helpers/generateKey";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AddNewBoard({ edit, boardDetails }) {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
-  const children = []; //push the users in this array
+  const children = useSelector((state) => state.team.members); //push the users in this array
   const createNewBoard = () => {};
   const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
   const [ownerMembers, setOwnerMembers] = useState([]);
@@ -24,7 +25,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
     setEditorMembers([]);
     setModalVisible(false);
   };
-
+  console.log(children);
   const updateBoardFunctionForAction = () => {
     closeModal();
     const updateDate = String(new Date().toLocaleDateString());
@@ -36,6 +37,12 @@ export default function AddNewBoard({ edit, boardDetails }) {
       owners: [...boardDetails.owners, ...ownerMembers],
       editors: [...boardDetails.editors, ...editorMembers],
       viewers: [...boardDetails.viewers, ...viewerMembers],
+      members: [
+        ...boardDetails.members,
+        ...ownerMembers,
+        ...editorMembers,
+        ...viewerMembers,
+      ],
       createdOn: boardDetails.createdOn,
       lastUpdatedOn: updateDate,
       stages: boardDetails.stages,
@@ -52,14 +59,21 @@ export default function AddNewBoard({ edit, boardDetails }) {
       name: boardName,
       backImg:
         "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      owners: ownerMembers,
+      owners: [auth.currentUser.email, ...ownerMembers],
       editors: editorMembers,
       viewers: viewerMembers,
+      members: [
+        ...ownerMembers,
+        ...editorMembers,
+        ...viewerMembers,
+        auth.currentUser.email,
+      ],
       createdOn: creationDate,
       lastUpdatedOn: creationDate,
       stages: [],
       stories: [],
     };
+    console.log(board);
     dispatch(createBoard(board));
   };
   return (
@@ -94,7 +108,10 @@ export default function AddNewBoard({ edit, boardDetails }) {
               onChange={(value) => setOwnerMembers(value)}
               notFoundContent={<Empty description="No users found" />}
             >
-              {children}
+              {children &&
+                children.map((child) => (
+                  <Select.Option key={child}>{child}</Select.Option>
+                ))}
             </Select>
           </Col>
           <Col span={18}>
@@ -108,7 +125,10 @@ export default function AddNewBoard({ edit, boardDetails }) {
               onChange={(value) => setEditorMembers(value)}
               notFoundContent={<Empty description="No users found" />}
             >
-              {children}
+              {children &&
+                children.map((child) => (
+                  <Select.Option key={child}>{child}</Select.Option>
+                ))}
             </Select>
           </Col>
           <Col span={18}>
@@ -122,7 +142,10 @@ export default function AddNewBoard({ edit, boardDetails }) {
               onChange={(value) => setViewerMembers(value)}
               notFoundContent={<Empty description="No users found" />}
             >
-              {children}
+              {children &&
+                children.map((child) => (
+                  <Select.Option key={child}>{child}</Select.Option>
+                ))}
             </Select>
           </Col>
           <Col span={24}>

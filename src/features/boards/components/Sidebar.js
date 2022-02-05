@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   LogoutOutlined,
   LayoutOutlined,
@@ -10,18 +10,21 @@ import {
 import "../css/Boards.css";
 import { Link, NavLink } from "react-router-dom";
 import { logoutAction } from "../../../store/authActions";
+import { getTeamMembers } from "../../../store/teamActions";
 import AddNewBoard from "./AddNewBoard";
-import { db } from '../../../firebase-config';
+import { db } from "../../../firebase-config";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 export default function Sidebar({ collapsed, setCollapsed }) {
   const dispatch = useDispatch();
+  const auth = getAuth();
   const logoutFunctionForAction = () => {
     dispatch(logoutAction());
-  }
+  };
   return (
     <Sider
       collapsible
@@ -61,8 +64,13 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         <Menu.Item key="9" icon={<UserOutlined />}>
           <Link to="/boards/profile">Profile</Link>
         </Menu.Item>
-        <Menu.Item key="10" icon={<LogoutOutlined />} onClick={() => {
-        }}>
+        <Menu.Item
+          key="10"
+          icon={<LogoutOutlined />}
+          onClick={() => {
+            auth.signOut();
+          }}
+        >
           Logout
         </Menu.Item>
       </Menu>

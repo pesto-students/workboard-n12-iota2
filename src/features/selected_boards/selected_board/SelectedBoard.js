@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Col, Row, Input, Modal, Tag } from "antd";
+import { Button, Col, Row, Input, Modal, Tag, Form } from "antd";
 import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   getBoardStages_Stories,
   createNewStageInBoard,
   updateStageInBoard,
+  getStoryInBoard,
   updateStoryInBoard,
 } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
@@ -15,7 +16,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import "../css/Board.css";
-import _ from "lodash";
+import _, { add } from "lodash";
 
 import generateKey from "../../../helpers/generateKey";
 import ViewCard from "../components/ViewCard";
@@ -23,6 +24,9 @@ import ViewCard from "../components/ViewCard";
 export default function SelectedBoard() {
   const dispatch = useDispatch();
   const [selectedCard, setSelectedCard] = useState(false);
+  const [disconnectBoardStoriesRef, setDisconnectBoardStoriesRef] =
+    useState(null);
+  const [disconnectStoryRef, setDisconnecStoryRef] = useState(null);
   const { boardId, cardId } = useParams();
   const navigate = useNavigate();
   // const boardId = useLocation().pathname.split("/")[2];
@@ -30,16 +34,33 @@ export default function SelectedBoard() {
 
   useEffect(() => {
     console.log("connection established with board document");
-    const { unsubBoard, unsubStories } = dispatch(
-      getBoardStages_Stories(boardId)
-    );
+    console.log("connection established with stories sub collection");
+    const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
+    setDisconnectBoardStoriesRef(disconnectBoardStories);
 
-    return () => {
-      unsubBoard();
-      unsubStories();
-      console.log("connection broken with board document");
-    };
+    // return () => {
+    //   console.log("connection broken with story document");
+    //   disconnectStoryRef();
+    // };
   }, []);
+
+  const openClickedStory = (storyId) => {
+    const { unsubBoard, unsubStories } = disconnectBoardStoriesRef;
+    unsubBoard();
+    unsubStories();
+    console.log("connection broken with board document");
+    console.log("connection broken with stories sub collection");
+    const disconnectStory = dispatch(getStoryInBoard(boardId, storyId));
+    setDisconnecStoryRef(disconnectStory);
+  };
+
+  const closeClickedStory = () => {
+    const { unsubStory } = disconnectStoryRef;
+    unsubStory();
+    const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
+    setDisconnectBoardStoriesRef(disconnectBoardStories);
+    console.log("connection broken with story document");
+  };
 
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
@@ -60,31 +81,35 @@ export default function SelectedBoard() {
           [dragIndex, 1],
           [hoverIndex, 0, dragStage],
         ],
-      }).map((stage, index) => { stage.position = index; return stage; });
-      setStages(
-        updatedStages
-      );
+      }).map((stage, index) => {
+        stage.position = index;
+        return stage;
+      });
+      setStages(updatedStages);
       dispatch(updateStageInBoard(boardId, updatedStages));
     },
     [stages]
   );
 
-  const moveCard = (storyId, destStageId, index, movingCard) => {
-    setStages(
-      stages.map((stage) => ({
-        ...stage,
-        storyIds: _.flowRight(
-          (ids) =>
-            stage.id === destStageId
-              ? [...ids.slice(0, index), storyId, ...ids.slice(index)]
-              : ids,
-          (ids) => ids.filter((id) => id !== storyId)
-        )(stage.storyIds),
-      }))
-    );
-    const updatedStory = { ...allStories.find((story) => story.id === storyId) };
+  const moveCard = (storyId, destStageId, index) => {
+    let updatedStages = stages.map((stage) => ({
+      ...stage,
+      storyIds: _.flowRight(
+        (ids) =>
+          stage.id === destStageId
+            ? [...ids.slice(0, index), storyId, ...ids.slice(index)]
+            : ids,
+        (ids) => ids.filter((id) => id !== storyId)
+      )(stage.storyIds),
+    }));
+    setStages(updatedStages);
+    const updatedStory = {
+      ...allStories.find((story) => story.id === storyId),
+    };
     updatedStory.stageId = destStageId;
+    console.log(updatedStory);
     dispatch(updateStoryInBoard(boardId, updatedStory));
+    dispatch(updateStageInBoard(boardId, updatedStages));
   };
 
   const createStageFunctionForAction = () => {
@@ -92,6 +117,7 @@ export default function SelectedBoard() {
       id: generateKey(),
       name: newStageName,
       position: allStages.length,
+      storyIds: [],
     };
     const newStages = [...allStages, newStage];
     dispatch(createNewStageInBoard(boardId, newStages));
@@ -110,6 +136,11 @@ export default function SelectedBoard() {
     dispatch(updateStageInBoard(boardId, newStages));
   };
 
+  const addNewList = () => {
+    setAddingNewList(false);
+    createStageFunctionForAction();
+  };
+
   useEffect(() => {
     if (cardId && getStateBoard) {
       setSelectedCard(allStories.find((story) => story.id === cardId));
@@ -117,17 +148,13 @@ export default function SelectedBoard() {
   }, [cardId, getStateBoard]);
 
   useEffect(() => {
-    // console.log("borad", selectedCard);
-  }, [selectedCard]);
-
-  useEffect(() => {
     setStages(
       allStages.map((stage) => {
         return {
           ...stage,
-          storyIds: [
-            ...allStories.filter((story) => story.stageId === stage.id),
-          ].map((story) => story.id),
+          // storyIds: [
+          //   ...allStories.filter((story) => story.stageId === stage.id),
+          // ].map((story) => story.id),
         };
       })
     );
@@ -163,62 +190,68 @@ export default function SelectedBoard() {
                   moveCard={moveCard}
                   stage={stage}
                   updateStageFunctionForAction={updateStageFunctionForAction}
+                  openClickedStory={openClickedStory}
                 />
               );
             }
             return null;
           })}
         {addingNewList ? (
-          <Col style={{ margin: 10 }}>
-            <Row gutter={[10, 10]} style={{ width: 300 }}>
-              <Col span={24}>
-                <Input
-                  style={{ border: "none", borderRadius: 5 }}
-                  placeholder="Enter title for list"
-                  autoFocus
-                  onChange={(e) => setNewStageName(e.target.value)}
-                  onPressEnter={() => {
-                    setAddingNewList(false);
-                    createStageFunctionForAction();
-                  }}
-                />
-              </Col>
-              <Col span={24}>
-                <Row gutter={[10, 10]} justify="end">
-                  <Col>
-                    <Button
-                      style={{
-                        background: "#fff",
-                        color: "#c2c2c2",
-                        borderRadius: 5,
-                      }}
-                      onClick={() => {
-                        setAddingNewList(false);
-                        setNewStageName("");
-                      }}
-                    >
-                      cancel
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      style={{
-                        background: "#ff7f58",
-                        color: "#fff",
-                        borderRadius: 5,
-                      }}
-                      onClick={() => {
-                        setAddingNewList(false);
-                        createStageFunctionForAction();
-                      }}
-                    >
-                      add
-                    </Button>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </Col>
+          <Form name="newList" onFinish={addNewList}>
+            <Col style={{ margin: 10 }}>
+              <Row gutter={[10, 10]} style={{ width: 300 }}>
+                <Col span={24}>
+                  <Form.Item
+                    name="listName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input list name!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      style={{ border: "none", borderRadius: 5 }}
+                      placeholder="Enter title for list"
+                      autoFocus
+                      onChange={(e) => setNewStageName(e.target.value)}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Row gutter={[10, 10]} justify="end">
+                    <Col>
+                      <Button
+                        style={{
+                          background: "#fff",
+                          color: "#c2c2c2",
+                          borderRadius: 5,
+                        }}
+                        onClick={() => {
+                          setAddingNewList(false);
+                          setNewStageName("");
+                        }}
+                      >
+                        cancel
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                        style={{
+                          background: "#ff7f58",
+                          color: "#fff",
+                          borderRadius: 5,
+                        }}
+                        htmlType="submit"
+                      >
+                        add
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Col>
+          </Form>
         ) : (
           <Col style={{ margin: 10 }}>
             <Button
@@ -241,7 +274,11 @@ export default function SelectedBoard() {
           </Col>
         )}
       </Row>
-      <ViewCard boardId={boardId} selectedCard={selectedCard} />
+      <ViewCard
+        boardId={boardId}
+        selectedCard={selectedCard}
+        closeClickedStory={closeClickedStory}
+      />
     </DndProvider>
   );
 }
