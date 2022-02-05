@@ -1,15 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState: { profile: {} },
   reducers: {
     signup(state, action) {
-      state.profile = { ...action.payload }
+      state.profile = { ...action.payload };
     },
     logout(state) {
-      state.profile = {}
-    }
+      state.profile = {};
+    },
     // ,
     // showNotification(state, action) {
     //   state.notification = {

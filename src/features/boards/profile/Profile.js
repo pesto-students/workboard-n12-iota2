@@ -15,7 +15,8 @@ export default function Profile() {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [formDisabled, setFormDisabled] = useState(true);
-  const profileState = useSelector((state) => state.auth);
+  const profileState = useSelector((state) => state.auth.profile);
+
   const onFinish = (profile) => {
     profile["id"] = profileState.id;
     dispatch(setProfile(profile));
@@ -27,8 +28,6 @@ export default function Profile() {
       dispatch(getProfile(user.uid));
     }
   }, [user, loading]);
-
-  console.log(profileState?.profile);
 
   return (
     <Row>
@@ -55,6 +54,7 @@ export default function Profile() {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
+              initialValues={{ ...profileState }}
             >
               <Form.Item
                 label="Display Name"
