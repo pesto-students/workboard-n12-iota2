@@ -23,34 +23,39 @@ export default function AllBoards() {
   const [allBoards, setAllBoards] = useState([]);
 
   useEffect(() => {
-    setAllBoards(
-      getStateBoards.map((board) => {
+    if (user) {
+      const boardsCopy = getStateBoards.map((board) => {
         return { ...board, ...dummyBoards };
-      })
-    );
-    setSharedBoards(
-      allBoards
-        .map((data) => {
-          if (
-            data.viewers.includes(user.uid) ||
-            data.editors.includes(user.uid)
-          ) {
-            return data;
-          }
-        })
-        .filter((data) => data)
-    );
-    setOwnBoards(
-      allBoards
-        .map((data) => {
-          if (data.owners.includes(user.uid)) {
-            return data;
-          }
-          return undefined;
-        })
-        .filter((data) => data)
-    );
-  }, [getStateBoards]);
+      });
+      setAllBoards(boardsCopy);
+      setSharedBoards([
+        ...boardsCopy
+          .map((data) => {
+            if (
+              data.viewers.includes(user.email) ||
+              data.editors.includes(user.email)
+            ) {
+              return data;
+            }
+            return undefined;
+          })
+          .filter((data) => data),
+      ]);
+      setOwnBoards([
+        ...boardsCopy
+          .map((data) => {
+            // console.log(data.owners);
+            if (data.owners.includes(user.email)) {
+              return data;
+            }
+            return undefined;
+          })
+          .filter((data) => data),
+      ]);
+    }
+  }, [getStateBoards, user]);
+
+  useEffect(() => {}, [allBoards, user]);
 
   return (
     <div>
@@ -65,7 +70,10 @@ export default function AllBoards() {
       <Divider />
 
       <PageHeader title="My boards" backIcon={null} />
-      <Row justify="center" gutter={[20, 20]}>
+      <Row
+        justify={ownBoards.length === 0 ? "center" : "start"}
+        gutter={[20, 20]}
+      >
         {ownBoards.map((data, idx) => (
           <Col
             key={`ownBoard${idx}`}
@@ -86,7 +94,10 @@ export default function AllBoards() {
       <Divider />
 
       <PageHeader title="Shared with me" backIcon={null} />
-      <Row justify="center" gutter={[20, 20]}>
+      <Row
+        justify={sharedBoards.length === 0 ? "center" : "start"}
+        gutter={[20, 20]}
+      >
         {sharedBoards.map((data, idx) => (
           <Col
             key={`sharedBoard${idx}`}

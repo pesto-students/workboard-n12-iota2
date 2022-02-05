@@ -25,7 +25,7 @@ export default function ListBoard({
   stage,
   setSelectedCard,
   updateStageFunctionForAction,
-  openClickedStory
+  openClickedStory,
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
@@ -33,8 +33,8 @@ export default function ListBoard({
   const [allCards, setAllCards] = useState([]);
   const [storyName, setStoryName] = useState("");
 
-  const deleteList = () => { };
-  const deleteListItems = () => { };
+  const deleteList = () => {};
+  const deleteListItems = () => {};
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -93,6 +93,7 @@ export default function ListBoard({
   };
 
   const createStoryFunctionForAction = () => {
+    console.log("triggered");
     const story = {
       id: generateKey(),
       stageId: stageId,
@@ -103,14 +104,19 @@ export default function ListBoard({
       labels: [],
       comments: [],
     };
-    dispatch(createStoryInBoard(boardId, story));
-    stage.storyIds.push(story.id);
+    console.log(story);
     const newStages = allStages.map((allStage) => {
-      if (allStage.id === stage.id) {
-        allStage.storyIds.concat(story.id);
+      let newStage = { ...allStage };
+      if (newStage.id === stage.id) {
+        if (newStage.storyIds)
+          newStage.storyIds = [...newStage.storyIds, story.id];
+        else newStage["storyIds"] = [story.id];
+        return newStage;
       }
-      return allStage;
-    })
+      return newStage;
+    });
+    console.log(newStages, "new");
+    dispatch(createStoryInBoard(boardId, story));
     dispatch(updateStageInBoard(boardId, newStages));
   };
 
@@ -194,7 +200,7 @@ export default function ListBoard({
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
-      // onClick={() => deleteStageFunctionForAction()}
+        // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
           {allCards.map(

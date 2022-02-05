@@ -24,7 +24,8 @@ import ViewCard from "../components/ViewCard";
 export default function SelectedBoard() {
   const dispatch = useDispatch();
   const [selectedCard, setSelectedCard] = useState(false);
-  const [disconnectBoardStoriesRef, setDisconnectBoardStoriesRef] = useState(null);
+  const [disconnectBoardStoriesRef, setDisconnectBoardStoriesRef] =
+    useState(null);
   const [disconnectStoryRef, setDisconnecStoryRef] = useState(null);
   const { boardId, cardId } = useParams();
   const navigate = useNavigate();
@@ -34,9 +35,7 @@ export default function SelectedBoard() {
   useEffect(() => {
     console.log("connection established with board document");
     console.log("connection established with stories sub collection");
-    const disconnectBoardStories = dispatch(
-      getBoardStages_Stories(boardId)
-    );
+    const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
     setDisconnectBoardStoriesRef(disconnectBoardStories);
 
     // return () => {
@@ -53,17 +52,15 @@ export default function SelectedBoard() {
     console.log("connection broken with stories sub collection");
     const disconnectStory = dispatch(getStoryInBoard(boardId, storyId));
     setDisconnecStoryRef(disconnectStory);
-  }
+  };
 
   const closeClickedStory = () => {
     const { unsubStory } = disconnectStoryRef;
     unsubStory();
-    const disconnectBoardStories = dispatch(
-      getBoardStages_Stories(boardId)
-    );
+    const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
     setDisconnectBoardStoriesRef(disconnectBoardStories);
     console.log("connection broken with story document");
-  }
+  };
 
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
@@ -84,31 +81,35 @@ export default function SelectedBoard() {
           [dragIndex, 1],
           [hoverIndex, 0, dragStage],
         ],
-      }).map((stage, index) => { stage.position = index; return stage; });
-      setStages(
-        updatedStages
-      );
+      }).map((stage, index) => {
+        stage.position = index;
+        return stage;
+      });
+      setStages(updatedStages);
       dispatch(updateStageInBoard(boardId, updatedStages));
     },
     [stages]
   );
 
   const moveCard = (storyId, destStageId, index) => {
-    setStages(
-      stages.map((stage) => ({
-        ...stage,
-        storyIds: _.flowRight(
-          (ids) =>
-            stage.id === destStageId
-              ? [...ids.slice(0, index), storyId, ...ids.slice(index)]
-              : ids,
-          (ids) => ids.filter((id) => id !== storyId)
-        )(stage.storyIds),
-      }))
-    );
-    const updatedStory = { ...allStories.find((story) => story.id === storyId) };
+    let updatedStages = stages.map((stage) => ({
+      ...stage,
+      storyIds: _.flowRight(
+        (ids) =>
+          stage.id === destStageId
+            ? [...ids.slice(0, index), storyId, ...ids.slice(index)]
+            : ids,
+        (ids) => ids.filter((id) => id !== storyId)
+      )(stage.storyIds),
+    }));
+    setStages(updatedStages);
+    const updatedStory = {
+      ...allStories.find((story) => story.id === storyId),
+    };
     updatedStory.stageId = destStageId;
+    console.log(updatedStory);
     dispatch(updateStoryInBoard(boardId, updatedStory));
+    dispatch(updateStageInBoard(boardId, updatedStages));
   };
 
   const createStageFunctionForAction = () => {
@@ -116,7 +117,7 @@ export default function SelectedBoard() {
       id: generateKey(),
       name: newStageName,
       position: allStages.length,
-      storyIds: []
+      storyIds: [],
     };
     const newStages = [...allStages, newStage];
     dispatch(createNewStageInBoard(boardId, newStages));
@@ -147,17 +148,13 @@ export default function SelectedBoard() {
   }, [cardId, getStateBoard]);
 
   useEffect(() => {
-    // console.log("borad", selectedCard);
-  }, [selectedCard]);
-
-  useEffect(() => {
     setStages(
       allStages.map((stage) => {
         return {
           ...stage,
-          storyIds: [
-            ...allStories.filter((story) => story.stageId === stage.id),
-          ].map((story) => story.id),
+          // storyIds: [
+          //   ...allStories.filter((story) => story.stageId === stage.id),
+          // ].map((story) => story.id),
         };
       })
     );
@@ -277,7 +274,11 @@ export default function SelectedBoard() {
           </Col>
         )}
       </Row>
-      <ViewCard boardId={boardId} selectedCard={selectedCard} closeClickedStory={closeClickedStory} />
+      <ViewCard
+        boardId={boardId}
+        selectedCard={selectedCard}
+        closeClickedStory={closeClickedStory}
+      />
     </DndProvider>
   );
 }

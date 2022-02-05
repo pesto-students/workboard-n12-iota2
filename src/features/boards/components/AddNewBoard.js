@@ -12,7 +12,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
   const children = useSelector((state) => state.boards.members); //push the users in this array
-  const createNewBoard = () => { };
+  const createNewBoard = () => {};
   const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
   const [ownerMembers, setOwnerMembers] = useState([]);
   const [viewerMembers, setViewerMembers] = useState([]);
@@ -37,7 +37,12 @@ export default function AddNewBoard({ edit, boardDetails }) {
       owners: [...boardDetails.owners, ...ownerMembers],
       editors: [...boardDetails.editors, ...editorMembers],
       viewers: [...boardDetails.viewers, ...viewerMembers],
-      members: [...boardDetails.members, ...ownerMembers, ...editorMembers, ...viewerMembers],
+      members: [
+        ...boardDetails.members,
+        ...ownerMembers,
+        ...editorMembers,
+        ...viewerMembers,
+      ],
       createdOn: boardDetails.createdOn,
       lastUpdatedOn: updateDate,
       stages: boardDetails.stages,
@@ -57,12 +62,18 @@ export default function AddNewBoard({ edit, boardDetails }) {
       owners: [auth.currentUser.email, ...ownerMembers],
       editors: editorMembers,
       viewers: viewerMembers,
-      members: [...ownerMembers, ...editorMembers, ...viewerMembers, auth.currentUser.email],
+      members: [
+        ...ownerMembers,
+        ...editorMembers,
+        ...viewerMembers,
+        auth.currentUser.email,
+      ],
       createdOn: creationDate,
       lastUpdatedOn: creationDate,
       stages: [],
       stories: [],
     };
+    console.log(board);
     dispatch(createBoard(board));
   };
   return (
