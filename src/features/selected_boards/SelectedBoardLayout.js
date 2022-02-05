@@ -6,10 +6,14 @@ import { Outlet } from "react-router";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import SearchBoard from "./components/SearchBoard";
 import "./css/Board.css";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const { Header, Content } = Layout;
 
 export default function SelectedBoardLayout() {
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
   const { boardId } = useParams();
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState("");
@@ -20,6 +24,13 @@ export default function SelectedBoardLayout() {
   useEffect(() => {
     setBoardName(getStateBoard?.name);
   }, [getStateBoard?.name]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth", { replace: true });
+    }
+  }, [user, loading]);
+
   return (
     <Layout
       style={{

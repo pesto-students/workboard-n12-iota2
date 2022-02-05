@@ -4,13 +4,13 @@ import { SettingOutlined } from "@ant-design/icons";
 import { createBoard, updateBoard } from "../../../store/boardActions";
 
 import generateKey from "../../../helpers/generateKey";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AddNewBoard({ edit, boardDetails }) {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
-  const children = []; //push the users in this array
+  const children = useSelector((state) => state.boards.members); //push the users in this array
   const createNewBoard = () => { };
   const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
   const [ownerMembers, setOwnerMembers] = useState([]);

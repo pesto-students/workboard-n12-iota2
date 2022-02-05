@@ -53,12 +53,12 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
     } else setViewModal(false);
   }, [selectedCard]);
 
-  const handleOk = () => { };
+  const handleOk = () => {};
   const handleCancel = () => {
     closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });
   };
-  const handleAddUsers = () => { };
+  const handleAddUsers = () => {};
   const handleAddUsersCancel = () => {
     setUserSelection(false);
   };
@@ -66,10 +66,10 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
   const updateStoryName = () => {
     const newStory = {
       ...selectedCard,
-      name: cardName
+      name: cardName,
     };
     dispatch(updateStoryInBoard(boardId, newStory));
-  }
+  };
 
   const updateLabel = (label) => {
     dispatch(

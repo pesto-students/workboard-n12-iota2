@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Col, Row, Input, Modal, Tag } from "antd";
+import { Button, Col, Row, Input, Modal, Tag, Form } from "antd";
 import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
@@ -16,7 +16,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import "../css/Board.css";
-import _ from "lodash";
+import _, { add } from "lodash";
 
 import generateKey from "../../../helpers/generateKey";
 import ViewCard from "../components/ViewCard";
@@ -135,6 +135,11 @@ export default function SelectedBoard() {
     dispatch(updateStageInBoard(boardId, newStages));
   };
 
+  const addNewList = () => {
+    setAddingNewList(false);
+    createStageFunctionForAction();
+  };
+
   useEffect(() => {
     if (cardId && getStateBoard) {
       setSelectedCard(allStories.find((story) => story.id === cardId));
@@ -195,56 +200,61 @@ export default function SelectedBoard() {
             return null;
           })}
         {addingNewList ? (
-          <Col style={{ margin: 10 }}>
-            <Row gutter={[10, 10]} style={{ width: 300 }}>
-              <Col span={24}>
-                <Input
-                  style={{ border: "none", borderRadius: 5 }}
-                  placeholder="Enter title for list"
-                  autoFocus
-                  onChange={(e) => setNewStageName(e.target.value)}
-                  onPressEnter={() => {
-                    setAddingNewList(false);
-                    createStageFunctionForAction();
-                  }}
-                />
-              </Col>
-              <Col span={24}>
-                <Row gutter={[10, 10]} justify="end">
-                  <Col>
-                    <Button
-                      style={{
-                        background: "#fff",
-                        color: "#c2c2c2",
-                        borderRadius: 5,
-                      }}
-                      onClick={() => {
-                        setAddingNewList(false);
-                        setNewStageName("");
-                      }}
-                    >
-                      cancel
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      style={{
-                        background: "#ff7f58",
-                        color: "#fff",
-                        borderRadius: 5,
-                      }}
-                      onClick={() => {
-                        setAddingNewList(false);
-                        createStageFunctionForAction();
-                      }}
-                    >
-                      add
-                    </Button>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </Col>
+          <Form name="newList" onFinish={addNewList}>
+            <Col style={{ margin: 10 }}>
+              <Row gutter={[10, 10]} style={{ width: 300 }}>
+                <Col span={24}>
+                  <Form.Item
+                    name="listName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input list name!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      style={{ border: "none", borderRadius: 5 }}
+                      placeholder="Enter title for list"
+                      autoFocus
+                      onChange={(e) => setNewStageName(e.target.value)}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Row gutter={[10, 10]} justify="end">
+                    <Col>
+                      <Button
+                        style={{
+                          background: "#fff",
+                          color: "#c2c2c2",
+                          borderRadius: 5,
+                        }}
+                        onClick={() => {
+                          setAddingNewList(false);
+                          setNewStageName("");
+                        }}
+                      >
+                        cancel
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                        style={{
+                          background: "#ff7f58",
+                          color: "#fff",
+                          borderRadius: 5,
+                        }}
+                        htmlType="submit"
+                      >
+                        add
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Col>
+          </Form>
         ) : (
           <Col style={{ margin: 10 }}>
             <Button
