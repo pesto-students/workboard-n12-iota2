@@ -77,6 +77,14 @@ export default function ViewCard({ boardId, selectedCard }) {
       })
     );
   };
+  const updateTitle = () => {
+    dispatch(
+      updateStoryInBoard(boardId, {
+        ...selectedCard,
+        name: cardName,
+      })
+    );
+  };
   const tagMenu = (
     <Menu>
       {tagColors.map((tag) => (
@@ -143,6 +151,10 @@ export default function ViewCard({ boardId, selectedCard }) {
                 onChange={(e) => setCardName(e.target.value)}
                 bordered={false}
                 style={{ fontSize: "2em" }}
+                onPressEnter={(e) => {
+                  updateTitle();
+                  e.currentTarget.blur();
+                }}
               />
             </Col>
             <Col span={24}>
