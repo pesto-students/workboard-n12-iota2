@@ -27,7 +27,7 @@ export const signupAction = (email, password) => {
                 organization: "",
                 emailVerified: false
             };
-            // await setDoc(dataDocumentProfileRef, { ...profile }, { merge: true });
+            await setDoc(dataDocumentProfileRef, { ...profile }, { merge: true });
             dispatch(
                 authActions.signup({
                     ...profile
