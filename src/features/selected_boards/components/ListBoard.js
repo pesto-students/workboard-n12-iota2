@@ -6,6 +6,7 @@ import CardBoard from "./CardBoard";
 import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import {
   createStoryInBoard,
+  updateStageInBoard,
   deleteStageInBoard,
   deleteStoryFromBoard,
 } from "../../../store/boardActions";
@@ -22,7 +23,9 @@ export default function ListBoard({
   position,
   moveCard,
   stage,
+  setSelectedCard,
   updateStageFunctionForAction,
+  openClickedStory
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
@@ -30,8 +33,8 @@ export default function ListBoard({
   const [allCards, setAllCards] = useState([]);
   const [storyName, setStoryName] = useState("");
 
-  const deleteList = () => {};
-  const deleteListItems = () => {};
+  const deleteList = () => { };
+  const deleteListItems = () => { };
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -101,6 +104,14 @@ export default function ListBoard({
       comments: [],
     };
     dispatch(createStoryInBoard(boardId, story));
+    stage.storyIds.push(story.id);
+    const newStages = allStages.map((allStage) => {
+      if (allStage.id === stage.id) {
+        allStage.storyIds.concat(story.id);
+      }
+      return allStage;
+    })
+    dispatch(updateStageInBoard(boardId, newStages));
   };
 
   const deleteStageFunctionForAction = () => {
@@ -155,7 +166,7 @@ export default function ListBoard({
               fontSize: "1.1em",
               fontWeight: "500",
               padding: 0,
-              width: "20vw",
+              width: "10vw",
             }}
             onFocus={() => setStageNameUI(true)}
             onBlur={() => setStageNameUI(false)}
@@ -183,7 +194,7 @@ export default function ListBoard({
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
-        // onClick={() => deleteStageFunctionForAction()}
+      // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
           {allCards.map(
@@ -199,6 +210,7 @@ export default function ListBoard({
                   stageIndex={index}
                   moveCard={moveCard}
                   cardDetails={story}
+                  openClickedStory={openClickedStory}
                 />
               )
           )}

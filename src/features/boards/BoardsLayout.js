@@ -17,7 +17,6 @@ export default function BoardsLayout() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
-  // let unsub;    //Execute this to disconnect from firrebase to recieve live updates.
   useEffect(() => {
     console.log("connection established with boards collection");
     const unsub = dispatch(getBoards());

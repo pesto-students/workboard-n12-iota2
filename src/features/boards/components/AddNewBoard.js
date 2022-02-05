@@ -11,7 +11,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
   const children = []; //push the users in this array
-  const createNewBoard = () => {};
+  const createNewBoard = () => { };
   const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
   const [ownerMembers, setOwnerMembers] = useState([]);
   const [viewerMembers, setViewerMembers] = useState([]);
@@ -36,6 +36,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
       owners: [...boardDetails.owners, ...ownerMembers],
       editors: [...boardDetails.editors, ...editorMembers],
       viewers: [...boardDetails.viewers, ...viewerMembers],
+      members: [...boardDetails.members, ...ownerMembers, ...editorMembers, ...viewerMembers],
       createdOn: boardDetails.createdOn,
       lastUpdatedOn: updateDate,
       stages: boardDetails.stages,
@@ -55,6 +56,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
       owners: ownerMembers,
       editors: editorMembers,
       viewers: viewerMembers,
+      members: [...ownerMembers, ...editorMembers, ...viewerMembers],
       createdOn: creationDate,
       lastUpdatedOn: creationDate,
       stages: [],

@@ -11,6 +11,7 @@ export default function CardBoard({
   moveCard,
   id,
   cardDetails,
+  openClickedStory,
   stageId,
   stageIndex,
 }) {
@@ -25,7 +26,7 @@ export default function CardBoard({
     },
     hover(item, monitor) {
       const draggingItem = monitor.getItem();
-      console.log(draggingItem.id, id);
+      // console.log(draggingItem.id, id);
       if (draggingItem.id !== id) {
         moveCard(draggingItem.id, stageId, index);
       }
@@ -55,7 +56,7 @@ export default function CardBoard({
         bordered={false}
         style={{ margin: 10, borderRadius: "5px", cursor: "pointer" }}
         bodyStyle={{ padding: 0 }}
-        onClick={() => navigate(id)}
+        onClick={() => { navigate(id); openClickedStory(id); }}
       >
         <Row
           //   ref={ref}
