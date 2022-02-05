@@ -23,7 +23,8 @@ export default function ListBoard({
   moveList,
   position,
   setSelectedCard,
-  updateStageFunctionForAction
+  updateStageFunctionForAction,
+  openClickedStory
 }) {
   const dispatch = useDispatch();
   const [addingNewCard, setAddingNewCard] = useState(false);
@@ -208,6 +209,7 @@ export default function ListBoard({
                   moveCard={moveCard}
                   setSelectedCard={setSelectedCard}
                   cardDetails={story}
+                  openClickedStory={openClickedStory}
                 />
               )
           )}

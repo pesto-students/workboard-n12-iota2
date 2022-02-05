@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 
 const { Text } = Typography;
 
-export default function CardBoard({ name, index, moveCard, id, cardDetails }) {
+export default function CardBoard({ name, index, moveCard, id, cardDetails, openClickedStory }) {
   const navigate = useNavigate();
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -70,7 +70,7 @@ export default function CardBoard({ name, index, moveCard, id, cardDetails }) {
         bordered={false}
         style={{ margin: 10, borderRadius: "5px", cursor: "pointer" }}
         bodyStyle={{ padding: 0 }}
-        onClick={() => navigate(id)}
+        onClick={() => { navigate(id); openClickedStory(id); }}
       >
         <Row
           //   ref={ref}

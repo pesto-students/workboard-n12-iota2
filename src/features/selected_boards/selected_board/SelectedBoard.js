@@ -2,11 +2,12 @@
 import { Button, Col, Row, Input, Modal, Tag } from "antd";
 import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   getBoardStages_Stories,
   createNewStageInBoard,
   updateStageInBoard,
+  getStoryInBoard,
 } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
@@ -21,6 +22,8 @@ import ViewCard from "../components/ViewCard";
 export default function SelectedBoard() {
   const dispatch = useDispatch();
   const [selectedCard, setSelectedCard] = useState(false);
+  const [disconnectBoardStoriesRef, setDisconnectBoardStoriesRef] = useState(null);
+  const [disconnectStoryRef, setDisconnecStoryRef] = useState(null);
   const { boardId, cardId } = useParams();
   const navigate = useNavigate();
   // const boardId = useLocation().pathname.split("/")[2];
@@ -28,16 +31,37 @@ export default function SelectedBoard() {
 
   useEffect(() => {
     console.log("connection established with board document");
-    const { unsubBoard, unsubStories } = dispatch(
+    console.log("connection established with stories sub collection");
+    const disconnectBoardStories = dispatch(
       getBoardStages_Stories(boardId)
     );
+    setDisconnectBoardStoriesRef(disconnectBoardStories);
 
-    return () => {
-      unsubBoard();
-      unsubStories();
-      console.log("connection broken with board document");
-    };
+    // return () => {
+    //   console.log("connection broken with story document");
+    //   disconnectStoryRef();
+    // };
   }, []);
+
+  const openClickedStory = (storyId) => {
+    const { unsubBoard, unsubStories } = disconnectBoardStoriesRef;
+    unsubBoard();
+    unsubStories();
+    console.log("connection broken with board document");
+    console.log("connection broken with stories sub collection");
+    const disconnectStory = dispatch(getStoryInBoard(boardId, storyId));
+    setDisconnecStoryRef(disconnectStory);
+  }
+
+  const closeClickedStory = () => {
+    const { unsubStory } = disconnectStoryRef;
+    unsubStory();
+    const disconnectBoardStories = dispatch(
+      getBoardStages_Stories(boardId)
+    );
+    setDisconnectBoardStoriesRef(disconnectBoardStories);
+    console.log("connection broken with story document");
+  }
 
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
@@ -132,6 +156,7 @@ export default function SelectedBoard() {
                   moveList={moveList}
                   setSelectedCard={setSelectedCard}
                   updateStageFunctionForAction={updateStageFunctionForAction}
+                  openClickedStory={openClickedStory}
                 />
               );
             }
@@ -210,7 +235,7 @@ export default function SelectedBoard() {
           </Col>
         )}
       </Row>
-      <ViewCard boardId={boardId} selectedCard={selectedCard} />
+      <ViewCard boardId={boardId} selectedCard={selectedCard} closeClickedStory={closeClickedStory} />
     </DndProvider>
   );
 }

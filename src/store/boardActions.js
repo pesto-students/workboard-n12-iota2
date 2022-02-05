@@ -90,8 +90,6 @@ export const getBoardStages_Stories = (boardId) => dispatch => {
     const dataCollectionBoardsDocumentBoardCollectionStoriesRef = collection(db, firebaseRootCollectionName, boardId, "stories");
 
     const unsubscribeBoard = onSnapshot(dataDocumentBoardRef, (doc) => {
-        // const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-        // console.log(source);
         const getBoard = doc.data();
         dispatch(
             boardActions.setBoard({
@@ -102,8 +100,6 @@ export const getBoardStages_Stories = (boardId) => dispatch => {
         console.log("Real Time Data Getting has an error.")
     });
     const unsubscribeStories = onSnapshot(query(dataCollectionBoardsDocumentBoardCollectionStoriesRef), (querySnapshot) => {
-        // const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
-        // console.log(source);
         const getAllStoriesOfBoard = [];
         querySnapshot.forEach((doc) => {
             if (Object.entries(doc.data()).length !== 0) {        //this condition checks whether the doc.data() is empty object or not
@@ -194,6 +190,50 @@ export const deleteStageInBoard = (boardId, newStages) => {
 }
 
 //CUD for stories with real time read at boards level.
+export const getStoryInBoard = (boardId, storyId) => dispatch => {
+    const dataDocumentStoryRef = doc(db, firebaseRootCollectionName, boardId, "stories", storyId);
+    // const dataDescriptionStoryRef = doc(db, firebaseRootCollectionName, boardId, "stories", storyId, "description", descriptionId);
+
+    const unsubscribeStory = onSnapshot(dataDocumentStoryRef, (doc) => {
+        const getStory = doc.data();
+        console.log(getStory);
+        // dispatch(
+        //     boardActions.setStory({
+        //         story: getStory
+        //     })
+        // );
+    }, (error) => {
+        console.log("Real Time Data Getting has an error.")
+    });
+    // const unsubscribeDescription = onSnapshot(query(dataDescriptionStoryRef), (querySnapshot) => {
+    //     const getDescriptionOfStory = "";
+    //     querySnapshot.forEach((doc) => {
+    //         if (Object.entries(doc.data()).length !== 0) {        //this condition checks whether the doc.data() is empty object or not
+    //             getAllStoriesOfBoard.push({ ...doc.data() });
+    //         }
+    //     })
+    //     console.log(getAllStoriesOfBoard);
+    //     dispatch(
+    //         boardActions.setStoriesForBoard({
+    //             boardId: boardId,
+    //             stories: getAllStoriesOfBoard
+    //         })
+    //     );
+    // }, (error) => {
+    //     console.log("Real Time Data Getting has an error.")
+    // });
+
+    // const returnUnsubscribeRefs = {
+    //     unsubBoard: unsubscribeBoard,
+    //     unsubStories: unsubscribeStories
+    // };
+
+    const returnUnsubscribeRefs = {
+        unsubStory: unsubscribeStory
+    };
+
+    return returnUnsubscribeRefs;
+}
 export const createStoryInBoard = (boardId, newStory) => {
     return async (dispatch) => {
         const dataStoryBoardRef = doc(db, firebaseRootCollectionName, boardId, 'stories', newStory.id);
@@ -216,6 +256,7 @@ export const createStoryInBoard = (boardId, newStory) => {
 
 export const updateStoryInBoard = (boardId, updatedStory) => {
     return async (dispatch) => {
+        console.log(updatedStory);
         const dataStoryBoardRef = doc(db, firebaseRootCollectionName, boardId, 'stories', updatedStory.id);
         const updateStoryTheBoard = async () => {
             const response = await updateDoc(dataStoryBoardRef,
@@ -234,6 +275,7 @@ export const updateStoryInBoard = (boardId, updatedStory) => {
         }
         catch (error) {
             console.log("try catch update board error");
+            console.log(error);
         }
     }
 }

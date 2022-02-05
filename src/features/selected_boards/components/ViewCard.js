@@ -10,6 +10,7 @@ import {
   Empty,
 } from "antd";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   CloseOutlined,
   UserOutlined,
@@ -19,10 +20,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import "../css/Board.css";
 import { tagColors } from "../../../helpers/tagColors";
+import { updateStoryInBoard } from '../../../store/boardActions';
 
-export default function ViewCard({ boardId, selectedCard }) {
+export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
   // console.log(selectedCard);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [cardName, setCardName] = useState(
     selectedCard ? selectedCard.name : ""
   );
@@ -48,12 +51,22 @@ export default function ViewCard({ boardId, selectedCard }) {
 
   const handleOk = () => { };
   const handleCancel = () => {
+    closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });
   };
   const handleAddUsers = () => { };
   const handleAddUsersCancel = () => {
     setUserSelection(false);
   };
+
+  const updateStoryName = () => {
+    const newStory = {
+      ...selectedCard,
+      name: cardName
+    };
+    dispatch(updateStoryInBoard(boardId, newStory));
+  }
+
   const tagMenu = (
     <Menu>
       {tagColors.map((tag) => (
@@ -119,6 +132,7 @@ export default function ViewCard({ boardId, selectedCard }) {
                 onChange={(e) => setCardName(e.target.value)}
                 bordered={false}
                 style={{ fontSize: "2em" }}
+                onPressEnter={updateStoryName}
               />
             </Col>
             <Col span={24}>
