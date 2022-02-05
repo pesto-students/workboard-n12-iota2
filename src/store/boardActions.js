@@ -1,5 +1,4 @@
 import { auth, db } from '../firebase-config';
-import generateKey from '../helpers/generateKey';
 import { setDoc, collection, deleteDoc, doc, getDocs, updateDoc, addDoc, query, onSnapshot, where } from "firebase/firestore";
 
 import { boardActions } from "./boardSlice";
@@ -10,7 +9,7 @@ const firebaseRootCollectionName = "newSchemaBoards";
 
 export const getBoards = () => dispatch => {
     const dataCollectionBoardsRef = collection(db, firebaseRootCollectionName);
-    const userEmail = auth.currentUser.email;
+    // const userEmail = auth.currentUser.email;
     const unsubscribe = onSnapshot(query(dataCollectionBoardsRef, where("members", "array-contains", "jidacif112@mxclip.com")), (querySnapshot) => {
         // const source = querySnapshot.metadata.hasPendingWrites ? "Local" : "Server";
         // console.log(source);
