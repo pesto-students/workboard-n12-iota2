@@ -7,6 +7,7 @@ import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import update from "immutability-helper";
 import {
   createStoryInBoard,
+  updateStageInBoard,
   deleteStageInBoard,
   deleteStoryFromBoard,
 } from "../../../store/boardActions";
@@ -111,6 +112,14 @@ export default function ListBoard({
       comments: [],
     };
     dispatch(createStoryInBoard(boardId, story));
+    stage.storyIds.push(story.id);
+    const newStages = allStages.map((allStage) => {
+      if (allStage.id === stage.id) {
+        allStage.storyIds.concat(story.id);
+      }
+      return allStage;
+    })
+    dispatch(updateStageInBoard(boardId, newStages));
   };
 
   const deleteStageFunctionForAction = () => {

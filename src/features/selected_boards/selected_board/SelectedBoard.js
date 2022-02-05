@@ -93,7 +93,7 @@ export default function SelectedBoard() {
     [stages]
   );
 
-  const moveCard = (storyId, destStageId, index, movingCard) => {
+  const moveCard = (storyId, destStageId, index) => {
     setStages(
       stages.map((stage) => ({
         ...stage,
@@ -116,6 +116,7 @@ export default function SelectedBoard() {
       id: generateKey(),
       name: newStageName,
       position: allStages.length,
+      storyIds: []
     };
     const newStages = [...allStages, newStage];
     dispatch(createNewStageInBoard(boardId, newStages));
