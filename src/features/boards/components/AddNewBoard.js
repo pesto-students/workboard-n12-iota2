@@ -11,8 +11,8 @@ export default function AddNewBoard({ edit, boardDetails }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
   const children = []; //push the users in this array
-  const createNewBoard = () => { };
-  const [boardName, setBoardName] = useState("");
+  const createNewBoard = () => {};
+  const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
   const [ownerMembers, setOwnerMembers] = useState([]);
   const [viewerMembers, setViewerMembers] = useState([]);
   const [editorMembers, setEditorMembers] = useState([]);
@@ -140,7 +140,11 @@ export default function AddNewBoard({ edit, boardDetails }) {
                 <Button
                   className="primary_button"
                   style={{ color: "white" }}
-                  onClick={edit ? updateBoardFunctionForAction : createBoardFunctionForAction}
+                  onClick={
+                    edit
+                      ? updateBoardFunctionForAction
+                      : createBoardFunctionForAction
+                  }
                 >
                   Create
                 </Button>

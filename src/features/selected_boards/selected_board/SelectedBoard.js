@@ -15,6 +15,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import "../css/Board.css";
+import _ from "lodash";
 
 import generateKey from "../../../helpers/generateKey";
 import ViewCard from "../components/ViewCard";
@@ -72,6 +73,7 @@ export default function SelectedBoard() {
   const [newStageName, setNewStageName] = useState("");
 
   const [stages, setStages] = useState([]);
+  const [stories, setStories] = useState([]);
 
   const moveList = useCallback(
     (dragIndex, hoverIndex) => {
@@ -88,11 +90,19 @@ export default function SelectedBoard() {
     [stages]
   );
 
-  const storiesForStage = (stageId) => {
-    const releventStories = allStories.filter(
-      (story) => story.stageId === stageId
+  const moveCard = (storyId, destStageId, index) => {
+    setStages(
+      stages.map((stage) => ({
+        ...stage,
+        storyIds: _.flowRight(
+          (ids) =>
+            stage.id === destStageId
+              ? [...ids.slice(0, index), storyId, ...ids.slice(index)]
+              : ids,
+          (ids) => ids.filter((id) => id !== storyId)
+        )(stage.storyIds),
+      }))
     );
-    return releventStories;
   };
 
   const createStageFunctionForAction = () => {
@@ -105,13 +115,15 @@ export default function SelectedBoard() {
     dispatch(createNewStageInBoard(boardId, newStages));
   };
 
-  const updateStageFunctionForAction = (stageId, updatedName, updatedPosition) => {
-    const newStages = allStages.map(stage => {
+  const updateStageFunctionForAction = (
+    stageId,
+    updatedName,
+    updatedPosition
+  ) => {
+    const newStages = allStages.map((stage) => {
       if (stage.id === stageId) {
-        return { id: stageId, name: updatedName, position: updatedPosition }
-      }
-      else
-        return stage;
+        return { id: stageId, name: updatedName, position: updatedPosition };
+      } else return stage;
     });
     dispatch(updateStageInBoard(boardId, newStages));
   };
@@ -123,14 +135,28 @@ export default function SelectedBoard() {
   }, [cardId, getStateBoard]);
 
   useEffect(() => {
-    setStages(allStages);
-  }, [allStages]);
+    console.log("borad", selectedCard);
+  }, [selectedCard]);
 
+  useEffect(() => {
+    setStages(
+      allStages.map((stage) => {
+        return {
+          ...stage,
+          storyIds: [
+            ...allStories.filter((story) => story.stageId === stage.id),
+          ].map((story) => story.id),
+        };
+      })
+    );
+  }, [allStages, allStories]);
 
+  useEffect(() => {
+    console.log(stages);
+  }, [stages]);
 
   return (
     <DndProvider backend={HTML5Backend}>
-      {/* {console.log(allStories.length)} */}
       <Row
         style={{
           overflowX: "scroll",
@@ -141,7 +167,6 @@ export default function SelectedBoard() {
         {stages &&
           stages.map((stage, index) => {
             if (stage) {
-              const sendStageStories = storiesForStage(stage.id);
               return (
                 <ListBoard
                   key={stage.id}
@@ -150,11 +175,11 @@ export default function SelectedBoard() {
                   index={index}
                   name={stage.name}
                   position={stage.position}
-                  allStageStories={sendStageStories}
+                  allStageStories={allStories}
                   allStages={allStages}
-                  allStories={allStories}
                   moveList={moveList}
-                  setSelectedCard={setSelectedCard}
+                  moveCard={moveCard}
+                  stage={stage}
                   updateStageFunctionForAction={updateStageFunctionForAction}
                   openClickedStory={openClickedStory}
                 />

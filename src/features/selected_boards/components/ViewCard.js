@@ -8,6 +8,7 @@ import {
   Dropdown,
   Select,
   Empty,
+  Button,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -16,11 +17,13 @@ import {
   UserOutlined,
   PlusCircleOutlined,
   ClockCircleOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "../css/Board.css";
 import { tagColors } from "../../../helpers/tagColors";
-import { updateStoryInBoard } from '../../../store/boardActions';
+import { useDispatch } from "react-redux";
+import { updateStoryInBoard } from "../../../store/boardActions";
 
 export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
   // console.log(selectedCard);
@@ -39,14 +42,16 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
     selectedCard ? selectedCard.assignees : []
   );
   const [userSelection, setUserSelection] = useState(false);
+  const [viewModal, setViewModal] = useState(false);
 
   useEffect(() => {
     if (selectedCard) {
+      setViewModal(true);
       setCardName(selectedCard.name);
       setCardDescription(selectedCard.description);
       setCardLabels(selectedCard.labels);
       setCardMembers(selectedCard.assignees);
-    }
+    } else setViewModal(false);
   }, [selectedCard]);
 
   const handleOk = () => { };
@@ -67,6 +72,22 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
     dispatch(updateStoryInBoard(boardId, newStory));
   }
 
+  const updateLabel = (label) => {
+    dispatch(
+      updateStoryInBoard(boardId, {
+        ...selectedCard,
+        labels: [{ color: label.color }],
+      })
+    );
+  };
+  const updateDescription = () => {
+    dispatch(
+      updateStoryInBoard(boardId, {
+        ...selectedCard,
+        description: cardDescription,
+      })
+    );
+  };
   const tagMenu = (
     <Menu>
       {tagColors.map((tag) => (
@@ -75,6 +96,7 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
             className="tag-card"
             style={{ width: "150px" }}
             color={tag.color}
+            onClick={() => updateLabel(tag)}
           >
             {tag.name}
           </Tag>
@@ -118,7 +140,7 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
       }
       width={800}
       footer={null}
-      visible={selectedCard}
+      visible={viewModal}
       onOk={handleOk}
       style={{ borderRadius: 5 }}
       onCancel={handleCancel}
@@ -148,6 +170,15 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
                 value={cardDescription}
                 onChange={(e) => setCardDescription(e.target.value)}
               ></Input.TextArea>
+              {selectedCard.description !== cardDescription && (
+                <Button
+                  className="primary_button"
+                  style={{ float: "right", margin: 5, color: "white" }}
+                  onClick={() => updateDescription()}
+                >
+                  Save
+                </Button>
+              )}
             </Col>
           </Row>
         </Col>
@@ -194,9 +225,15 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
                   </Col>
                 ))}
                 <Dropdown overlay={tagMenu} trigger="click">
-                  <PlusCircleOutlined
-                    style={{ fontSize: "2em", cursor: "pointer" }}
-                  />
+                  {cardLabels.length >= 1 ? (
+                    <RedoOutlined
+                      style={{ fontSize: "2em", cursor: "pointer" }}
+                    />
+                  ) : (
+                    <PlusCircleOutlined
+                      style={{ fontSize: "2em", cursor: "pointer" }}
+                    />
+                  )}
                 </Dropdown>
               </Row>
             </Col>
