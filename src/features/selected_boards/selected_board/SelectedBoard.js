@@ -24,7 +24,8 @@ import ViewCard from "../components/ViewCard";
 export default function SelectedBoard() {
   const dispatch = useDispatch();
   const [selectedCard, setSelectedCard] = useState(false);
-  const [disconnectBoardStoriesRef, setDisconnectBoardStoriesRef] = useState(null);
+  const [disconnectBoardStoriesRef, setDisconnectBoardStoriesRef] =
+    useState(null);
   const [disconnectStoryRef, setDisconnecStoryRef] = useState(null);
   const { boardId, cardId } = useParams();
   const navigate = useNavigate();
@@ -34,9 +35,7 @@ export default function SelectedBoard() {
   useEffect(() => {
     console.log("connection established with board document");
     console.log("connection established with stories sub collection");
-    const disconnectBoardStories = dispatch(
-      getBoardStages_Stories(boardId)
-    );
+    const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
     setDisconnectBoardStoriesRef(disconnectBoardStories);
 
     // return () => {
@@ -53,17 +52,15 @@ export default function SelectedBoard() {
     console.log("connection broken with stories sub collection");
     const disconnectStory = dispatch(getStoryInBoard(boardId, storyId));
     setDisconnecStoryRef(disconnectStory);
-  }
+  };
 
   const closeClickedStory = () => {
     const { unsubStory } = disconnectStoryRef;
     unsubStory();
-    const disconnectBoardStories = dispatch(
-      getBoardStages_Stories(boardId)
-    );
+    const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
     setDisconnectBoardStoriesRef(disconnectBoardStories);
     console.log("connection broken with story document");
-  }
+  };
 
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
@@ -84,10 +81,11 @@ export default function SelectedBoard() {
           [dragIndex, 1],
           [hoverIndex, 0, dragStage],
         ],
-      }).map((stage, index) => { stage.position = index; return stage; });
-      setStages(
-        updatedStages
-      );
+      }).map((stage, index) => {
+        stage.position = index;
+        return stage;
+      });
+      setStages(updatedStages);
       dispatch(updateStageInBoard(boardId, updatedStages));
     },
     [stages]
@@ -106,7 +104,9 @@ export default function SelectedBoard() {
         )(stage.storyIds),
       }))
     );
-    const updatedStory = { ...allStories.find((story) => story.id === storyId) };
+    const updatedStory = {
+      ...allStories.find((story) => story.id === storyId),
+    };
     updatedStory.stageId = destStageId;
     dispatch(updateStoryInBoard(boardId, updatedStory));
   };
@@ -116,7 +116,7 @@ export default function SelectedBoard() {
       id: generateKey(),
       name: newStageName,
       position: allStages.length,
-      storyIds: []
+      storyIds: [],
     };
     const newStages = [...allStages, newStage];
     dispatch(createNewStageInBoard(boardId, newStages));
@@ -277,7 +277,11 @@ export default function SelectedBoard() {
           </Col>
         )}
       </Row>
-      <ViewCard boardId={boardId} selectedCard={selectedCard} closeClickedStory={closeClickedStory} />
+      <ViewCard
+        boardId={boardId}
+        selectedCard={selectedCard}
+        closeClickedStory={closeClickedStory}
+      />
     </DndProvider>
   );
 }
