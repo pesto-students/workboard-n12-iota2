@@ -92,23 +92,24 @@ export default function SelectedBoard() {
   );
 
   const moveCard = (storyId, destStageId, index) => {
-    setStages(
-      stages.map((stage) => ({
-        ...stage,
-        storyIds: _.flowRight(
-          (ids) =>
-            stage.id === destStageId
-              ? [...ids.slice(0, index), storyId, ...ids.slice(index)]
-              : ids,
-          (ids) => ids.filter((id) => id !== storyId)
-        )(stage.storyIds),
-      }))
-    );
+    let updatedStages = stages.map((stage) => ({
+      ...stage,
+      storyIds: _.flowRight(
+        (ids) =>
+          stage.id === destStageId
+            ? [...ids.slice(0, index), storyId, ...ids.slice(index)]
+            : ids,
+        (ids) => ids.filter((id) => id !== storyId)
+      )(stage.storyIds),
+    }));
+    setStages(updatedStages);
     const updatedStory = {
       ...allStories.find((story) => story.id === storyId),
     };
     updatedStory.stageId = destStageId;
+    console.log(updatedStory);
     dispatch(updateStoryInBoard(boardId, updatedStory));
+    dispatch(updateStageInBoard(boardId, updatedStages));
   };
 
   const createStageFunctionForAction = () => {
@@ -147,17 +148,13 @@ export default function SelectedBoard() {
   }, [cardId, getStateBoard]);
 
   useEffect(() => {
-    // console.log("borad", selectedCard);
-  }, [selectedCard]);
-
-  useEffect(() => {
     setStages(
       allStages.map((stage) => {
         return {
           ...stage,
-          storyIds: [
-            ...allStories.filter((story) => story.stageId === stage.id),
-          ].map((story) => story.id),
+          // storyIds: [
+          //   ...allStories.filter((story) => story.stageId === stage.id),
+          // ].map((story) => story.id),
         };
       })
     );
