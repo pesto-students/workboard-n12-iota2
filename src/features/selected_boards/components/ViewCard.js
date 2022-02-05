@@ -22,7 +22,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import "../css/Board.css";
 import { tagColors } from "../../../helpers/tagColors";
-import { useDispatch } from "react-redux";
 import { updateStoryInBoard } from "../../../store/boardActions";
 
 export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {

@@ -26,7 +26,7 @@ export default function CardBoard({
     },
     hover(item, monitor) {
       const draggingItem = monitor.getItem();
-      console.log(draggingItem.id, id);
+      // console.log(draggingItem.id, id);
       if (draggingItem.id !== id) {
         moveCard(draggingItem.id, stageId, index);
       }

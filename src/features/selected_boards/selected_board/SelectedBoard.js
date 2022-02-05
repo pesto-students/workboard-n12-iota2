@@ -8,6 +8,7 @@ import {
   createNewStageInBoard,
   updateStageInBoard,
   getStoryInBoard,
+  updateStoryInBoard,
 } from "../../../store/boardActions";
 import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
@@ -78,19 +79,21 @@ export default function SelectedBoard() {
   const moveList = useCallback(
     (dragIndex, hoverIndex) => {
       const dragStage = stages[dragIndex];
+      const updatedStages = update(stages, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragStage],
+        ],
+      }).map((stage, index) => { stage.position = index; return stage; });
       setStages(
-        update(stages, {
-          $splice: [
-            [dragIndex, 1],
-            [hoverIndex, 0, dragStage],
-          ],
-        })
+        updatedStages
       );
+      dispatch(updateStageInBoard(boardId, updatedStages));
     },
     [stages]
   );
 
-  const moveCard = (storyId, destStageId, index) => {
+  const moveCard = (storyId, destStageId, index, movingCard) => {
     setStages(
       stages.map((stage) => ({
         ...stage,
@@ -103,6 +106,9 @@ export default function SelectedBoard() {
         )(stage.storyIds),
       }))
     );
+    const updatedStory = { ...allStories.find((story) => story.id === storyId) };
+    updatedStory.stageId = destStageId;
+    dispatch(updateStoryInBoard(boardId, updatedStory));
   };
 
   const createStageFunctionForAction = () => {
@@ -135,7 +141,7 @@ export default function SelectedBoard() {
   }, [cardId, getStateBoard]);
 
   useEffect(() => {
-    console.log("borad", selectedCard);
+    // console.log("borad", selectedCard);
   }, [selectedCard]);
 
   useEffect(() => {
@@ -152,7 +158,7 @@ export default function SelectedBoard() {
   }, [allStages, allStories]);
 
   useEffect(() => {
-    console.log(stages);
+    // console.log(stages);
   }, [stages]);
 
   return (

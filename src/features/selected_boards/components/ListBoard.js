@@ -180,7 +180,7 @@ export default function ListBoard({
               fontSize: "1.1em",
               fontWeight: "500",
               padding: 0,
-              width: "20vw",
+              width: "10vw",
             }}
             onFocus={() => setStageNameUI(true)}
             onBlur={() => setStageNameUI(false)}
