@@ -15,12 +15,6 @@ export default function Login() {
   const [pass, setPass] = useState("");
   const login = () => {
     dispatch(loginAction(email, pass));
-    if (auth.currentUser && auth.currentUser.emailVerified) {
-      dispatch(getProfile(auth.currentUser.uid));
-      navigate("/boards/profile");
-    } else {
-      alert("Please verify email first");
-    }
   };
   const onError = (errorInfo) => {
     console.log("Failed:", errorInfo);

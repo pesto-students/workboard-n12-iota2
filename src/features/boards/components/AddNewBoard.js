@@ -1,6 +1,7 @@
 import { Button, Col, Modal, Row, Input, Select, Empty } from "antd";
 import React, { useState } from "react";
 import { SettingOutlined } from "@ant-design/icons";
+import { auth } from "../../../firebase-config";
 import { createBoard, updateBoard } from "../../../store/boardActions";
 
 import generateKey from "../../../helpers/generateKey";
@@ -53,10 +54,10 @@ export default function AddNewBoard({ edit, boardDetails }) {
       name: boardName,
       backImg:
         "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      owners: ownerMembers,
+      owners: [auth.currentUser.email, ...ownerMembers],
       editors: editorMembers,
       viewers: viewerMembers,
-      members: [...ownerMembers, ...editorMembers, ...viewerMembers],
+      members: [...ownerMembers, ...editorMembers, ...viewerMembers, auth.currentUser.email],
       createdOn: creationDate,
       lastUpdatedOn: creationDate,
       stages: [],
