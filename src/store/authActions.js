@@ -30,14 +30,23 @@ export const signupAction = (email, password) => {
       sendEmailVerification(auth.currentUser).then(() =>
         console.log("mail sent")
       );
+      const dataDocumentProfileRef = doc(
+        db,
+        firebaseRootCollectionName,
+        userCreated.user.uid
+      );
+      const profile = {
+        id: userCreated.user.uid,
+        email: userCreated.user.email,
+        displayName: userCreated.user.displayName,
+        designation: "",
+        organization: "",
+        emailVerified: false,
+      };
+      await setDoc(dataDocumentProfileRef, { ...profile }, { merge: true });
       dispatch(
         authActions.signup({
-          id: userCreated.user.uid,
-          email: userCreated.user.email,
-          displayName: userCreated.user.displayName,
-          designation: "",
-          organization: "",
-          emailVerified: false,
+          ...profile,
         })
       );
       console.log("success async create user");
