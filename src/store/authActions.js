@@ -2,6 +2,7 @@ import { db, auth } from '../firebase-config';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth';
 import { authActions } from './authSlice';
 import { setDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { message } from 'antd';
 
 const firebaseRootCollectionName = "profiles";
 
@@ -17,14 +18,19 @@ export const signupAction = (email, password) => {
         try {
             const userCreated = await createUser();
             sendEmailVerification(auth.currentUser).then(() => console.log("mail sent"));
+            const dataDocumentProfileRef = doc(db, firebaseRootCollectionName, userCreated.user.uid);
+            const profile = {
+                id: userCreated.user.uid,
+                email: userCreated.user.email,
+                displayName: userCreated.user.displayName,
+                designation: "",
+                organization: "",
+                emailVerified: false
+            };
+            await setDoc(dataDocumentProfileRef, { ...profile }, { merge: true });
             dispatch(
                 authActions.signup({
-                    id: userCreated.user.uid,
-                    email: userCreated.user.email,
-                    displayName: userCreated.user.displayName,
-                    designation: "",
-                    organization: "",
-                    emailVerified: false
+                    ...profile
                 })
             );
             console.log("success async create user");
@@ -117,9 +123,11 @@ export const getProfile = (id) => {
                     ...response.data()
                 })
                 console.log("success get profile");
+                console.log(response.data());
+                return response;
             }
             else {
-                alert("User Does not exists")
+                message.error("User Does not exists")
             }
         }
         catch (error) {

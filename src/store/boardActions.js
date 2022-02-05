@@ -17,7 +17,6 @@ export const getBoards = () => dispatch => {
         querySnapshot.forEach((doc) => {
             getAllBoards.push({ ...doc.data() });
         })
-        console.log(getAllBoards);
         dispatch(
             boardActions.setAllBoards({
                 boards: [...getAllBoards]

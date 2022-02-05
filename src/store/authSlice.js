@@ -6,7 +6,6 @@ const authSlice = createSlice({
   reducers: {
     signup(state, action) {
       state.isLoggedIn = true;
-      console.log(action.payload);
       state.profile = { ...action.payload }
     },
     logout(state) {
