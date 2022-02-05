@@ -2,7 +2,7 @@ import { Col, Row, Form, Input, Button } from "antd";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getProfile, loginAction } from "../../../store/authActions";
+import { loginAction } from "../../../store/authActions";
 import "../css/Auth.css";
 import GoogleLogo from "../../../assets/google.png";
 import FacebookLogo from "../../../assets/facebook.png";
