@@ -98,21 +98,6 @@ export default function ListBoard({
     // setAllCards(allCards.concat({ }));
     setAddingNewCard(false);
   };
-  // const moveCard = useCallback(
-  //   (dragIndex, hoverIndex) => {
-  //     const dragCard = allCards[dragIndex];
-  //     setAllCards(
-  //       update(allCards, {
-  //         $splice: [
-  //           [dragIndex, 1],
-  //           [hoverIndex, 0, dragCard],
-  //         ],
-  //       })
-  //     );
-  //   },
-  //   [allCards]
-  // );
-  // console.log(handlerId, isDragging);
 
   const createStoryFunctionForAction = () => {
     const story = {

@@ -1,5 +1,5 @@
-import { Layout, Menu } from "antd";
-import React from "react";
+import { Input, Layout, Menu } from "antd";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Outlet } from "react-router";
@@ -12,9 +12,14 @@ const { Header, Content } = Layout;
 export default function SelectedBoardLayout() {
   const { boardId } = useParams();
   const navigate = useNavigate();
+  const [boardName, setBoardName] = useState("");
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
   );
+  const updateBoardName = () => {};
+  useEffect(() => {
+    setBoardName(getStateBoard?.name);
+  }, [getStateBoard?.name]);
   return (
     <Layout
       style={{
@@ -47,7 +52,13 @@ export default function SelectedBoardLayout() {
           </Menu.Item>
           <Menu.Item disabled style={{ cursor: "initial" }}>
             <div>
-              <h3 style={{ margin: 0 }}>{getStateBoard?.name}</h3>
+              <Input
+                value={boardName}
+                bordered={false}
+                style={{ fontSize: "1.2em", fontWeight: 600 }}
+                onPressEnter={() => updateBoardName()}
+                onChange={(e) => setBoardName(e.target.value)}
+              />
             </div>
           </Menu.Item>
           <Menu.Item disabled style={{ float: "right" }}>
