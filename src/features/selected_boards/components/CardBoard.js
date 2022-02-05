@@ -14,6 +14,7 @@ export default function CardBoard({
   openClickedStory,
   stageId,
   stageIndex,
+  isSpacer,
 }) {
   const navigate = useNavigate();
   const ref = useRef(null);
@@ -54,9 +55,19 @@ export default function CardBoard({
     >
       <Card
         bordered={false}
-        style={{ margin: 10, borderRadius: "5px", cursor: "pointer" }}
-        bodyStyle={{ padding: 0 }}
-        onClick={() => { navigate(id); openClickedStory(id); }}
+        style={{
+          margin: 10,
+          borderRadius: "5px",
+          cursor: "pointer",
+          background: isSpacer ? "transparent" : "",
+        }}
+        bodyStyle={{
+          padding: 0,
+        }}
+        onClick={() => {
+          navigate(id);
+          openClickedStory(id);
+        }}
       >
         <Row
           //   ref={ref}

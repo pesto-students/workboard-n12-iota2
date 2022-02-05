@@ -220,6 +220,12 @@ export default function ListBoard({
                 />
               )
           )}
+          {allCards.length === 0 && (
+            <CardBoard
+              isSpacer={true}
+              moveCard={(storyId) => moveCard(storyId, stageId, 0)}
+            />
+          )}
         </div>
         <Col style={{ margin: 10 }}>
           {addingNewCard ? (

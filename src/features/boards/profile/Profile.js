@@ -3,24 +3,35 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { EditOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import generateKey from '../../../helpers/generateKey';
-import { setProfile } from "../../../store/authActions";
+import generateKey from "../../../helpers/generateKey";
+import { getProfile, setProfile } from "../../../store/authActions";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Profile() {
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
   const formRef = useRef(null);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [formDisabled, setFormDisabled] = useState(true);
-  const profileState = useSelector((state) => state.auth.profile);
+  const profileState = useSelector((state) => state.auth);
   const onFinish = (profile) => {
-    profile['id'] = profileState.id;
+    profile["id"] = profileState.id;
     dispatch(setProfile(profile));
   };
-  const onFinishFailed = () => { };
+  const onFinishFailed = () => {};
+
+  useEffect(() => {
+    if (!loading && user) {
+      dispatch(getProfile(user.uid));
+    }
+  }, [user, loading]);
+
+  console.log(profileState?.profile);
 
   return (
     <Row>
-      {console.log(profileState)}
       <Col xs={24} sm={24} md={20} lg={18} xl={18}>
         <PageHeader
           className="site-page-header"

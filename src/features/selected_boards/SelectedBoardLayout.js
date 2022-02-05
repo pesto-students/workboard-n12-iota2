@@ -1,6 +1,6 @@
 import { Input, Layout, Menu } from "antd";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Outlet } from "react-router";
 import { ArrowLeftOutlined } from "@ant-design/icons";
@@ -8,12 +8,14 @@ import SearchBoard from "./components/SearchBoard";
 import "./css/Board.css";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { getTeamMembers } from "../../store/teamActions";
 
 const { Header, Content } = Layout;
 
 export default function SelectedBoardLayout() {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
+  const dispatch = useDispatch();
   const { boardId } = useParams();
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState("");
@@ -23,6 +25,7 @@ export default function SelectedBoardLayout() {
   const updateBoardName = () => {};
   useEffect(() => {
     setBoardName(getStateBoard?.name);
+    dispatch(getTeamMembers());
   }, [getStateBoard?.name]);
 
   useEffect(() => {
