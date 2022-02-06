@@ -2,5 +2,21 @@
   font-size: 2.6em;
   font-weight: 600;
   color: #ff7f58;
+  margin-bottom: 0;
   /* margin: 100px auto; */
+}
+
+.landing-link {
+  font-size: 0.5em;
+  float: right;
+}
+
+.hero-button {
+  background: #ff7f58;
+  color: white;
+  padding: 10px 20px;
+  font-size: 0.5em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }

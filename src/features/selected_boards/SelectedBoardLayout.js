@@ -1,9 +1,14 @@
-import { Input, Layout, Menu } from "antd";
+import { Avatar, Dropdown, Input, Layout, Menu } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Outlet } from "react-router";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  UserOutlined,
+  LogoutOutlined,
+  LayoutOutlined,
+} from "@ant-design/icons";
 import SearchBoard from "./components/SearchBoard";
 import "./css/Board.css";
 import { getAuth } from "firebase/auth";
@@ -33,6 +38,20 @@ export default function SelectedBoardLayout() {
       navigate("/auth", { replace: true });
     }
   }, [user, loading]);
+
+  const profileMenu = (
+    <Menu>
+      <Menu.Item icon={<UserOutlined />}>
+        <Link to="/boards/profile">Profile</Link>
+      </Menu.Item>
+      <Menu.Item icon={<LayoutOutlined />}>
+        <Link to="/boards">All Boards</Link>
+      </Menu.Item>
+      <Menu.Item icon={<LogoutOutlined />} onClick={() => auth.signOut()}>
+        Logout
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <Layout
@@ -75,8 +94,13 @@ export default function SelectedBoardLayout() {
               />
             </div>
           </Menu.Item>
-          <Menu.Item disabled style={{ float: "right" }}>
-            <SearchBoard />
+          <Menu.Item style={{ float: "right" }}>
+            <Dropdown overlay={profileMenu}>
+              <Avatar
+                size="large"
+                icon={<UserOutlined style={{ fontSize: "1em" }} />}
+              />
+            </Dropdown>
           </Menu.Item>
         </Menu>
       </Header>
