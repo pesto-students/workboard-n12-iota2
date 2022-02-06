@@ -104,10 +104,9 @@ export default function SelectedBoardLayout() {
           </Menu.Item>
           <Menu.Item style={{ float: "right" }}>
             <Dropdown overlay={profileMenu}>
-              <Avatar
-                size="large"
-                icon={<UserOutlined style={{ fontSize: "1em" }} />}
-              />
+              <Avatar size="large">
+                {String(user.email).charAt(0).toUpperCase()}
+              </Avatar>
             </Dropdown>
           </Menu.Item>
         </Menu>
