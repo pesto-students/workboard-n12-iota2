@@ -14,6 +14,8 @@ import ListBoard from "../components/ListBoard";
 import { PlusOutlined } from "@ant-design/icons";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
+import { isMobile } from "react-device-detect";
 import update from "immutability-helper";
 import "../css/Board.css";
 import _ from "lodash";
@@ -158,7 +160,7 @@ export default function SelectedBoard() {
   }, [stages]);
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
       <Row
         style={{
           overflowX: "scroll",
