@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../../../store/authActions";
 import "../css/Auth.css";
-import GoogleLogo from "../../../assets/google.png";
-import FacebookLogo from "../../../assets/facebook.png";
+// import GoogleLogo from "../../../assets/google.png";
+// import FacebookLogo from "../../../assets/facebook.png";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -98,7 +98,7 @@ export default function Login() {
                 </Form.Item>
               </Row>
 
-              <Row gutter={[20, 20]} justify="center">
+              {/* <Row gutter={[20, 20]} justify="center">
                 <Col>Or signin using</Col>
                 <Col span={24}>
                   <Row gutter={[20, 20]} justify="center">
@@ -120,7 +120,7 @@ export default function Login() {
                     </Col>
                   </Row>
                 </Col>
-              </Row>
+              </Row> */}
             </Form>
           </Col>
         </Row>
