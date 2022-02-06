@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Outlet } from "react-router";
 import {
-  ArrowLeftOutlined,
+  LeftCircleOutlined,
   UserOutlined,
   LogoutOutlined,
   LayoutOutlined,
@@ -25,6 +25,7 @@ export default function SelectedBoardLayout() {
   const { boardId } = useParams();
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState("");
+  const [boardNameUI, setBoardNameUI] = useState(false);
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
   );
@@ -74,7 +75,8 @@ export default function SelectedBoardLayout() {
         >
           <Menu.Item disabled style={{ cursor: "pointer" }}>
             <div>
-              <ArrowLeftOutlined
+              <LeftCircleOutlined
+                style={{ color: "red", fontSize: "25px" }}
                 onClick={() => navigate("/boards", { replace: true })}
               />
             </div>
@@ -88,9 +90,14 @@ export default function SelectedBoardLayout() {
             <div>
               <Input
                 value={boardName}
-                bordered={false}
+                bordered={boardNameUI}
+                onFocus={() => setBoardNameUI(true)}
+                onBlur={() => setBoardNameUI(false)}
                 style={{ fontSize: "1.2em", fontWeight: 600 }}
-                onPressEnter={() => updateBoardName()}
+                onPressEnter={(e) => {
+                  e.target.blur();
+                  updateBoardName();
+                }}
                 onChange={(e) => setBoardName(e.target.value)}
               />
             </div>

@@ -39,6 +39,7 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
   const [cardName, setCardName] = useState(
     selectedCard ? selectedCard.name : ""
   );
+  const [storyNameUI, setStoryNameUI] = useState(false);
   const [cardDescription, setCardDescription] = useState(
     selectedCard ? selectedCard.description : ""
   );
@@ -167,9 +168,14 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
               <Input
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
-                bordered={false}
+                bordered={storyNameUI}
+                onFocus={() => setStoryNameUI(true)}
+                onBlur={() => setStoryNameUI(false)}
                 style={{ fontSize: "2em" }}
-                onPressEnter={updateStoryName}
+                onPressEnter={(e) => {
+                  e.target.blur();
+                  updateStoryName();
+                }}
               />
             </Col>
             <Col span={24}>
