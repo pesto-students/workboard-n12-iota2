@@ -40,6 +40,7 @@ export default function ViewCard({ boardId, selectedCard }) {
   const [cardName, setCardName] = useState(
     selectedCard ? selectedCard.name : ""
   );
+  const [storyNameUI, setStoryNameUI] = useState(false);
   const [cardDescription, setCardDescription] = useState(
     selectedCard ? selectedCard.description : ""
   );
@@ -63,7 +64,7 @@ export default function ViewCard({ boardId, selectedCard }) {
     } else setViewModal(false);
   }, [selectedCard]);
 
-  const handleOk = () => {};
+  const handleOk = () => { };
   const handleCancel = () => {
     // closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });
@@ -173,7 +174,9 @@ export default function ViewCard({ boardId, selectedCard }) {
               <Input
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
-                bordered={false}
+                bordered={true}
+                onFocus={() => setStoryNameUI(true)}
+                onBlur={() => setStoryNameUI(false)}
                 style={{ fontSize: "2em" }}
                 onPressEnter={updateStoryName}
               />

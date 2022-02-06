@@ -33,8 +33,18 @@ export default function ListBoard({
   const [allCards, setAllCards] = useState([]);
   const [storyName, setStoryName] = useState("");
 
-  const deleteList = () => { };
-  const deleteListItems = () => { };
+  const deleteList = () => {
+    const stageIndex = allStages.findIndex((stage) => stage.id === stageId);
+    const updatedStages = allStages.slice();
+    updatedStages.splice(stageIndex, 1);
+    dispatch(deleteStageInBoard(boardId, updatedStages));
+    deleteListItems();
+  };
+  const deleteListItems = () => {
+    allStageStories.forEach((story) => {
+      if (story.stageId === stageId) dispatch(deleteStoryFromBoard(boardId, story.id));
+    })
+  };
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
