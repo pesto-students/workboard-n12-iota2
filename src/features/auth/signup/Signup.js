@@ -99,7 +99,7 @@ export default function Signup() {
                   </Button>
                 </Form.Item>
               </Row>
-              <Row gutter={[20, 20]} justify="center">
+              {/* <Row gutter={[20, 20]} justify="center">
                 <Col>Or signin using</Col>
                 <Col span={24}>
                   <Row gutter={[20, 20]} justify="center">
@@ -121,7 +121,7 @@ export default function Signup() {
                     </Col>
                   </Row>
                 </Col>
-              </Row>
+              </Row> */}
             </Form>
           </Col>
         </Row>
