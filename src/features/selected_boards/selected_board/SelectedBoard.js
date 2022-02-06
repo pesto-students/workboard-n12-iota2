@@ -277,8 +277,7 @@ export default function SelectedBoard() {
       <ViewCard
         boardId={boardId}
         selectedCard={selectedCard}
-        currentBoard={getStateBoard}
-        closeClickedStory={closeClickedStory}
+        allStages={allStages}
       />
     </DndProvider>
   );

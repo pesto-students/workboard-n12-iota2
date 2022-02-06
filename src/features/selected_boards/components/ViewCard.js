@@ -12,6 +12,7 @@ import {
   DatePicker,
   Avatar,
   Tooltip,
+  Popconfirm,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,12 +26,16 @@ import {
 import { useNavigate } from "react-router-dom";
 import "../css/Board.css";
 import { tagColors } from "../../../helpers/tagColors";
-import { updateStoryInBoard } from "../../../store/boardActions";
+import {
+  deleteStoryFromBoard,
+  updateStageInBoard,
+  updateStoryInBoard,
+} from "../../../store/boardActions";
 import DateTimePicker from "react-datetime-picker";
 
 const format = "HH:mm";
 
-export default function ViewCard({ boardId, selectedCard }) {
+export default function ViewCard({ boardId, selectedCard, allStages }) {
   // console.log(selectedCard);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -108,6 +113,20 @@ export default function ViewCard({ boardId, selectedCard }) {
       })
     );
     setUserSelection(false);
+  };
+  const deleteCard = () => {
+    const newStages = allStages.map((allStage) => {
+      let newStage = { ...allStage };
+      if (newStage.id === selectedCard.stageId) {
+        newStage.storyIds = [...newStage.storyIds].filter(
+          (a) => a !== selectedCard.id
+        );
+        return newStage;
+      }
+      return newStage;
+    });
+    dispatch(updateStageInBoard(boardId, newStages));
+    dispatch(deleteStoryFromBoard(boardId, selectedCard.id));
   };
   const tagMenu = (
     <Menu>
@@ -256,6 +275,19 @@ export default function ViewCard({ boardId, selectedCard }) {
                   )}
                 </Dropdown>
               </Row>
+            </Col>
+            <Col span={24}>
+              <Popconfirm
+                title="Are you sure to delete this card?"
+                onConfirm={deleteCard}
+                onCancel={() => {}}
+                okText="Yes"
+                cancelText="No"
+              >
+                <p style={{ color: "#ff7f58", cursor: "pointer" }}>
+                  Delete this card
+                </p>
+              </Popconfirm>
             </Col>
           </Row>
         </Col>
