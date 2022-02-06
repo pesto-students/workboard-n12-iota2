@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar, Dropdown, Input, Layout, Menu } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +10,7 @@ import {
   LogoutOutlined,
   LayoutOutlined,
 } from "@ant-design/icons";
-import SearchBoard from "./components/SearchBoard";
+// import SearchBoard from "./components/SearchBoard";
 import "./css/Board.css";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -19,7 +20,7 @@ const { Header, Content } = Layout;
 
 export default function SelectedBoardLayout() {
   const auth = getAuth();
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const dispatch = useDispatch();
   const { boardId } = useParams();
   const navigate = useNavigate();

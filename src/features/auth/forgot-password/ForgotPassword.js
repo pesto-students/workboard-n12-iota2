@@ -1,14 +1,13 @@
 import { Col, Row, Form, Input, Button } from "antd";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { forgotPassword } from "../../../store/authActions";
 import "../css/Auth.css";
 
 export default function ForgotPassword() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
+  const [, setEmail] = useState("");
   const forgotPass = (info) => {
     dispatch(forgotPassword(info.email));
     console.log("Bhooooolllllaaaa");
@@ -40,7 +39,10 @@ export default function ForgotPassword() {
                   },
                 ]}
               >
-                <Input placeholder="Email address" onChange={(e) => setEmail(e.target.value)} />
+                <Input
+                  placeholder="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
 
               <Row justify="space-between">

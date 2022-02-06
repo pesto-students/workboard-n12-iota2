@@ -1,16 +1,5 @@
-import { auth, db } from "../firebase-config";
-import {
-  setDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  updateDoc,
-  addDoc,
-  query,
-  onSnapshot,
-  where,
-} from "firebase/firestore";
+import { db } from "../firebase-config";
+import { collection, query, onSnapshot } from "firebase/firestore";
 
 import { teamActions } from "./teamSlice";
 

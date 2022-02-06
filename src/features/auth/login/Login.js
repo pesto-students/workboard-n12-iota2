@@ -1,15 +1,13 @@
 import { Col, Row, Form, Input, Button } from "antd";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../../../store/authActions";
 import "../css/Auth.css";
 import GoogleLogo from "../../../assets/google.png";
 import FacebookLogo from "../../../assets/facebook.png";
-import { auth } from "../../../firebase-config";
 
 export default function Login() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");

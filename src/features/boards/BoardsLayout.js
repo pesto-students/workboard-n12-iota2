@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 // import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router";
@@ -14,7 +15,7 @@ import { getTeamMembers } from "../../store/teamActions";
 const { Header, Content, Footer } = Layout;
 export default function BoardsLayout() {
   const auth = getAuth();
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);

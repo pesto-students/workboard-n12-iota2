@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Col, Layout, Row, Typography } from "antd";
+import { Col, Layout, Row, Typography } from "antd";
 
 import "./css/Landing.css";
 

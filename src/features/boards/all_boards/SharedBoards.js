@@ -1,4 +1,5 @@
-import { Col, Divider, Empty, PageHeader, Row } from "antd";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Col, Empty, PageHeader, Row } from "antd";
 import { getAuth } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";

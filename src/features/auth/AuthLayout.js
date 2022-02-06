@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Row } from "antd";
 import { getAuth } from "firebase/auth";
 import React, { useEffect } from "react";
@@ -7,7 +8,7 @@ import "./css/Auth.css";
 
 export default function AuthLayout() {
   const auth = getAuth();
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && user) {

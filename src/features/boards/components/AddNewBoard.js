@@ -1,6 +1,5 @@
 import { Button, Col, Modal, Row, Input, Select, Empty } from "antd";
 import React, { useState } from "react";
-import { SettingOutlined } from "@ant-design/icons";
 import { auth } from "../../../firebase-config";
 import { createBoard, updateBoard } from "../../../store/boardActions";
 
@@ -10,9 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default function AddNewBoard({ edit, boardDetails }) {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
-  const { Option } = Select;
   const children = useSelector((state) => state.team.members); //push the users in this array
-  const createNewBoard = () => {};
   const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
   const [ownerMembers, setOwnerMembers] = useState([]);
   const [viewerMembers, setViewerMembers] = useState([]);

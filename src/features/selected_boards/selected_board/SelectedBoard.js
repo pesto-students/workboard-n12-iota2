@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Col, Row, Input, Modal, Tag, Form } from "antd";
+import { Button, Col, Row, Input, Form } from "antd";
 import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   getBoardStages_Stories,
   createNewStageInBoard,
@@ -16,7 +16,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import "../css/Board.css";
-import _, { add } from "lodash";
+import _ from "lodash";
 
 import generateKey from "../../../helpers/generateKey";
 import ViewCard from "../components/ViewCard";
@@ -28,12 +28,14 @@ export default function SelectedBoard() {
     useState(null);
   const [disconnectStoryRef, setDisconnecStoryRef] = useState(null);
   const { boardId, cardId } = useParams();
-  const navigate = useNavigate();
   // const boardId = useLocation().pathname.split("/")[2];
   const [addingNewList, setAddingNewList] = useState(false);
 
   useEffect(() => {
-    console.log("connection established with board document");
+    console.log(
+      "connection established with board document",
+      disconnectStoryRef
+    );
     console.log("connection established with stories sub collection");
     const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
     setDisconnectBoardStoriesRef(disconnectBoardStories);
@@ -54,14 +56,6 @@ export default function SelectedBoard() {
     setDisconnecStoryRef(disconnectStory);
   };
 
-  const closeClickedStory = () => {
-    const { unsubStory } = disconnectStoryRef;
-    unsubStory();
-    const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
-    setDisconnectBoardStoriesRef(disconnectBoardStories);
-    console.log("connection broken with story document");
-  };
-
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
   );
@@ -71,7 +65,6 @@ export default function SelectedBoard() {
   const [newStageName, setNewStageName] = useState("");
 
   const [stages, setStages] = useState([]);
-  const [stories, setStories] = useState([]);
 
   const moveList = useCallback(
     (dragIndex, hoverIndex) => {
