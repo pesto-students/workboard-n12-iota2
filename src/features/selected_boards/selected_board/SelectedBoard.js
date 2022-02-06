@@ -283,6 +283,7 @@ export default function SelectedBoard() {
         selectedCard={selectedCard}
         currentBoard={getStateBoard}
         closeClickedStory={closeClickedStory}
+        allStages={allStages}
       />
     </DndProvider>
   );
