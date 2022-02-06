@@ -19,6 +19,7 @@ export default function Profile() {
   const onFinish = (profile) => {
     profile["id"] = profileState.id;
     dispatch(setProfile(profile));
+    setFormDisabled(true);
   };
   const onFinishFailed = () => {};
 

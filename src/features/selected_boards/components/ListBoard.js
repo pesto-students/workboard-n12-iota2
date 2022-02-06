@@ -30,8 +30,8 @@ export default function ListBoard({
   const [allCards, setAllCards] = useState([]);
   const [storyName, setStoryName] = useState("");
 
-  const deleteList = () => {};
-  const deleteListItems = () => {};
+  const deleteList = () => { };
+  const deleteListItems = () => { };
 
   const ref = useRef(null);
   const [, drop] = useDrop({
@@ -101,7 +101,7 @@ export default function ListBoard({
       labels: [],
       comments: [],
     };
-    console.log(story);
+    // console.log(story);
     const newStages = allStages.map((allStage) => {
       let newStage = { ...allStage };
       if (newStage.id === stage.id) {
@@ -112,7 +112,7 @@ export default function ListBoard({
       }
       return newStage;
     });
-    console.log(newStages, "new");
+    // console.log(newStages, "new");
     dispatch(createStoryInBoard(boardId, story));
     dispatch(updateStageInBoard(boardId, newStages));
   };
@@ -197,7 +197,7 @@ export default function ListBoard({
           overflowY: "scroll",
           maxHeight: "calc(100vh - 150px)",
         }}
-        // onClick={() => deleteStageFunctionForAction()}
+      // onClick={() => deleteStageFunctionForAction()}
       >
         <div>
           {allCards.map(
