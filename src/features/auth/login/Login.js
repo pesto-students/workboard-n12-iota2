@@ -17,6 +17,9 @@ export default function Login() {
   const onError = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+  const testlogin = () => {
+    dispatch(loginAction("mekep65629@mxclip.com", "123456789"));
+  };
   return (
     <Row style={{ minHeight: "100vh" }} justify="center">
       <Col span={22}>
@@ -77,6 +80,13 @@ export default function Login() {
                 >
                   <Link to="/auth/signup">Signup</Link>
                 </h3>
+                <Button
+                  className="primary_button"
+                  type="primary"
+                  onClick={() => testlogin()}
+                >
+                  Test Login
+                </Button>
                 <Form.Item style={{ float: "right" }}>
                   <Button
                     className="primary_button"
