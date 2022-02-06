@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { db } from "../firebase-config";
-import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 
 const boardSlice = createSlice({
   name: "boards",
@@ -19,8 +17,13 @@ const boardSlice = createSlice({
         (board) => board.id === action.payload.board.id
       );
       const copyAllBoards = state.boards.slice();
-      if (boardIndex !== -1) { const copyStories = copyAllBoards[boardIndex].stories; copyAllBoards[boardIndex] = action.payload.board; copyAllBoards[boardIndex].stories = copyStories; }
-      else { copyAllBoards.push(action.payload.board); }
+      if (boardIndex !== -1) {
+        const copyStories = copyAllBoards[boardIndex].stories;
+        copyAllBoards[boardIndex] = action.payload.board;
+        copyAllBoards[boardIndex].stories = copyStories;
+      } else {
+        copyAllBoards.push(action.payload.board);
+      }
       state.boards = [...copyAllBoards];
     },
     setStoriesForBoard(state, action) {
