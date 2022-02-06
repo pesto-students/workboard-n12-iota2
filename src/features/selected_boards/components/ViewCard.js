@@ -63,7 +63,7 @@ export default function ViewCard({ boardId, selectedCard }) {
     } else setViewModal(false);
   }, [selectedCard]);
 
-  const handleOk = () => {};
+  const handleOk = () => { };
   const handleCancel = () => {
     // closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });

@@ -27,7 +27,7 @@ export default function SelectedBoardLayout() {
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
   );
-  const updateBoardName = () => {};
+  const updateBoardName = () => { };
   useEffect(() => {
     setBoardName(getStateBoard?.name);
     dispatch(getTeamMembers());
