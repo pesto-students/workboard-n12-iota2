@@ -11,7 +11,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const { Option } = Select;
-  const children = useSelector((state) => state.boards.members); //push the users in this array
+  const children = useSelector((state) => state.team.members); //push the users in this array
   const createNewBoard = () => {};
   const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
   const [ownerMembers, setOwnerMembers] = useState([]);
@@ -25,7 +25,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
     setEditorMembers([]);
     setModalVisible(false);
   };
-
+  console.log(children);
   const updateBoardFunctionForAction = () => {
     closeModal();
     const updateDate = String(new Date().toLocaleDateString());
@@ -108,7 +108,10 @@ export default function AddNewBoard({ edit, boardDetails }) {
               onChange={(value) => setOwnerMembers(value)}
               notFoundContent={<Empty description="No users found" />}
             >
-              {children}
+              {children &&
+                children.map((child) => (
+                  <Select.Option key={child}>{child}</Select.Option>
+                ))}
             </Select>
           </Col>
           <Col span={18}>
@@ -122,7 +125,10 @@ export default function AddNewBoard({ edit, boardDetails }) {
               onChange={(value) => setEditorMembers(value)}
               notFoundContent={<Empty description="No users found" />}
             >
-              {children}
+              {children &&
+                children.map((child) => (
+                  <Select.Option key={child}>{child}</Select.Option>
+                ))}
             </Select>
           </Col>
           <Col span={18}>
@@ -136,7 +142,10 @@ export default function AddNewBoard({ edit, boardDetails }) {
               onChange={(value) => setViewerMembers(value)}
               notFoundContent={<Empty description="No users found" />}
             >
-              {children}
+              {children &&
+                children.map((child) => (
+                  <Select.Option key={child}>{child}</Select.Option>
+                ))}
             </Select>
           </Col>
           <Col span={24}>

@@ -1,8 +1,9 @@
-import { Col, Divider, Empty, PageHeader, Row } from "antd";
+import { Button, Col, Divider, Empty, PageHeader, Row } from "antd";
 import { getAuth } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useSelector } from "react-redux";
+import AddNewBoard from "../components/AddNewBoard";
 // import { createBoard } from '../../../store/boardActions';
 import BoardCard from "../components/BoardCard";
 
@@ -60,12 +61,25 @@ export default function AllBoards() {
   return (
     <div>
       <PageHeader title="Recent boards" backIcon={null} />
-      <Row gutter={[20, 20]}>
+      <Row
+        justify={allBoards.length === 0 ? "center" : "start"}
+        gutter={[20, 20]}
+      >
         {allBoards.map((board) => (
           <Col key={board.id} xs={24} sm={24} md={12} lg={8} xl={6} xxl={4}>
             <BoardCard {...board} />
           </Col>
         ))}
+        {allBoards.length === 0 && (
+          <Empty
+            description="You do not have any boards"
+            children={
+              <Button>
+                <AddNewBoard />
+              </Button>
+            }
+          />
+        )}
       </Row>
       <Divider />
 

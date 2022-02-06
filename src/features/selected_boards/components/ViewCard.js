@@ -9,9 +9,12 @@ import {
   Select,
   Empty,
   Button,
+  DatePicker,
+  Avatar,
+  Tooltip,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CloseOutlined,
   UserOutlined,
@@ -23,11 +26,17 @@ import { useNavigate } from "react-router-dom";
 import "../css/Board.css";
 import { tagColors } from "../../../helpers/tagColors";
 import { updateStoryInBoard } from "../../../store/boardActions";
+import DateTimePicker from "react-datetime-picker";
 
-export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
+const format = "HH:mm";
+
+export default function ViewCard({ boardId, selectedCard }) {
   // console.log(selectedCard);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentBoard = useSelector((state) =>
+    state.boards.boards.find((board) => board.id === boardId)
+  );
   const [cardName, setCardName] = useState(
     selectedCard ? selectedCard.name : ""
   );
@@ -42,6 +51,7 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
   );
   const [userSelection, setUserSelection] = useState(false);
   const [viewModal, setViewModal] = useState(false);
+  const [scheduledDate, setScheduledDate] = useState(new Date());
 
   useEffect(() => {
     if (selectedCard) {
@@ -55,10 +65,13 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
 
   const handleOk = () => {};
   const handleCancel = () => {
-    closeClickedStory();
+    // closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });
   };
-  const handleAddUsers = () => {};
+  const handleAddUsers = () => {
+    console.log(cardMembers);
+    updateAssignees(cardMembers);
+  };
   const handleAddUsersCancel = () => {
     setUserSelection(false);
   };
@@ -86,6 +99,15 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
         description: cardDescription,
       })
     );
+  };
+  const updateAssignees = (assignees) => {
+    dispatch(
+      updateStoryInBoard(boardId, {
+        ...selectedCard,
+        assignees: [...new Set([...assignees])].filter((a) => a),
+      })
+    );
+    setUserSelection(false);
   };
   const tagMenu = (
     <Menu>
@@ -137,7 +159,7 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
           }}
         />
       }
-      width={800}
+      width={1000}
       footer={null}
       visible={viewModal}
       onOk={handleOk}
@@ -169,7 +191,7 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
                 value={cardDescription}
                 onChange={(e) => setCardDescription(e.target.value)}
               ></Input.TextArea>
-              {selectedCard.description !== cardDescription && (
+              {selectedCard?.description !== cardDescription && (
                 <Button
                   className="primary_button"
                   style={{ float: "right", margin: 5, color: "white" }}
@@ -186,32 +208,31 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
             <Col span={24}>
               <h3>Scheduled</h3>
               <p style={{ justifyItems: "center" }}>
-                <ClockCircleOutlined
-                  style={{
-                    fontSize: "1.5em",
-                    borderRadius: 20,
-                    padding: 5,
-                  }}
+                <DateTimePicker
+                  onChange={setScheduledDate}
+                  value={scheduledDate}
                 />
-                <span style={{ fontSize: "1.3em" }}>19:00</span>
               </p>
             </Col>
             <Col span={24}>
               <h3>Members</h3>
-              {cardMembers.map((member) => (
-                <UserOutlined
+              <Row align="middle">
+                <Avatar.Group>
+                  {cardMembers.map((member) => (
+                    <Avatar style={{ backgroundColor: "#f56a00" }}>
+                      {member && member.charAt(0)}
+                    </Avatar>
+                  ))}
+                </Avatar.Group>
+                <PlusCircleOutlined
                   style={{
-                    background: "#e2e2e2",
-                    fontSize: "1.5em",
-                    borderRadius: 20,
-                    padding: 7,
+                    fontSize: "2em",
+                    cursor: "pointer",
+                    margin: "0 5px",
                   }}
+                  onClick={() => setUserSelection(true)}
                 />
-              ))}
-              <PlusCircleOutlined
-                style={{ fontSize: "2em", cursor: "pointer" }}
-                onClick={() => setUserSelection(true)}
-              />
+              </Row>
             </Col>
             <Col span={24}>
               <h3>Labels</h3>
@@ -240,7 +261,7 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
         </Col>
       </Row>
       <Modal
-        title="Add members"
+        title="Assign members"
         visible={userSelection}
         onOk={handleAddUsers}
         onCancel={handleAddUsersCancel}
@@ -255,7 +276,16 @@ export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
           onChange={(value) => setCardMembers(value)}
           notFoundContent={<Empty description="No users found" />}
         >
-          {/* {children} add card members here */}
+          {console.log(currentBoard)}
+          {currentBoard &&
+            [
+              ...currentBoard.owners,
+              ...currentBoard.viewers,
+              ...currentBoard.editors,
+            ].map(
+              (option) =>
+                option && <Select.Option value={option}>{option}</Select.Option>
+            )}
         </Select>
       </Modal>
     </Modal>

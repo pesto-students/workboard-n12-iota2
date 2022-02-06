@@ -1,4 +1,4 @@
-import { Card, Col, Row, Typography, Tag } from "antd";
+import { Card, Col, Row, Typography, Tag, Avatar } from "antd";
 import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useNavigate } from "react-router";
@@ -14,6 +14,7 @@ export default function CardBoard({
   openClickedStory,
   stageId,
   stageIndex,
+  isSpacer,
 }) {
   const navigate = useNavigate();
   const ref = useRef(null);
@@ -54,15 +55,26 @@ export default function CardBoard({
     >
       <Card
         bordered={false}
-        style={{ margin: 10, borderRadius: "5px", cursor: "pointer" }}
-        bodyStyle={{ padding: 0 }}
-        onClick={() => { navigate(id); openClickedStory(id); }}
+        style={{
+          margin: 10,
+          borderRadius: "5px",
+          cursor: "pointer",
+          background: isSpacer ? "transparent" : "",
+        }}
+        bodyStyle={{
+          padding: 0,
+        }}
+        onClick={() => {
+          navigate(id);
+          openClickedStory(id);
+        }}
       >
         <Row
           //   ref={ref}
           data-handler-id={handlerId}
           style={{ padding: 10, margin: 0 }}
           gutter={[10, 10]}
+          align="bottom"
         >
           <Col span={24} style={{ height: "fit-content" }}>
             <h4>{name}</h4>
@@ -72,14 +84,28 @@ export default function CardBoard({
               </EllipsisMiddle>
             )}
           </Col>
-          {cardDetails && cardDetails.labels.length >= 1 && (
-            <Col span={24}>
+          <Col span={12}>
+            {cardDetails && cardDetails.labels.length >= 1 && (
               <Row gutter={[10, 10]}>
                 {cardDetails.labels.map((label) => (
                   <Tag className="tag" color={label.color}>
                     &emsp;&emsp;
                   </Tag>
                 ))}
+              </Row>
+            )}
+          </Col>
+
+          {cardDetails && cardDetails.assignees.length >= 1 && (
+            <Col span={12}>
+              <Row justify="end" gutter={[10, 10]}>
+                <Avatar.Group>
+                  {cardDetails.assignees.map((assignee) => (
+                    <Avatar style={{ backgroundColor: "#f56a00" }}>
+                      {assignee && assignee.charAt(0)}
+                    </Avatar>
+                  ))}
+                </Avatar.Group>
               </Row>
             </Col>
           )}

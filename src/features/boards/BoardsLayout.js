@@ -9,6 +9,7 @@ import "./css/Boards.css";
 import Sidebar from "./components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { getAuth } from "firebase/auth";
+import { getTeamMembers } from "../../store/teamActions";
 // import AddNewBoard from "./components/AddNewBoard";
 const { Header, Content, Footer } = Layout;
 export default function BoardsLayout() {
@@ -18,18 +19,22 @@ export default function BoardsLayout() {
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
   useEffect(() => {
-    console.log("connection established with boards collection");
-    const unsub = dispatch(getBoards());
-
-    return () => {
-      console.log("connection broken with boards collection");
-      unsub();
-    };
-  }, []);
+    if (user) {
+      console.log("connection established with boards collection");
+      const unsub = dispatch(getBoards());
+      return () => {
+        console.log("connection broken with boards collection");
+        unsub();
+      };
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!loading && !user) {
       navigate("/auth", { replace: true });
+    }
+    if (user) {
+      dispatch(getTeamMembers());
     }
   }, [user, loading]);
 

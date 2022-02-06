@@ -15,9 +15,12 @@ export default function Signup() {
   const [pass, setPass] = useState("");
   const [confPass, setConfPass] = useState("");
   const signup = () => {
-    if (pass !== confPass) { alert("password and confirm password do not match"); return; }
+    if (pass !== confPass) {
+      alert("password and confirm password do not match");
+      return;
+    }
     dispatch(signupAction(email, pass));
-    navigate('/auth');
+    // navigate('/auth');
   };
   const onError = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -47,7 +50,10 @@ export default function Signup() {
                   },
                 ]}
               >
-                <Input placeholder="Email address" onChange={(e) => setEmail(e.target.value)} />
+                <Input
+                  placeholder="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
 
               <Form.Item
@@ -56,7 +62,10 @@ export default function Signup() {
                   { required: true, message: "Please input your password!" },
                 ]}
               >
-                <Input.Password placeholder="Password" onChange={(e) => setPass(e.target.value)} />
+                <Input.Password
+                  placeholder="Password"
+                  onChange={(e) => setPass(e.target.value)}
+                />
               </Form.Item>
 
               <Form.Item
@@ -65,7 +74,10 @@ export default function Signup() {
                   { required: true, message: "Please input your password!" },
                 ]}
               >
-                <Input.Password placeholder="Confirm password" onChange={(e) => setConfPass(e.target.value)} />
+                <Input.Password
+                  placeholder="Confirm password"
+                  onChange={(e) => setConfPass(e.target.value)}
+                />
               </Form.Item>
 
               <Row justify="space-between">
