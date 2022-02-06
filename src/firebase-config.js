@@ -4,41 +4,41 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB4h0vdDhkT4naoiAV2UEnKmsy0vV8AyOo",
-  authDomain: "workboard-5e843.firebaseapp.com",
-  projectId: "workboard-5e843",
-  storageBucket: "workboard-5e843.appspot.com",
-  messagingSenderId: "658535769279",
-  appId: "1:658535769279:web:0704e17acaea92c6d8920a",
-  measurementId: "G-P24KE63BVC",
+  apiKey: "AIzaSyBY_18Xqe5J5s8sQHPKnPXWiEOUXRlWQhg",
+  authDomain: "workboard-ee9ec.firebaseapp.com",
+  databaseURL: "https://workboard-ee9ec-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "workboard-ee9ec",
+  storageBucket: "workboard-ee9ec.appspot.com",
+  messagingSenderId: "598679887499",
+  appId: "1:598679887499:web:8c50f1f2cd4af3db453e8e"
 };
 
 const app = initializeApp(firebaseConfig);
 
 // Get registration token. Initially this makes a network call, once retrieved
 // subsequent calls to getToken will return from cache.
-const messaging = getMessaging();
-getToken(messaging, {
-  vapidKey:
-    "BDemoD4_d-XnKxHDJ18Mh64vwjIjrbXBljfTsXHXUuwaU-Ajrbur2f0xT837Cm1ti3zhyyneLKrnKe6xgkjR5Xg",
-})
-  .then((currentToken) => {
-    if (currentToken) {
-      // Send the token to your server and update the UI if necessary
-      // ...
-      console.log("success");
-    } else {
-      // Show permission request UI
-      console.log(
-        "No registration token available. Request permission to generate one."
-      );
-      // ...
-    }
-  })
-  .catch((err) => {
-    console.log("An error occurred while retrieving token. ", err);
-    // ...
-  });
+// const messaging = getMessaging();
+// getToken(messaging, {
+//   vapidKey:
+//     "BDemoD4_d-XnKxHDJ18Mh64vwjIjrbXBljfTsXHXUuwaU-Ajrbur2f0xT837Cm1ti3zhyyneLKrnKe6xgkjR5Xg",
+// })
+//   .then((currentToken) => {
+//     if (currentToken) {
+//       // Send the token to your server and update the UI if necessary
+//       // ...
+//       console.log("success");
+//     } else {
+//       // Show permission request UI
+//       console.log(
+//         "No registration token available. Request permission to generate one."
+//       );
+//       // ...
+//     }
+//   })
+//   .catch((err) => {
+//     console.log("An error occurred while retrieving token. ", err);
+//     // ...
+//   });
 
 export const db = getFirestore(app);
 

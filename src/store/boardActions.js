@@ -33,7 +33,7 @@ export const getBoards = () => (dispatch) => {
             querySnapshot.forEach((doc) => {
                 getAllBoards.push({ ...doc.data() });
             });
-            console.log(getAllBoards);
+            // console.log(getAllBoards);
             dispatch(
                 boardActions.setAllBoards({
                     boards: [...getAllBoards],
@@ -139,7 +139,7 @@ export const getBoardStages_Stories = (boardId) => (dispatch) => {
                     getAllStoriesOfBoard.push({ ...doc.data() });
                 }
             });
-            console.log(getAllStoriesOfBoard);
+            // console.log(getAllStoriesOfBoard);
             dispatch(
                 boardActions.setStoriesForBoard({
                     boardId: boardId,
@@ -239,7 +239,7 @@ export const getStoryInBoard = (boardId, storyId) => (dispatch) => {
         dataDocumentStoryRef,
         (doc) => {
             const getStory = doc.data();
-            console.log(getStory);
+            // console.log(getStory);
             // dispatch(
             //     boardActions.setStory({
             //         story: getStory
@@ -291,7 +291,7 @@ export const createStoryInBoard = (boardId, newStory) => {
         const createStoryInBoard = async () => {
             const response = await setDoc(dataStoryBoardRef, { ...newStory });
 
-            console.log(response);
+            // console.log(response);
         };
         try {
             await createStoryInBoard();
@@ -305,7 +305,7 @@ export const createStoryInBoard = (boardId, newStory) => {
 
 export const updateStoryInBoard = (boardId, updatedStory) => {
     return async (dispatch) => {
-        console.log(updatedStory);
+        // console.log(updatedStory);
         const dataStoryBoardRef = doc(
             db,
             firebaseRootCollectionName,

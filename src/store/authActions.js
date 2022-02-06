@@ -141,7 +141,7 @@ export const getProfile = (id) => {
             ...response.data(),
           })
         );
-        console.log("success get profile", response.data());
+        console.log("success get profile");
       } else {
         message.error("User Does not exists");
       }

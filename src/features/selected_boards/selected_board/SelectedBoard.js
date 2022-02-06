@@ -56,11 +56,14 @@ export default function SelectedBoard() {
   };
 
   const closeClickedStory = () => {
+    console.log("close")
     const { unsubStory } = disconnectStoryRef;
     unsubStory();
+    console.log("connection broken with story document");
     const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
     setDisconnectBoardStoriesRef(disconnectBoardStories);
-    console.log("connection broken with story document");
+    console.log("connection established with board document");
+    console.log("connection established with stories sub collection");
   };
 
   const getStateBoard = useSelector((state) =>

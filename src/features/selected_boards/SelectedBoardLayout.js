@@ -93,7 +93,7 @@ export default function SelectedBoardLayout() {
                 onFocus={() => setBoardNameUI(true)}
                 onBlur={() => setBoardNameUI(false)}
                 style={{ fontSize: "1.2em", fontWeight: 600 }}
-                onPressEnter={() => updateBoardName()}
+                onPressEnter={(e) => { e.target.blur(); updateBoardName(); }}
                 onChange={(e) => setBoardName(e.target.value)}
               />
             </div>

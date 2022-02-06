@@ -114,7 +114,7 @@ export default function ListBoard({
       labels: [],
       comments: [],
     };
-    console.log(story);
+    // console.log(story);
     const newStages = allStages.map((allStage) => {
       let newStage = { ...allStage };
       if (newStage.id === stage.id) {
@@ -125,7 +125,7 @@ export default function ListBoard({
       }
       return newStage;
     });
-    console.log(newStages, "new");
+    // console.log(newStages, "new");
     dispatch(createStoryInBoard(boardId, story));
     dispatch(updateStageInBoard(boardId, newStages));
   };
@@ -140,7 +140,7 @@ export default function ListBoard({
   };
 
   useEffect(() => {
-    if (stage) {
+    if (stage && stage.storyIds) {
       setAllCards([
         ...stage.storyIds.map((story) => {
           return allStageStories.find((findStory) => findStory.id === story);

@@ -30,7 +30,7 @@ import DateTimePicker from "react-datetime-picker";
 
 const format = "HH:mm";
 
-export default function ViewCard({ boardId, selectedCard }) {
+export default function ViewCard({ boardId, selectedCard, closeClickedStory }) {
   // console.log(selectedCard);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -66,7 +66,7 @@ export default function ViewCard({ boardId, selectedCard }) {
 
   const handleOk = () => { };
   const handleCancel = () => {
-    // closeClickedStory();
+    closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });
   };
   const handleAddUsers = () => {
@@ -174,11 +174,11 @@ export default function ViewCard({ boardId, selectedCard }) {
               <Input
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
-                bordered={true}
+                bordered={storyNameUI}
                 onFocus={() => setStoryNameUI(true)}
                 onBlur={() => setStoryNameUI(false)}
                 style={{ fontSize: "2em" }}
-                onPressEnter={updateStoryName}
+                onPressEnter={(e) => { e.target.blur(); updateStoryName(); }}
               />
             </Col>
             <Col span={24}>
@@ -279,7 +279,7 @@ export default function ViewCard({ boardId, selectedCard }) {
           onChange={(value) => setCardMembers(value)}
           notFoundContent={<Empty description="No users found" />}
         >
-          {console.log(currentBoard)}
+          {/* {console.log(currentBoard)} */}
           {currentBoard &&
             [
               ...currentBoard.owners,
