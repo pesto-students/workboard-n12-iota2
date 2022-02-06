@@ -19,7 +19,7 @@ export default function LandingLayout() {
           <Link className="landing-link" to="/auth">
             Login
           </Link>
-          <Link className="landing-link" to="/auth">
+          <Link className="landing-link" to="/auth/signup">
             Signup
           </Link>
         </p>
