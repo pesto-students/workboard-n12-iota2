@@ -22,7 +22,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
     setEditorMembers([]);
     setModalVisible(false);
   };
-  console.log(children);
+  // console.log(children);
   const updateBoardFunctionForAction = () => {
     closeModal();
     const updateDate = String(new Date().toLocaleDateString());
@@ -70,7 +70,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
       stages: [],
       stories: [],
     };
-    console.log(board);
+    // console.log(board);
     dispatch(createBoard(board));
   };
   return (

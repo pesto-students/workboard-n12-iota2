@@ -75,8 +75,8 @@ export const loginAction = (email, password) => {
 export const logoutAction = () => {
   return async (dispatch) => {
     const logoutUser = async () => {
-      const response = await signOut(auth);
-      console.log(response);
+      await signOut(auth);
+      // console.log(response);
     };
 
     try {
@@ -112,12 +112,12 @@ export const setProfile = (profile) => {
       profile.id
     );
     const postProfile = async () => {
-      const response = await setDoc(
+      await setDoc(
         dataDocumentProfileRef,
         { ...profile },
         { merge: true }
       );
-      console.log(response);
+      // console.log(response);
     };
     try {
       await postProfile();
@@ -143,7 +143,7 @@ export const getProfile = (id) => {
             ...response.data(),
           })
         );
-        console.log("success get profile", response.data());
+        // console.log("success get profile", response.data());
       } else {
         message.error("User Does not exists");
       }

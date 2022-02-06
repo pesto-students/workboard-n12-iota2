@@ -10,7 +10,7 @@ export default function ForgotPassword() {
   const [, setEmail] = useState("");
   const forgotPass = (info) => {
     dispatch(forgotPassword(info.email));
-    console.log("Bhooooolllllaaaa");
+    // console.log("Bhooooolllllaaaa");
   };
   const onError = (errorInfo) => {
     console.log("Failed:", errorInfo);

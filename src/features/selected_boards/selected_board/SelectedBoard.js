@@ -100,7 +100,7 @@ export default function SelectedBoard() {
       ...allStories.find((story) => story.id === storyId),
     };
     updatedStory.stageId = destStageId;
-    console.log(updatedStory);
+    // console.log(updatedStory);
     dispatch(updateStoryInBoard(boardId, updatedStory));
     dispatch(updateStageInBoard(boardId, updatedStages));
   };
