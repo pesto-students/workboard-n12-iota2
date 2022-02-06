@@ -158,7 +158,7 @@ export default function SelectedBoard() {
         };
       })
     );
-  }, [allStages, allStories]);
+  }, [allStages, allStories, getStateBoard]);
 
   useEffect(() => {
     // console.log(stages);
@@ -277,6 +277,7 @@ export default function SelectedBoard() {
       <ViewCard
         boardId={boardId}
         selectedCard={selectedCard}
+        currentBoard={getStateBoard}
         closeClickedStory={closeClickedStory}
       />
     </DndProvider>

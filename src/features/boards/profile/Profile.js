@@ -11,11 +11,11 @@ import { useAuthState } from "react-firebase-hooks/auth";
 export default function Profile() {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
-  const formRef = useRef(null);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [formDisabled, setFormDisabled] = useState(true);
-  const profileState = useSelector((state) => state.auth);
+  const profileState = useSelector((state) => state.auth.profile);
+
   const onFinish = (profile) => {
     profile["id"] = profileState.id;
     dispatch(setProfile(profile));
@@ -28,7 +28,11 @@ export default function Profile() {
     }
   }, [user, loading]);
 
-  console.log(profileState?.profile);
+  useEffect(() => {
+    form.setFieldsValue({
+      ...profileState,
+    });
+  }, [profileState]);
 
   return (
     <Row>
@@ -47,84 +51,86 @@ export default function Profile() {
           gutter={[20, 20]}
         >
           <Col xs={24} sm={24} md={12} lg={10} xl={14}>
-            <Form
-              ref={formRef}
-              form={form}
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-            >
-              <Form.Item
-                label="Display Name"
-                name="displayName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your display name!",
-                  },
-                ]}
+            {profileState && (
+              <Form
+                form={form}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                initialValues={{ ...profileState }}
               >
-                <Input disabled={formDisabled} />
-              </Form.Item>
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    type: "email",
-                    message: "Please input your email!",
-                  },
-                ]}
-              >
-                <Input disabled={formDisabled} />
-              </Form.Item>
-              <Form.Item
-                label="Designation"
-                name="designation"
-                rules={[
-                  {
-                    required: false,
-                  },
-                ]}
-              >
-                <Input disabled={formDisabled} />
-              </Form.Item>
-              <Form.Item
-                label="Organization"
-                name="organization"
-                rules={[
-                  {
-                    required: false,
-                  },
-                ]}
-              >
-                <Input disabled={formDisabled} />
-              </Form.Item>
-
-              {!formDisabled && (
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                  <Button
-                    style={{ borderRadius: 5, margin: "0 10px 0 0" }}
-                    disabled={formDisabled}
-                    type="ghost"
-                    onClick={() => setFormDisabled(true)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    disabled={formDisabled}
-                    className="primary_button"
-                    style={{ color: "white" }}
-                    htmlType="submit"
-                  >
-                    Submit
-                  </Button>
+                <Form.Item
+                  label="Display Name"
+                  name="displayName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your display name!",
+                    },
+                  ]}
+                >
+                  <Input disabled={formDisabled} />
                 </Form.Item>
-              )}
-            </Form>
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    {
+                      required: true,
+                      type: "email",
+                      message: "Please input your email!",
+                    },
+                  ]}
+                >
+                  <Input disabled={formDisabled} />
+                </Form.Item>
+                <Form.Item
+                  label="Designation"
+                  name="designation"
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}
+                >
+                  <Input disabled={formDisabled} />
+                </Form.Item>
+                <Form.Item
+                  label="Organization"
+                  name="organization"
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}
+                >
+                  <Input disabled={formDisabled} />
+                </Form.Item>
+
+                {!formDisabled && (
+                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button
+                      style={{ borderRadius: 5, margin: "0 10px 0 0" }}
+                      disabled={formDisabled}
+                      type="ghost"
+                      onClick={() => setFormDisabled(true)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      disabled={formDisabled}
+                      className="primary_button"
+                      style={{ color: "white" }}
+                      htmlType="submit"
+                    >
+                      Submit
+                    </Button>
+                  </Form.Item>
+                )}
+              </Form>
+            )}
           </Col>
           <Col xs={18} sm={20} md={10} lg={7} xl={6}>
             <Avatar

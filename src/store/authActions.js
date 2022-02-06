@@ -136,10 +136,12 @@ export const getProfile = (id) => {
     try {
       const response = await getProfile();
       if (response.exists()) {
-        authActions.signup({
-          ...response.data(),
-        });
-        console.log("success get profile");
+        dispatch(
+          authActions.signup({
+            ...response.data(),
+          })
+        );
+        console.log("success get profile", response.data());
       } else {
         message.error("User Does not exists");
       }
