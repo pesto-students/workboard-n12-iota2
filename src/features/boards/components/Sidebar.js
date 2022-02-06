@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch } from "react-redux";
 import {
   LogoutOutlined,
   LayoutOutlined,
@@ -9,22 +9,19 @@ import {
 } from "@ant-design/icons";
 import "../css/Boards.css";
 import { Link, NavLink } from "react-router-dom";
-import { logoutAction } from "../../../store/authActions";
-import { getTeamMembers } from "../../../store/teamActions";
+// import { logoutAction } from "../../../store/authActions";
 import AddNewBoard from "./AddNewBoard";
-import { db } from "../../../firebase-config";
-import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 export default function Sidebar({ collapsed, setCollapsed }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const auth = getAuth();
-  const logoutFunctionForAction = () => {
-    dispatch(logoutAction());
-  };
+  // const logoutFunctionForAction = () => {
+  //   dispatch(logoutAction());
+  // };
   return (
     <Sider
       collapsible

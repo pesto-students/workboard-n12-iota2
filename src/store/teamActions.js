@@ -1,16 +1,5 @@
-import { auth, db } from "../firebase-config";
-import {
-  setDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  updateDoc,
-  addDoc,
-  query,
-  onSnapshot,
-  where,
-} from "firebase/firestore";
+import { db } from "../firebase-config";
+import { collection, query, onSnapshot } from "firebase/firestore";
 
 import { teamActions } from "./teamSlice";
 
@@ -25,7 +14,7 @@ export const getTeamMembers = () => (dispatch) => {
       querySnapshot.forEach((doc) => {
         getTeamEmails.push(doc.data().email);
       });
-      // console.log(getTeamEmails);
+      console.log(getTeamEmails);
       dispatch(
         teamActions.setTeamMmbers({
           members: [...getTeamEmails],

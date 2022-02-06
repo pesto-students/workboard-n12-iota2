@@ -1,8 +1,7 @@
 import { Col, Row, Form, Input, Button } from "antd";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { auth } from "../../../firebase-config";
 import { signupAction } from "../../../store/authActions";
 import "../css/Auth.css";
 import GoogleLogo from "../../../assets/google.png";
@@ -10,7 +9,6 @@ import FacebookLogo from "../../../assets/facebook.png";
 
 export default function Signup() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [confPass, setConfPass] = useState("");

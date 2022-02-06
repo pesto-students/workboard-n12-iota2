@@ -9,18 +9,14 @@ import {
   Select,
   Empty,
   Button,
-  DatePicker,
   Avatar,
-  Tooltip,
   Popconfirm,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CloseOutlined,
-  UserOutlined,
   PlusCircleOutlined,
-  ClockCircleOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -33,9 +29,7 @@ import {
 } from "../../../store/boardActions";
 import DateTimePicker from "react-datetime-picker";
 
-const format = "HH:mm";
-
-export default function ViewCard({ boardId, selectedCard, allStages, closeClickedStory }) {
+export default function ViewCard({ boardId, selectedCard, allStages }) {
   // console.log(selectedCard);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -132,7 +126,7 @@ export default function ViewCard({ boardId, selectedCard, allStages, closeClicke
   const tagMenu = (
     <Menu>
       {tagColors.map((tag) => (
-        <Menu.Item>
+        <Menu.Item key={tag.color}>
           <Tag
             className="tag-card"
             style={{ width: "150px" }}
@@ -143,25 +137,6 @@ export default function ViewCard({ boardId, selectedCard, allStages, closeClicke
           </Tag>
         </Menu.Item>
       ))}
-    </Menu>
-  );
-
-  const userMenu = (
-    <Menu>
-      <Menu.Item>
-        <Select
-          mode="tags"
-          allowClear
-          style={{ width: "250px" }}
-          placeholder="Please enter or select members to add."
-          value={cardMembers}
-          on
-          onChange={(value) => setCardMembers(value)}
-          notFoundContent={<Empty description="No users found" />}
-        >
-          {/* {children} add card members here */}
-        </Select>
-      </Menu.Item>
     </Menu>
   );
 
@@ -311,8 +286,8 @@ export default function ViewCard({ boardId, selectedCard, allStages, closeClicke
           onChange={(value) => setCardMembers(value)}
           notFoundContent={<Empty description="No users found" />}
         >
-          {/* {console.log(currentBoard)} */}
-          {currentBoard &&
+          {
+            currentBoard &&
             [
               ...currentBoard.owners,
               ...currentBoard.viewers,
@@ -320,9 +295,10 @@ export default function ViewCard({ boardId, selectedCard, allStages, closeClicke
             ].map(
               (option) =>
                 option && <Select.Option value={option}>{option}</Select.Option>
-            )}
-        </Select>
-      </Modal>
-    </Modal>
+            )
+          }
+        </Select >
+      </Modal >
+    </Modal >
   );
 }

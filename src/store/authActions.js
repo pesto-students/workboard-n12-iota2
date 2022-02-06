@@ -7,7 +7,7 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { authActions } from "./authSlice";
-import { setDoc, updateDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
 import { message } from "antd";
 
 const firebaseRootCollectionName = "profiles";
@@ -76,6 +76,7 @@ export const logoutAction = () => {
   return async (dispatch) => {
     const logoutUser = async () => {
       const response = await signOut(auth);
+      console.log(response);
     };
 
     try {
@@ -116,6 +117,7 @@ export const setProfile = (profile) => {
         { ...profile },
         { merge: true }
       );
+      console.log(response);
     };
     try {
       await postProfile();
@@ -141,7 +143,7 @@ export const getProfile = (id) => {
             ...response.data(),
           })
         );
-        console.log("success get profile");
+        console.log("success get profile", response.data());
       } else {
         message.error("User Does not exists");
       }

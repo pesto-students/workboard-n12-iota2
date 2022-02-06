@@ -1,5 +1,5 @@
 import { Button, Card, Col, Row, Input, Dropdown, Menu, Form } from "antd";
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
 import CardBoard from "./CardBoard";
@@ -7,8 +7,6 @@ import { PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
 import {
   createStoryInBoard,
   updateStageInBoard,
-  deleteStageInBoard,
-  deleteStoryFromBoard,
 } from "../../../store/boardActions";
 import generateKey from "../../../helpers/generateKey";
 
@@ -23,7 +21,6 @@ export default function ListBoard({
   position,
   moveCard,
   stage,
-  setSelectedCard,
   updateStageFunctionForAction,
   openClickedStory,
 }) {
@@ -33,21 +30,11 @@ export default function ListBoard({
   const [allCards, setAllCards] = useState([]);
   const [storyName, setStoryName] = useState("");
 
-  const deleteList = () => {
-    const stageIndex = allStages.findIndex((stage) => stage.id === stageId);
-    const updatedStages = allStages.slice();
-    updatedStages.splice(stageIndex, 1);
-    dispatch(deleteStageInBoard(boardId, updatedStages));
-    deleteListItems();
-  };
-  const deleteListItems = () => {
-    allStageStories.forEach((story) => {
-      if (story.stageId === stageId) dispatch(deleteStoryFromBoard(boardId, story.id));
-    })
-  };
+  const deleteList = () => { };
+  const deleteListItems = () => { };
 
   const ref = useRef(null);
-  const [{ handlerId }, drop] = useDrop({
+  const [, drop] = useDrop({
     accept: "list",
     collect(monitor) {
       return {
@@ -87,7 +74,7 @@ export default function ListBoard({
       item.index = hoverIndex;
     },
   });
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     type: "list",
     item: () => {
       return { stageId, index };
@@ -114,7 +101,7 @@ export default function ListBoard({
       labels: [],
       comments: [],
     };
-    // console.log(story);
+    console.log(story);
     const newStages = allStages.map((allStage) => {
       let newStage = { ...allStage };
       if (newStage.id === stage.id) {
@@ -125,22 +112,22 @@ export default function ListBoard({
       }
       return newStage;
     });
-    // console.log(newStages, "new");
+    console.log(newStages, "new");
     dispatch(createStoryInBoard(boardId, story));
     dispatch(updateStageInBoard(boardId, newStages));
   };
 
-  const deleteStageFunctionForAction = () => {
-    console.log("delete me");
-    const updatedStages = allStages.filter((stage) => stage.id !== stageId);
-    allStageStories.forEach((story) => {
-      dispatch(deleteStoryFromBoard(boardId, story.id));
-    });
-    dispatch(deleteStageInBoard(boardId, updatedStages));
-  };
+  // const deleteStageFunctionForAction = () => {
+  //   console.log("delete me");
+  //   const updatedStages = allStages.filter((stage) => stage.id !== stageId);
+  //   allStageStories.forEach((story) => {
+  //     dispatch(deleteStoryFromBoard(boardId, story.id));
+  //   });
+  //   dispatch(deleteStageInBoard(boardId, updatedStages));
+  // };
 
   useEffect(() => {
-    if (stage && stage.storyIds) {
+    if (stage) {
       setAllCards([
         ...stage.storyIds.map((story) => {
           return allStageStories.find((findStory) => findStory.id === story);

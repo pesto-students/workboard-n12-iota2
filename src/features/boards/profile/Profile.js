@@ -1,16 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar, Col, PageHeader, Row, Form, Button, Input } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { EditOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import generateKey from "../../../helpers/generateKey";
 import { getProfile, setProfile } from "../../../store/authActions";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Profile() {
   const auth = getAuth();
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [formDisabled, setFormDisabled] = useState(true);
