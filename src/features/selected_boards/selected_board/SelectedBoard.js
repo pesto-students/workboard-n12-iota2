@@ -26,7 +26,7 @@ export default function SelectedBoard() {
   const [selectedCard, setSelectedCard] = useState(false);
   const [disconnectBoardStoriesRef, setDisconnectBoardStoriesRef] =
     useState(null);
-  const [disconnectStoryRef, setDisconnecStoryRef] = useState(null);
+  const [disconnectStoryRef, setDisconnectStoryRef] = useState(null);
   const { boardId, cardId } = useParams();
   const navigate = useNavigate();
   // const boardId = useLocation().pathname.split("/")[2];
@@ -51,7 +51,8 @@ export default function SelectedBoard() {
     console.log("connection broken with board document");
     console.log("connection broken with stories sub collection");
     const disconnectStory = dispatch(getStoryInBoard(boardId, storyId));
-    setDisconnecStoryRef(disconnectStory);
+    console.log("connection with story document");
+    setDisconnectStoryRef(disconnectStory);
   };
 
   const closeClickedStory = () => {
