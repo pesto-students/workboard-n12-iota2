@@ -71,7 +71,7 @@ export default function ViewCard({ boardId, selectedCard, allStages, closeClicke
 
   const handleOk = () => { };
   const handleCancel = () => {
-    closeClickedStory();
+    // closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });
   };
   const handleAddUsers = () => {

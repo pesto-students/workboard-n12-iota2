@@ -66,7 +66,7 @@ export default function CardBoard({
         }}
         onClick={() => {
           navigate(id);
-          openClickedStory(id);
+          // openClickedStory(id);
         }}
       >
         <Row
