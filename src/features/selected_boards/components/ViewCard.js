@@ -63,7 +63,7 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
     } else setViewModal(false);
   }, [selectedCard]);
 
-  const handleOk = () => { };
+  const handleOk = () => {};
   const handleCancel = () => {
     // closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });
@@ -220,7 +220,7 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
                 <Avatar.Group>
                   {cardMembers.map((member) => (
                     <Avatar style={{ backgroundColor: "#f56a00" }}>
-                      {member && member.charAt(0)}
+                      {member && String(member).charAt(0).toUpperCase()}
                     </Avatar>
                   ))}
                 </Avatar.Group>
@@ -261,7 +261,7 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
               <Popconfirm
                 title="Are you sure to delete this card?"
                 onConfirm={deleteCard}
-                onCancel={() => { }}
+                onCancel={() => {}}
                 okText="Yes"
                 cancelText="No"
               >
