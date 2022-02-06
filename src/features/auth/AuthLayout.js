@@ -1,9 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Row } from "antd";
-import React from "react";
-import { Outlet } from "react-router";
+import { getAuth } from "firebase/auth";
+import React, { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Outlet, useNavigate } from "react-router";
 import "./css/Auth.css";
 
 export default function AuthLayout() {
+  const auth = getAuth();
+  const [user, loading] = useAuthState(auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/boards", { replace: true });
+    }
+  }, [user, loading]);
   return (
     <Row>
       <Col className="auth_background" xs={0} sm={0} md={12} lg={14} xl={16}>

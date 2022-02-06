@@ -1,16 +1,59 @@
-import { Layout, Menu } from "antd";
-import React from "react";
-import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Avatar, Dropdown, Input, Layout, Menu } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Outlet } from "react-router";
-import SearchBoard from "./components/SearchBoard";
+import {
+  ArrowLeftOutlined,
+  UserOutlined,
+  LogoutOutlined,
+  LayoutOutlined,
+} from "@ant-design/icons";
+// import SearchBoard from "./components/SearchBoard";
 import "./css/Board.css";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { getTeamMembers } from "../../store/teamActions";
 
 const { Header, Content } = Layout;
 
 export default function SelectedBoardLayout() {
-  const boardId = useLocation().pathname.split('/')[2];
-  const getStateBoard = useSelector((state) => state.boards.boards.find((board) => board.id === boardId));
+  const auth = getAuth();
+  const [user, loading] = useAuthState(auth);
+  const dispatch = useDispatch();
+  const { boardId } = useParams();
+  const navigate = useNavigate();
+  const [boardName, setBoardName] = useState("");
+  const getStateBoard = useSelector((state) =>
+    state.boards.boards.find((board) => board.id === boardId)
+  );
+  const updateBoardName = () => {};
+  useEffect(() => {
+    setBoardName(getStateBoard?.name);
+    dispatch(getTeamMembers());
+  }, [getStateBoard?.name]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth", { replace: true });
+    }
+  }, [user, loading]);
+
+  const profileMenu = (
+    <Menu>
+      <Menu.Item icon={<UserOutlined />}>
+        <Link to="/boards/profile">Profile</Link>
+      </Menu.Item>
+      <Menu.Item icon={<LayoutOutlined />}>
+        <Link to="/boards">All Boards</Link>
+      </Menu.Item>
+      <Menu.Item icon={<LogoutOutlined />} onClick={() => auth.signOut()}>
+        Logout
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <Layout
       style={{
@@ -31,16 +74,34 @@ export default function SelectedBoardLayout() {
         >
           <Menu.Item disabled style={{ cursor: "pointer" }}>
             <div>
+              <ArrowLeftOutlined
+                onClick={() => navigate("/boards", { replace: true })}
+              />
+            </div>
+          </Menu.Item>
+          <Menu.Item disabled style={{ cursor: "pointer" }}>
+            <div>
               <p className="selected_board_logo">workboard</p>
             </div>
           </Menu.Item>
           <Menu.Item disabled style={{ cursor: "initial" }}>
             <div>
-              <h3 style={{ margin: 0 }}>{getStateBoard?.name}</h3>
+              <Input
+                value={boardName}
+                bordered={false}
+                style={{ fontSize: "1.2em", fontWeight: 600 }}
+                onPressEnter={() => updateBoardName()}
+                onChange={(e) => setBoardName(e.target.value)}
+              />
             </div>
           </Menu.Item>
-          <Menu.Item disabled style={{ float: "right" }}>
-            <SearchBoard />
+          <Menu.Item style={{ float: "right" }}>
+            <Dropdown overlay={profileMenu}>
+              <Avatar
+                size="large"
+                icon={<UserOutlined style={{ fontSize: "1em" }} />}
+              />
+            </Dropdown>
           </Menu.Item>
         </Menu>
       </Header>

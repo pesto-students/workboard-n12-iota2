@@ -1,12 +1,25 @@
 import { Col, Row, Form, Input, Button } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signupAction } from "../../../store/authActions";
 import "../css/Auth.css";
 import GoogleLogo from "../../../assets/google.png";
 import FacebookLogo from "../../../assets/facebook.png";
 
 export default function Signup() {
-  const signup = () => {};
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [confPass, setConfPass] = useState("");
+  const signup = () => {
+    if (pass !== confPass) {
+      alert("password and confirm password do not match");
+      return;
+    }
+    dispatch(signupAction(email, pass));
+    // navigate('/auth');
+  };
   const onError = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -35,7 +48,10 @@ export default function Signup() {
                   },
                 ]}
               >
-                <Input placeholder="Email address" />
+                <Input
+                  placeholder="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
 
               <Form.Item
@@ -44,7 +60,10 @@ export default function Signup() {
                   { required: true, message: "Please input your password!" },
                 ]}
               >
-                <Input.Password placeholder="Password" />
+                <Input.Password
+                  placeholder="Password"
+                  onChange={(e) => setPass(e.target.value)}
+                />
               </Form.Item>
 
               <Form.Item
@@ -53,7 +72,10 @@ export default function Signup() {
                   { required: true, message: "Please input your password!" },
                 ]}
               >
-                <Input.Password placeholder="Confirm password" />
+                <Input.Password
+                  placeholder="Confirm password"
+                  onChange={(e) => setConfPass(e.target.value)}
+                />
               </Form.Item>
 
               <Row justify="space-between">

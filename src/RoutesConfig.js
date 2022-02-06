@@ -30,7 +30,9 @@ export default function RoutesConfig() {
           <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="board" element={<SelectedBoardLayout />}>
-          <Route path=":boardId" element={<SelectedBoard />} />
+          <Route path=":boardId" element={<SelectedBoard />}>
+            <Route path=":cardId" element={<SelectedBoard />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
