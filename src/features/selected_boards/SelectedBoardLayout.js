@@ -15,7 +15,6 @@ import "./css/Board.css";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getTeamMembers } from "../../store/teamActions";
-import { updateBoard } from "../../store/boardActions";
 
 const { Header, Content } = Layout;
 
@@ -30,7 +29,7 @@ export default function SelectedBoardLayout() {
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
   );
-  const updateBoardName = () => { };
+  const updateBoardName = () => {};
   useEffect(() => {
     setBoardName(getStateBoard?.name);
     dispatch(getTeamMembers());
@@ -76,7 +75,8 @@ export default function SelectedBoardLayout() {
         >
           <Menu.Item disabled style={{ cursor: "pointer" }}>
             <div>
-              <LeftCircleOutlined style={{ color: 'red', fontSize: '25px' }}
+              <LeftCircleOutlined
+                style={{ color: "red", fontSize: "25px" }}
                 onClick={() => navigate("/boards", { replace: true })}
               />
             </div>
@@ -94,7 +94,10 @@ export default function SelectedBoardLayout() {
                 onFocus={() => setBoardNameUI(true)}
                 onBlur={() => setBoardNameUI(false)}
                 style={{ fontSize: "1.2em", fontWeight: 600 }}
-                onPressEnter={(e) => { e.target.blur(); updateBoardName(); }}
+                onPressEnter={(e) => {
+                  e.target.blur();
+                  updateBoardName();
+                }}
                 onChange={(e) => setBoardName(e.target.value)}
               />
             </div>
