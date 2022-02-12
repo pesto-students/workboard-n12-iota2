@@ -102,7 +102,7 @@ export default function CardBoard({
                 <Avatar.Group>
                   {cardDetails.assignees.map((assignee) => (
                     <Avatar style={{ backgroundColor: "#f56a00" }}>
-                      {assignee && assignee.charAt(0)}
+                      {assignee && String(assignee).charAt(0).toUpperCase()}
                     </Avatar>
                   ))}
                 </Avatar.Group>
