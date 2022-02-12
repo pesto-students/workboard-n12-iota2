@@ -69,7 +69,7 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
     navigate(`/board/${boardId}`, { replace: true });
   };
   const handleAddUsers = () => {
-    console.log(cardMembers);
+    // console.log(cardMembers);
     updateAssignees(cardMembers);
   };
   const handleAddUsersCancel = () => {
@@ -172,7 +172,10 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
                 onFocus={() => setStoryNameUI(true)}
                 onBlur={() => setStoryNameUI(false)}
                 style={{ fontSize: "2em" }}
-                onPressEnter={(e) => { e.target.blur(); updateStoryName(); }}
+                onPressEnter={(e) => {
+                  e.target.blur();
+                  updateStoryName();
+                }}
               />
             </Col>
             <Col span={24}>
@@ -286,8 +289,7 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
           onChange={(value) => setCardMembers(value)}
           notFoundContent={<Empty description="No users found" />}
         >
-          {
-            currentBoard &&
+          {currentBoard &&
             [
               ...currentBoard.owners,
               ...currentBoard.viewers,

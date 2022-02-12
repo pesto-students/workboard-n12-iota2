@@ -28,11 +28,11 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       collapsed={collapsed}
       breakpoint="sm"
       collapsedWidth="0"
-      onBreakpoint={(broken) => {
-        console.log(broken);
-      }}
-      onCollapse={(collapse, type) => {
-        console.log(type, collapse);
+      // onBreakpoint={(broken) => {
+      //   console.log(broken);
+      // }}
+      onCollapse={(collapse) => {
+        // console.log(type, collapse);
         setCollapsed(collapse);
       }}
       theme="light"

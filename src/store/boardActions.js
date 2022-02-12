@@ -31,7 +31,7 @@ export const getBoards = () => (dispatch) => {
             querySnapshot.forEach((doc) => {
                 getAllBoards.push({ ...doc.data() });
             });
-            console.log(getAllBoards);
+            //   console.log(getAllBoards);
             dispatch(
                 boardActions.setAllBoards({
                     boards: [...getAllBoards],
@@ -53,10 +53,10 @@ export const createBoard = (newBoard) => {
             newBoard.id
         );
         const postBoard = async () => {
-            const response = await setDoc(dataCollectionBoardsDocumentBoardRef, {
+            await setDoc(dataCollectionBoardsDocumentBoardRef, {
                 ...newBoard,
             });
-            console.log(response);
+            // console.log(response);
         };
 
         try {
@@ -92,8 +92,8 @@ export const deleteBoard = (boardId) => {
     return async (dispatch) => {
         const dataBoardRef = doc(db, firebaseRootCollectionName, boardId);
         const deleteData = async () => {
-            const response = await deleteDoc(dataBoardRef);
-            console.log(response);
+            await deleteDoc(dataBoardRef);
+            // console.log(response);
         };
         try {
             await deleteData();
@@ -139,7 +139,7 @@ export const getBoardStages_Stories = (boardId) => (dispatch) => {
                     getAllStoriesOfBoard.push({ ...doc.data() });
                 }
             });
-            console.log(getAllStoriesOfBoard);
+            // console.log(getAllStoriesOfBoard);
             dispatch(
                 boardActions.setStoriesForBoard({
                     boardId: boardId,
@@ -163,10 +163,10 @@ export const createNewStageInBoard = (boardId, newStages) => {
     return async (dispatch) => {
         const dataStagesBoardRef = doc(db, firebaseRootCollectionName, boardId);
         const updateStagesInBoard = async () => {
-            const response = await updateDoc(dataStagesBoardRef, {
+            await updateDoc(dataStagesBoardRef, {
                 stages: [...newStages],
             });
-            console.log(response);
+            // console.log(response);
         };
 
         try {
@@ -182,10 +182,10 @@ export const updateStageInBoard = (boardId, newStages) => {
     return async (dispatch) => {
         const dataStagesBoardRef = doc(db, firebaseRootCollectionName, boardId);
         const updateStageInBoard = async () => {
-            const response = await updateDoc(dataStagesBoardRef, {
+            await updateDoc(dataStagesBoardRef, {
                 stages: [...newStages],
             });
-            console.log(response);
+            // console.log(response);
         };
         try {
             await updateStageInBoard();
@@ -241,8 +241,8 @@ export const getStoryInBoard = (boardId, storyId) => (dispatch) => {
     const unsubscribeStory = onSnapshot(
         dataDocumentStoryRef,
         (doc) => {
-            const getStory = doc.data();
-            console.log(getStory);
+            // const getStory = doc.data();
+            // console.log(getStory);
             // dispatch(
             //     boardActions.setStory({
             //         story: getStory
@@ -292,9 +292,9 @@ export const createStoryInBoard = (boardId, newStory) => {
             newStory.id
         );
         const createStoryInBoard = async () => {
-            const response = await setDoc(dataStoryBoardRef, { ...newStory });
+            await setDoc(dataStoryBoardRef, { ...newStory });
 
-            console.log(response);
+            // console.log(response);
         };
         try {
             await createStoryInBoard();
@@ -308,7 +308,7 @@ export const createStoryInBoard = (boardId, newStory) => {
 
 export const updateStoryInBoard = (boardId, updatedStory) => {
     return async (dispatch) => {
-        console.log(updatedStory);
+        // console.log(updatedStory);
         const dataStoryBoardRef = doc(
             db,
             firebaseRootCollectionName,
@@ -317,8 +317,8 @@ export const updateStoryInBoard = (boardId, updatedStory) => {
             updatedStory.id
         );
         const updateStoryTheBoard = async () => {
-            const response = await updateDoc(dataStoryBoardRef, { ...updatedStory });
-            console.log(response);
+            await updateDoc(dataStoryBoardRef, { ...updatedStory });
+            // console.log(response);
         };
 
         try {
@@ -347,8 +347,8 @@ export const deleteStoryFromBoard = (boardId, storyId) => {
             storyId
         );
         const deleteStoryFromTheBoard = async () => {
-            const response = await deleteDoc(dataStoryBoardRef);
-            console.log(response);
+            await deleteDoc(dataStoryBoardRef);
+            // console.log(response);
         };
 
         try {
