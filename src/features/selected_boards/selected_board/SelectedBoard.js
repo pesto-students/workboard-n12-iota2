@@ -30,7 +30,6 @@ export default function SelectedBoard() {
     useState(null);
   const [disconnectStoryRef, setDisconnecStoryRef] = useState(null);
   const { boardId, cardId } = useParams();
-  // const boardId = useLocation().pathname.split("/")[2];
   const [addingNewList, setAddingNewList] = useState(false);
 
   useEffect(() => {

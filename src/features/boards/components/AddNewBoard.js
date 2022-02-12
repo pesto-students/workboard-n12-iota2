@@ -1,4 +1,4 @@
-import { Button, Col, Modal, Row, Input, Select, Empty } from "antd";
+import { Button, Col, Modal, Row, Input, Select, Empty, message } from "antd";
 import React, { useState } from "react";
 import { auth } from "../../../firebase-config";
 import { createBoard, updateBoard } from "../../../store/boardActions";
@@ -49,6 +49,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
   };
 
   const createBoardFunctionForAction = () => {
+    message.success("New Board Created");
     closeModal();
     const creationDate = String(new Date().toLocaleDateString());
     const board = {

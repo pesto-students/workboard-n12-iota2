@@ -29,7 +29,7 @@ export default function SelectedBoardLayout() {
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
   );
-  const updateBoardName = () => {};
+  const updateBoardName = () => { };
   useEffect(() => {
     setBoardName(getStateBoard?.name);
     dispatch(getTeamMembers());
@@ -105,7 +105,7 @@ export default function SelectedBoardLayout() {
           <Menu.Item style={{ float: "right" }}>
             <Dropdown overlay={profileMenu}>
               <Avatar size="large">
-                {String(user.email).charAt(0).toUpperCase()}
+                {String(user ? user.email : "").charAt(0).toUpperCase()}
               </Avatar>
             </Dropdown>
           </Menu.Item>
