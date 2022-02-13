@@ -40,22 +40,25 @@ export default function SelectedBoard() {
     console.log("connection established with stories sub collection");
     const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
     setDisconnectBoardStoriesRef(disconnectBoardStories);
-
-    // return () => {
-    //   console.log("connection broken with story document");
-    //   disconnectStoryRef();
-    // };
   }, []);
 
-  const openClickedStory = (storyId) => {
-    const { unsubBoard, unsubStories } = disconnectBoardStoriesRef;
-    unsubBoard();
-    unsubStories();
-    console.log("connection broken with board document");
-    console.log("connection broken with stories sub collection");
-    const disconnectStory = dispatch(getStoryInBoard(boardId, storyId));
-    setDisconnecStoryRef(disconnectStory);
-  };
+  const openStory = () => {
+
+  }
+
+  const closeStory = () => {
+
+  }
+
+  // const openClickedStory = (storyId) => {
+  //   const { unsubBoard, unsubStories } = disconnectBoardStoriesRef;
+  //   unsubBoard();
+  //   unsubStories();
+  //   console.log("connection broken with board document");
+  //   console.log("connection broken with stories sub collection");
+  //   const disconnectStory = dispatch(getStoryInBoard(boardId, storyId));
+  //   setDisconnecStoryRef(disconnectStory);
+  // };
 
   const getStateBoard = useSelector((state) =>
     state.boards.boards.find((board) => board.id === boardId)
@@ -101,7 +104,6 @@ export default function SelectedBoard() {
       ...allStories.find((story) => story.id === storyId),
     };
     updatedStory.stageId = destStageId;
-    // console.log(updatedStory);
     dispatch(updateStoryInBoard(boardId, updatedStory));
     dispatch(updateStageInBoard(boardId, updatedStages));
   };
@@ -137,8 +139,32 @@ export default function SelectedBoard() {
 
   useEffect(() => {
     if (cardId && getStateBoard) {
-      setSelectedCard(allStories.find((story) => story.id === cardId));
-    } else setSelectedCard(false);
+      setSelectedCard(allStories.find((story) => {
+        if (story.id === cardId) {
+          const { unsubBoard, unsubStories } = disconnectBoardStoriesRef;
+          unsubBoard();
+          unsubStories();
+          console.log("connection broken with board document");
+          console.log("connection broken with stories sub collection");
+          console.log("connection established with story document in stories sub collection");
+          const disconnectStory = dispatch(getStoryInBoard(boardId, story.id));
+          setDisconnecStoryRef(disconnectStory);
+          return true;
+        }
+      }));
+    } else {
+      if (disconnectStoryRef) {
+        const { unsubStory } = disconnectStoryRef;
+        unsubStory();
+        setDisconnecStoryRef(null);
+        console.log("connection broken with story document in stories sub collection");
+        console.log("connection established with board document");
+        console.log("connection established with stories sub collection");
+        const disconnectBoardStories = dispatch(getBoardStages_Stories(boardId));
+        setDisconnectBoardStoriesRef(disconnectBoardStories);
+        setSelectedCard(false);
+      }
+    }
   }, [cardId, getStateBoard]);
 
   useEffect(() => {
@@ -184,7 +210,6 @@ export default function SelectedBoard() {
                   moveCard={moveCard}
                   stage={stage}
                   updateStageFunctionForAction={updateStageFunctionForAction}
-                  openClickedStory={openClickedStory}
                 />
               );
             }

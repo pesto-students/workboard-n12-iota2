@@ -14,7 +14,6 @@ export const getTeamMembers = () => (dispatch) => {
       querySnapshot.forEach((doc) => {
         getTeamEmails.push(doc.data().email);
       });
-      console.log(getTeamEmails);
       dispatch(
         teamActions.setTeamMmbers({
           members: [...getTeamEmails],

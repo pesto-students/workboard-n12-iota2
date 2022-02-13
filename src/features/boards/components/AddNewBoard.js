@@ -5,9 +5,11 @@ import { createBoard, updateBoard } from "../../../store/boardActions";
 
 import generateKey from "../../../helpers/generateKey";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function AddNewBoard({ edit, boardDetails }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
   const children = useSelector((state) => state.team.members); //push the users in this array
   const [boardName, setBoardName] = useState(edit ? boardDetails.name : "");
@@ -72,6 +74,7 @@ export default function AddNewBoard({ edit, boardDetails }) {
       stories: [],
     };
     // console.log(board);
+    navigate('/boards');
     dispatch(createBoard(board));
   };
   return (

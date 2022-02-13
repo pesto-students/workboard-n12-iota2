@@ -11,7 +11,6 @@ export default function CardBoard({
   moveCard,
   id,
   cardDetails,
-  openClickedStory,
   stageId,
   stageIndex,
   isSpacer,
@@ -66,7 +65,6 @@ export default function CardBoard({
         }}
         onClick={() => {
           navigate(id);
-          // openClickedStory(id);
         }}
       >
         <Row

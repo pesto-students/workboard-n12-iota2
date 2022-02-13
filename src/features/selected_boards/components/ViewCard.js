@@ -63,9 +63,8 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
     } else setViewModal(false);
   }, [selectedCard]);
 
-  const handleOk = () => {};
+  const handleOk = () => { };
   const handleCancel = () => {
-    // closeClickedStory();
     navigate(`/board/${boardId}`, { replace: true });
   };
   const handleAddUsers = () => {
@@ -261,7 +260,7 @@ export default function ViewCard({ boardId, selectedCard, allStages }) {
               <Popconfirm
                 title="Are you sure to delete this card?"
                 onConfirm={deleteCard}
-                onCancel={() => {}}
+                onCancel={() => { }}
                 okText="Yes"
                 cancelText="No"
               >
