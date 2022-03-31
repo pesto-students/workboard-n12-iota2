@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-    <img src="https://ik.imagekit.io/e0eu93qtsue/wb_TRHbAyOoa.png?ik-sdk-version=javascript-1.4.3&updatedAt=1648719482537" alt="Logo" width="400" height="200" >
+    <img src="https://ik.imagekit.io/e0eu93qtsue/wb_TRHbAyOoa.png?ik-sdk-version=javascript-1.4.3&updatedAt=1648719482537" alt="Logo" width="400" height="400" >
 </p>
 Workboard is an easy to use task management tool which helps teams organize plans, track progress and collaborate effectively.
 Workboard helps in managing the significant milestones and daily activities of team collaboration
