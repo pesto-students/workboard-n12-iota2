@@ -1,44 +1,75 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+    <img src="https://ik.imagekit.io/e0eu93qtsue/wb_TRHbAyOoa.png?ik-sdk-version=javascript-1.4.3&updatedAt=1648719482537" alt="Logo" width="400" height="200" >
+</p>
+Workboard is an easy to use task management tool which helps teams organize plans, track progress and collaborate effectively.
+Workboard helps in managing the significant milestones and daily activities of team collaboration
 
-## Available Scripts
+Welcome! we hope you enjoy the site as much as we enjoyed making it.
+ 
+  
+<!-- TABLE OF CONTENTS -->
+<br/>
 
-In the project directory, you can run:
+# Table of Contents
 
-### `yarn start`
+1. [Demo](#demo)
+2. [Installation](#installation)
+3. [Technology Stack](#technology-stack)
+4. [Authors](#authors)
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<br/>
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+# Demo
 
-### `yarn test`
+[Live Demo](https://workboard-5e843.web.app/)
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<br/>
 
-### `yarn build`
+Please Note:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. We recommend using this app in Google Chrome
+2. Use the app on Laptop/desktop only as of now.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<br/>
 
-### `yarn eject`
+# Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+1. Clone the repo
+    ```sh
+    git clone https://github.com/pesto-students/workboard-n12-iota2.git workboard
+    ```
+2. Install NPM packages
+    ```sh
+    cd workboard-n12-iota2 && npm install
+    ```
+3. Run
+    ```sh
+    npm start
+    ```
+4. Open http://localhost:3000 to view it in the browser
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+5. Run Test cases
+    ```sh
+    npm test
+    ```
+<br/>
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+# Technology Stack
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+We tried to use a completely modern tech stack while testing out some new technologies that we had never used before. This resulted in a fast, performant, and easily-extensible web app that should be fairly future-proof for the coming next several years. We used:
 
-## Learn More
+- [Ant design](https://ant.design/)
+- [Axios](https://axios-http.com/docs/intro)
+- [React](https://reactjs.org/)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<br/>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Authors
+
+- [Syed Vali](https://github.com/syedvali98)
+- [Ankit Sachan](https://github.com/is-it-me)
+
+<br/>
